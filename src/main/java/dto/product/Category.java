@@ -1,4 +1,4 @@
-package dto.admin;
+package dto.product;
 
 public class Category {
 

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.admin.SubCategory;
+import dto.product.SubCategory;
 import service.admin.CategoryService;
 import service.admin.CategoryServiceImpl;
 

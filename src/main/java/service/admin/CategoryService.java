@@ -1,8 +1,9 @@
 package service.admin;
 
 import java.util.List;
-import dto.admin.Category;
-import dto.admin.SubCategory;
+
+import dto.product.Category;
+import dto.product.SubCategory;
 
 public interface CategoryService {
     void insertCategory(Category category);

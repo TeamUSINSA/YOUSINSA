@@ -4,8 +4,8 @@ import java.util.List;
 
 import dao.admin.CategoryDAO;
 import dao.admin.CategoryDAOImpl;
-import dto.admin.Category;
-import dto.admin.SubCategory;
+import dto.product.Category;
+import dto.product.SubCategory;
 
 public class CategoryServiceImpl implements CategoryService {
 

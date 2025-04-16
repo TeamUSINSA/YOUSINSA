@@ -2,8 +2,9 @@ package dao.admin;
 
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
-import dto.admin.Category;
-import dto.admin.SubCategory;
+
+import dto.product.Category;
+import dto.product.SubCategory;
 import utils.MybatisSqlSessionFactory;
 
 public class CategoryDAOImpl implements CategoryDAO {

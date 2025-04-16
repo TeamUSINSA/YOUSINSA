@@ -2,8 +2,8 @@ package dao.admin;
 
 import java.util.List;
 
-import dto.admin.Category;
-import dto.admin.SubCategory;
+import dto.product.Category;
+import dto.product.SubCategory;
 
 public interface CategoryDAO {
     void insertCategory(Category category);

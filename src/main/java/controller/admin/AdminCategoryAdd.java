@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.admin.Category;
+import dto.product.Category;
 import service.admin.CategoryService;
 import service.admin.CategoryServiceImpl;
 
@@ -34,9 +34,9 @@ public class AdminCategoryAdd extends HttpServlet {
             Category category = new Category();
             category.setCategoryName(name);
 
-            service.insertCategory(category); // useGeneratedKeys로 categoryId가 자동 주입됨
+            service.insertCategory(category); 
 
-            int id = category.getCategoryId(); // 여기서 확인 가능
+            int id = category.getCategoryId();
             response.getWriter().write("success," + id + "," + name);
 
         } catch (Exception e) {
