@@ -11,4 +11,6 @@ public interface CategoryDAO {
 
     void insertSubCategory(SubCategory subCategory);
     List<SubCategory> selectSubCategoryList();
+	void deleteSubCategoryById(int subCategoryId);
+	void deleteCategoryById(int categoryId);
 }

@@ -19,6 +19,11 @@ public class CategoryServiceImpl implements CategoryService {
     public void insertCategory(Category category) {
         categoryDao.insertCategory(category);
     }
+    
+    @Override
+    public void deleteCategoryById(int categoryId) {
+        categoryDao.deleteCategoryById(categoryId);
+    }
 
     @Override
     public List<Category> selectCategoryList() {
@@ -29,6 +34,12 @@ public class CategoryServiceImpl implements CategoryService {
     public void insertSubCategory(SubCategory subCategory) {
         categoryDao.insertSubCategory(subCategory);
     }
+    
+    @Override
+    public void deleteSubCategoryById(int subCategoryId) {
+        categoryDao.deleteSubCategoryById(subCategoryId);
+    }
+
 
     @Override
     public List<SubCategory> selectSubCategoryList() {

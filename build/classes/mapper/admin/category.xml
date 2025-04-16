@@ -1,29 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="mapper.category">
 
-    <insert id="insertCategory" parameterType="dto.admin.Category">
-        INSERT INTO Category (category_id, category_name)
-        VALUES (#{categoryId}, #{categoryName})
-    </insert>
+	<insert id="insertCategory" parameterType="dto.admin.Category"
+		useGeneratedKeys="true" keyProperty="categoryId">
+		INSERT INTO Category (category_name)
+		VALUES (#{categoryName})
+	</insert>
 
-    <select id="selectCategoryList" resultType="dto.admin.Category">
-        SELECT category_id AS categoryId, category_name AS categoryName
-        FROM Category
-    </select>
+	<delete id="deleteCategory" parameterType="int">
+		DELETE FROM Category
+		WHERE category_id = #{categoryId}
+	</delete>
 
-    <insert id="insertSubCategory" parameterType="dto.admin.SubCategory">
-        INSERT INTO SubCategory (sub_category_id, sub_category_name, category_id)
-        VALUES (#{subCategoryId}, #{subCategoryName}, #{categoryId})
-    </insert>
+	<select id="selectCategoryList" resultType="dto.admin.Category">
+		SELECT category_id AS categoryId,
+		category_name AS categoryName
+		FROM Category
+	</select>
 
-    <select id="selectSubCategoryList" resultType="dto.admin.SubCategory">
-        SELECT sub_category_id AS subCategoryId, sub_category_name AS subCategoryName, category_id
-        FROM SubCategory
-    </select>
+	<insert id="insertSubCategory"
+		parameterType="dto.admin.SubCategory" useGeneratedKeys="true"
+		keyProperty="subCategoryId">
+		INSERT INTO SubCategory (sub_category_name, category_id)
+		VALUES (#{subCategoryName}, #{categoryId})
+	</insert>
+
+	<delete id="deleteSubCategory" parameterType="int">
+		DELETE FROM SubCategory
+		WHERE sub_category_id = #{subCategoryId}
+	</delete>
+
+	<select id="selectSubCategoryList"
+		resultType="dto.admin.SubCategory">
+		SELECT sub_category_id AS subCategoryId,
+		sub_category_name AS subCategoryName,
+		category_id
+		FROM SubCategory
+	</select>
 
 </mapper>
-
-	

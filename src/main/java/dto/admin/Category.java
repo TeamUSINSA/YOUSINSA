@@ -1,38 +1,30 @@
 package dto.admin;
 
 public class Category {
-	
-	int categoryid;
-	String categoryname;
-	
-	
-	public Category() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
-	public Category(int categoryid, String categoryname) {
-		super();
-		this.categoryid = categoryid;
-		this.categoryname = categoryname;
-	}
+    private int categoryId;
+    private String categoryName;
 
-	public int getCategoryId() {
-		return categoryid;
-	}
+    public Category() {}
 
-	public void setCategoryId(int categoryid) {
-		this.categoryid = categoryid;
-	}
+    public Category(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+    }
 
-	public String getCategoryName() {
-		return categoryname;
-	}
+    public int getCategoryId() {
+        return categoryId;
+    }
 
-	public void setCategoryName(String categoryname) {
-		this.categoryname = categoryname;
-	}
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
-	
+    public String getCategoryName() {
+        return categoryName;
+    }
 
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

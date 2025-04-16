@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>카테고리 관리</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -102,157 +103,182 @@
 </head>
 
 <body>
-
-    <h2>카테고리 관리</h2>
-    <div class="container">
-        <div class="section">
-            <h3>대분류 관리</h3>
-            <div class="input-row">
-                <input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
-                <button class="add" onclick="addMainCategory()">추가</button>
-            </div>
-            <table id="mainCategoryTable">
-                <thead>
-                    <tr>
-                        <th>대분류명</th>
-                        <th>삭제</th>
-                    </tr>
-                </thead>
-                <tbody>
-    <c:forEach var="cat" items="${categoryList}">
-        <tr>
-            <td>${cat.categoryName}</td>
-            <td><button class="delete" onclick="deleteRow(this, '${cat.categoryName}', 'main')">삭제</button></td>
-        </tr>
-    </c:forEach>
-</tbody>
-
-            </table>
+<h2>카테고리 관리</h2>
+<div class="container">
+    <div class="section">
+        <h3>대분류 관리</h3>
+        <div class="input-row">
+            <input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
+            <button class="add" id="mainAddBtn">추가</button>
         </div>
-
-        <div class="section">
-            <h3>소분류 관리</h3>
-            <div class="input-row">
-                <select id="mainCategorySelect">
-    <option value="">대분류 선택</option>
-    <c:forEach var="cat" items="${categoryList}">
-        <option value="${cat.categoryName}">${cat.categoryName}</option>
-    </c:forEach>
-</select>
-                <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
-                <button class="add" onclick="addSubCategory()">추가</button>
-            </div>
-            <table id="subCategoryTable">
-                <thead>
-                    <tr>
-                        <th>소분류명</th>
-                        <th>대분류명</th>
-                        <th>삭제</th>
-                    </tr>
-                </thead>
-                <tbody>
-    <c:forEach var="sub" items="${subCategoryList}">
-        <tr data-main="${sub.categoryId}">
-            <td>${sub.subCategoryName}</td>
-            <td>
+        <table id="mainCategoryTable">
+            <thead>
+                <tr><th>대분류명</th><th>삭제</th></tr>
+            </thead>
+            <tbody>
                 <c:forEach var="cat" items="${categoryList}">
-                    <c:if test="${cat.categoryId == sub.categoryId}">
-                        ${cat.categoryName}
-                    </c:if>
+                    <tr>
+                        <td>${cat.categoryName}</td>
+                        <td><button class="delete" onclick="deleteMainCategory(${cat.categoryId}, this)">삭제</button>
+                        </td>
+                    </tr>
                 </c:forEach>
-            </td>
-            <td><button class="delete" onclick="deleteRow(this)">삭제</button></td>
-        </tr>
-    </c:forEach>
-</tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
 
-    <script>
-        function addMainCategory() {
-            const input = document.getElementById("mainCategoryInput");
-            const value = input.value.trim();
-            if (!value) return;
+    <div class="section">
+        <h3>소분류 관리</h3>
+        <div class="input-row">
+            <select id="mainCategorySelect">
+                <option value="">대분류 선택</option>
+                <c:forEach var="cat" items="${categoryList}">
+                    <option value="${cat.categoryId}" data-name="${cat.categoryName}">${cat.categoryName}</option>
+                </c:forEach>
+            </select>
+            <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
+            <button class="add" id="subAddBtn">추가</button>
+        </div>
+        <table id="subCategoryTable">
+            <thead>
+                <tr><th>소분류명</th><th>대분류명</th><th>삭제</th></tr>
+            </thead>
+            <tbody>
+                <c:forEach var="sub" items="${subCategoryList}">
+                    <tr>
+                        <td>${sub.subCategoryName}</td>
+                        <td>
+                            <c:forEach var="cat" items="${categoryList}">
+                                <c:if test="${cat.categoryId == sub.categoryId}">
+                                    ${cat.categoryName}
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                        <td><button class="delete" onclick="deleteSubCategory(${sub.subCategoryId}, this)">삭제</button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-            const tbody = document.getElementById("mainCategoryTable").querySelector("tbody");
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${value}</td>
-                <td><button class="delete" onclick="deleteRow(this, '${value}', 'main')">삭제</button></td>
-            `;
-            tbody.appendChild(row);
+<script>
 
-            const select = document.getElementById("mainCategorySelect");
-            const option = document.createElement("option");
-            option.value = value;
-            option.textContent = value;
-            select.appendChild(option);
+$(function () {
 
-            input.value = "";
-        }
+	$("#mainAddBtn").click(function () {
+	    const categoryName = $("#mainCategoryInput").val().trim();
+	    if (!categoryName) return;
 
-        function addSubCategory() {
-            const mainSelect = document.getElementById("mainCategorySelect");
-            const mainValue = mainSelect.value;
-            const input = document.getElementById("subCategoryInput");
-            const subValue = input.value.trim();
+	    $.ajax({
+	        url: '/yousinsa/adminCategoryAdd',
+	        type: 'post',
+	        data: { categoryName: categoryName },
+	        success: function (result) {
 
-            if (!mainValue || !subValue) return;
+	            const parts = result.split(",");
+	            if (parts[0] === "success") {
+	                const categoryId = parts[1];
+	                const name = parts[2];
 
-            const tbody = document.getElementById("subCategoryTable").querySelector("tbody");
-            const row = document.createElement("tr");
-            row.setAttribute("data-main", mainValue);
-            row.innerHTML = `
-                <td>${subValue}</td>
-                <td>${mainValue}</td>
-                <td><button class="delete" onclick="deleteRow(this)">삭제</button></td>
-            `;
-            tbody.appendChild(row);
+	                $("#mainCategoryTable tbody").append(`
+	                    <tr>
+	                        <td>${name}</td>
+	                        <td><button class="delete" onclick="deleteMainCategory(${categoryId}, this)">삭제</button></td>
+	                    </tr>
+	                `);
 
-            input.value = "";
-        }
+	                $("#mainCategorySelect").append(`<option value="${categoryId}">${name}</option>`);
+	                $("#mainCategoryInput").val("");
+	                alert("대분류 추가 완료");
+	            } else {
+	                alert("대분류 추가 실패");
+	            }
+	        }
+	    });
+	});
 
-        function deleteRow(btn, categoryName = "", type = "") {
-            const row = btn.parentElement.parentElement;
 
-            if (type === 'main') {
-                const select = document.getElementById("mainCategorySelect");
-                const subTbody = document.getElementById("subCategoryTable").querySelector("tbody");
-                const subRows = subTbody.querySelectorAll("tr");
 
-                const relatedSubs = [];
-                subRows.forEach(subRow => {
-                    if (subRow.getAttribute("data-main") === categoryName) {
-                        const subName = subRow.querySelector("td").innerText;
-                        relatedSubs.push(subName);
-                    }
-                });
+	$("#subAddBtn").click(function () {
+	    const subCategoryName = $("#subCategoryInput").val().trim();
+	    const categoryId = $("#mainCategorySelect").val();
+	    const categoryName = $("#mainCategorySelect option:selected").text();
 
-                if (relatedSubs.length > 0) {
-                    const message =
-                        `해당 대분류 "${categoryName}"에는 아래 소분류가 있습니다:\n\n` +
-                        relatedSubs.map(name => `- ${name}`).join('\n') +
-                        `\n\n정말 삭제하시겠습니까?`;
-                    if (!confirm(message)) return;
-                }
+	    if (!subCategoryName || !categoryId) return;
 
-                for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].value === categoryName) {
-                        select.remove(i);
-                        break;
-                    }
-                }
+	    $.ajax({
+	        url: '/yousinsa/adminSubcategoryAdd',
+	        type: 'post',
+	        data: {
+	            subCategoryName: subCategoryName,
+	            categoryId: categoryId
+	        },
+	        success: function (result) {
+	            const parts = result.split(",");
+	            if (parts[0] === "success") {
+	                const subCategoryId = parts[1];
+	                const subName = parts[2];
 
-                subRows.forEach(subRow => {
-                    if (subRow.getAttribute("data-main") === categoryName) {
-                        subRow.remove();
-                    }
-                });
+	                $("#subCategoryTable tbody").append(`
+	                    <tr>
+	                        <td>${subName}</td>
+	                        <td>${categoryName}</td>
+	                        <td><button class="delete" onclick="deleteSubCategory(${subCategoryId}, this)">삭제</button></td>
+	                    </tr>
+	                `);
+
+	                $("#subCategoryInput").val("");
+	            } else {
+	                alert("추가 실패");
+	            }
+	        }
+	    });
+	});
+
+
+
+function deleteMainCategory(categoryId, btn) {
+    if (!confirm("삭제하시겠습니까?")) return;
+
+    $.ajax({
+        url: '/yousinsa/adminCategoryDelete',
+        type: 'post',
+        data: { categoryId: categoryId },
+        success: function (result) {
+            if (result === "success") {
+                $(btn).closest("tr").remove();
+                $(`#mainCategorySelect option[value="${categoryId}"]`).remove();
+                alert("삭제 완료");
+            } else {
+                alert("삭제 실패");
             }
-
-            row.remove();
         }
-    </script>
+    });
+}
+
+
+
+
+function deleteSubCategory(subCategoryId, btn) {
+    if (!confirm("소분류를 삭제하시겠습니까?")) return;
+
+    $.ajax({
+        url: '/yousinsa/adminSubcategoryDelete',
+        type: 'post',
+        data: { subCategoryId: subCategoryId },
+        success: function (result) {
+            if (result === "success") {
+                $(btn).closest("tr").remove();
+                alert("삭제 완료");
+            } else {
+                alert("삭제 실패");
+            }
+        }
+    });
+}
+
+</script>
 </body>
 </html>

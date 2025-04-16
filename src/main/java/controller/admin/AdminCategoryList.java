@@ -15,10 +15,10 @@ import service.admin.CategoryService;
 import service.admin.CategoryServiceImpl;
 
 @WebServlet("/adminCategory")
-public class adminCategory extends HttpServlet {
+public class AdminCategoryList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public adminCategory() {
+	public AdminCategoryList() {
 		super();
 	}
 
@@ -28,6 +28,7 @@ public class adminCategory extends HttpServlet {
 		try {
 			List<Category> categoryList = service.selectCategoryList();
 			List<SubCategory> subCategoryList = service.selectSubCategoryList();
+			
 
 			request.setAttribute("categoryList", categoryList);
 			request.setAttribute("subCategoryList", subCategoryList);
