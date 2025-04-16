@@ -6,6 +6,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="dto.admin.Category" alias="category"/>
+		<typeAlias type="dto.user.User" alias="user"/>
 	</typeAliases>
 	
 	<environments default="development">
@@ -22,6 +23,7 @@
 	
 	<mappers>
 		<mapper resource="mapper/admin/category.xml"/>
+		<mapper resource="mapper/user/user.xml"/>
 
 	</mappers>
 </configuration>
