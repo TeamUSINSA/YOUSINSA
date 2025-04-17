@@ -14,6 +14,7 @@
 	</select>
 
 
+
 	<select id="isDuplicateId" parameterType="string"
 		resultType="int">
 		SELECT COUNT(*) FROM user WHERE user_id = #{userId}
@@ -23,24 +24,33 @@
 	<update id="updateSingleField" parameterType="map">
 		UPDATE user
 		SET
-		${column} = #{value}
+		<choose>
+			<when test="column == 'name'"> name = #{value} </when>
+			<when test="column == 'phone'"> phone = #{value} </when>
+			<when test="column == 'email'"> email = #{value} </when>
+			<when test="column == 'birth'"> birth = #{value} </when>
+		</choose>
 		WHERE user_id = #{userId}
 	</update>
+
 
 	<select id="loginUser" parameterType="map"
 		resultType="dto.user.User">
 		SELECT user_id, name
 		FROM User
-		WHERE user_id = #{userId} AND password = #{password}
+		WHERE user_id = #{userId} AND
+		password = #{password}
 	</select>
 
 
 	<select id="findUserId" parameterType="map" resultType="string">
-		SELECT user_id
+		SELECT
+		user_id
 		FROM User
 		WHERE name = #{name}
 		AND email = #{email}
-		AND phone = #{phone}
+		AND phone =
+		#{phone}
 		LIMIT 1
 	</select>
 
@@ -49,7 +59,8 @@
 
 	<select id="findUserForPasswordReset" resultType="user">
 		SELECT *
-		FROM User
+		FROM
+		User
 		WHERE name = #{name}
 		AND user_id = #{userId}
 		AND email = #{email}
@@ -57,20 +68,21 @@
 
 
 
-	<update id="withdrawUser" parameterType="String">
+	<update id="withdrawUser" parameterType="user">
 		update user
-		set deleted =
-		#{deleted}, withdrawal_reason =
-		#{withdrawalReason},withdrawal_detail=#{withdrawalDetail}
-		where user_id
-		= #{userId}
-
+		set deleted = #{deleted, jdbcType=BOOLEAN},
+		withdrawal_reason = #{withdrawalReason},
+		withdrawal_detail = #{withdrawalDetail}
+		where user_id = #{userId}
 	</update>
 
 	<update id="updateUserPassword" parameterType="map">
 		UPDATE user
-		SET password = #{newPassword}
+		SET
+		password = #{newPassword}
 		WHERE user_id = #{userId}
 	</update>
+
+
 
 </mapper>

@@ -26,11 +26,21 @@ public class Withdraw extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-	    if (session == null || session.getAttribute("user") == null) {
-	      response.sendRedirect("/user/login.jsp?error=needLogin");
-	      return;
-	    }
-	    request.getRequestDispatcher("/user/mywithdraw.jsp").forward(request, response);
+		 String userId = (session != null) ? (String) session.getAttribute("userId") : null;
+
+		    if (userId == null) {
+		        response.sendRedirect(request.getContextPath() + "/login?error=needLogin");
+		        return;
+		    }
+		    try {
+		        UserDAO userDao = new UserDAOImpl();
+		        User user = userDao.findUserByUserId(userId);
+		        request.setAttribute("user", user);
+		        request.getRequestDispatcher("/user/mywithdraw.jsp").forward(request, response);
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        response.sendRedirect("error.jsp");
+		    }
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,17 +50,24 @@ public class Withdraw extends HttpServlet {
 		String detail = request.getParameter("detail");
 		
 		HttpSession session = request.getSession(false);
-		User user = (User) session.getAttribute("user");
+		String userId = (session != null) ? (String) session.getAttribute("userId") : null;
+
+	    if (userId == null) {
+	        response.sendRedirect(request.getContextPath() + "login");
+	        return;
+	    }
 		
 		UserDAO userDao = new UserDAOImpl();
 		try {
-			user.setDeleted(true);
-			user.setWithdrawalReason(reason);
-			user.setWithdrawalDetail(detail);
-			userDao.withdrawUser(user);
-			
+	        User user = userDao.findUserByUserId(userId); // DB에서 다시 조회
+	        user.setDeleted(true);
+	        user.setWithdrawalReason(reason);
+	        user.setWithdrawalDetail(detail);
+	        userDao.withdrawUser(user);
+
+			//세션 종료
 			session.invalidate();
-			response.sendRedirect("mywithdrawSuccess.jsp");
+			response.sendRedirect(request.getContextPath() +"/withdrawSuccess");
 		}catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect("error");

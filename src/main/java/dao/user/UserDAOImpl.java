@@ -18,15 +18,11 @@ public class UserDAOImpl implements UserDAO {
 
 	}
 
+
 	public void updateUser(User user) throws Exception {
 		sqlSession.update("mapper.member.updateUser", user);
 		sqlSession.commit();
-
-	}
-
-
-
-
+		}
 
 	public void updateSingleField(String userId, String column, String value) throws Exception {
 		Map<String, String> params = new HashMap<>();
@@ -41,10 +37,8 @@ public class UserDAOImpl implements UserDAO {
 	public void withdrawUser(User user) throws Exception {
 		sqlSession.update("mapper.user.withdrawUser",user);
 		sqlSession.commit();
-		
-
 	}
-
+		
 	@Override
 	public User findUserByUserId(String userId) throws Exception {
 		return sqlSession.selectOne("mapper.user.selectUser", userId);
@@ -88,7 +82,6 @@ public class UserDAOImpl implements UserDAO {
 	    param.put("email", email);
 
 	    return sqlSession.selectOne("mapper.user.findUserForPasswordReset", param);
-
 	}
 	
 	@Override
@@ -100,7 +93,4 @@ public class UserDAOImpl implements UserDAO {
 	    sqlSession.update("mapper.user.updateUserPassword", param);
 	    sqlSession.commit();
 	}
-
-
-
 }

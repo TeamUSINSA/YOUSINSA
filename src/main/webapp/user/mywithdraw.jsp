@@ -1,18 +1,21 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%-- <!-- 공통 헤더 -->
-<%@ include file="/includes/header.jsp" %> --%>
+<%-- <%@ include file="/includes/header.jsp" %> --%>
+
+<!-- 로그인 안 된 경우 alert -->
+<c:if test="${param.error eq 'needLogin'}">
+  <script>alert("로그인이 필요합니다.");</script>
+</c:if>
 
 <!-- 전체 레이아웃 -->
 <div class="layout" style="display: flex; max-width: 1000px; margin: 0 auto; padding: 40px 20px; gap: 30px;">
 
- <%--  <!-- 사이드바 -->
+  <%-- 사이드바 영역 (필요 시 포함) 
   <div class="sidebar" style="width: 200px;">
     <%@ include file="/includes/mysidebar.jsp" %>
-  </div> --%>
-<c:if test="${param.error eq 'needLogin'}">
-  <script>alert("로그인이 필요합니다.");</script>
-</c:if>
+  </div>
+  --%>
 
   <!-- 본문 -->
   <div class="content" style="flex: 1;">
@@ -23,11 +26,12 @@
       <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">회원 탈퇴 정보 작성</h3>
       <p style="font-size: 13px; color: #666;">귀하의 사유 작성은 YOUSINSA에 큰 도움이 됩니다.</p>
 
-      <form method="post" action="withdraw.do" style="margin-top: 20px;">
-        
+      <!-- ✅ 탈퇴 폼 -->
+      <form method="post" action="withdraw" style="margin-top: 20px;">
+
         <!-- 탈퇴 사유 -->
         <select name="reason"
-                style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px;">
+                style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px;" required>
           <option value="">탈퇴사유 선택</option>
           <option value="불만족">서비스에 불만족</option>
           <option value="이용빈도낮음">이용 빈도 낮음</option>
@@ -54,16 +58,18 @@
     </div>
   </div>
 </div>
+
+<!-- ✅ 스타일 -->
 <style>
   .layout {
-  width: 100%;
-  max-width: 900px;
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  margin: 0 auto; /* 중앙 정렬 */
-}
+    width: 100%;
+    max-width: 900px;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin: 0 auto;
+  }
 </style>
-<%-- <!-- ✅ 공통 푸터 -->
-<%@ include file="/includes/footer.jsp" %> --%>
+
+<%-- <%@ include file="/includes/footer.jsp" %> --%>
