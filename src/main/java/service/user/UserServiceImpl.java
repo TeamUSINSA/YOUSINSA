@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findUserPoint(userId);
     }
     @Override
-    public User login(String userId, String password) throws Exception {
-        return userDao.findUserByLogin(userId, password);
+    public User login(User user) throws Exception {
+        return userDao.findUserByLogin(user);
     }
 }

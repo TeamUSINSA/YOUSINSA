@@ -14,7 +14,7 @@ import dto.product.SubCategory;
 import service.admin.CategoryService;
 import service.admin.CategoryServiceImpl;
 
-@WebServlet("/adminCategoryList")
+@WebServlet("/adminCategory")
 public class AdminCategoryList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

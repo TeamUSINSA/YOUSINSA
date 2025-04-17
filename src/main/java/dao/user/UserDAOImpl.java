@@ -47,12 +47,10 @@ public class UserDAOImpl implements UserDAO{
 	}
 	
 	@Override
-	public User findUserByLogin(String userId, String password) throws Exception {
-	    Map<String, String> param = new HashMap<>();
-	    param.put("userId", userId);
-	    param.put("password", password);
-	    return sqlSession.selectOne("mapper.user.loginUser", param);
+	public User findUserByLogin(User user) throws Exception {
+	    return sqlSession.selectOne("mapper.user.loginUser", user);
 	}
+
 
 
 }

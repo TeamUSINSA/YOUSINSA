@@ -7,6 +7,7 @@ public interface UserService {
     User getUserById(String userId) throws Exception;
     User getUserAddressList(String userId) throws Exception;
     int getUserPoint(String userId) throws Exception;
-    User login(String userId, String password) throws Exception;
+    User login(User user) throws Exception;
+
 }
 

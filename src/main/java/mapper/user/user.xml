@@ -4,17 +4,17 @@
 	
 <mapper namespace="mapper.user">
 	<insert id="insertUser" parameterType="user">
-		insert into user (user_id,password,name,phone,email,birth) 
+		insert into `user` (user_id,password,name,phone,email,birth) 
 			values(#{userId},#{password},#{name},#{phoneNum},#{email},#{birth})
 	</insert>
 	
 	<select id="selectUser" parameterType="String" resultType="user">
-		select * from user where user_id=#{userId}
+		select * from `user` where user_id=#{userId}
 	</select>
 	
 
   <select id="selectUserPoint" parameterType="String" resultType="int">
-    select point from user where user_id = #{userId}
+    select point from `user` where user_id = #{userId}
   </select>
 
 
@@ -24,9 +24,9 @@
   </select>
   
 
-<select id="loginUser" parameterType="map" resultType="user">
+<select id="loginUser" parameterType="user" resultType="user">
   SELECT *
-  FROM user
+  FROM `user`
   WHERE user_id = #{userId}
     AND password = #{password}
 </select>

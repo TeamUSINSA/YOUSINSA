@@ -2,7 +2,7 @@
 <%
     String userId = (String) session.getAttribute("userId");
     if (userId == null) {
-        response.sendRedirect(request.getContextPath() + "/user/Login.jsp");
+        response.sendRedirect(request.getContextPath() + "/user/login.jsp");
         return;
     }
 %>

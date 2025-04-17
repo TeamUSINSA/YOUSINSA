@@ -4,20 +4,6 @@
 
 <mapper namespace="mapper.product">
 
-  <!-- 🛒 사용자 장바구니 상품 목록 가져오기 -->
-  <select id="selectCartProductList" parameterType="String" resultType="dto.product.Product">
-    SELECT 
-      p.product_id,
-      p.name,
-      p.price,
-      p.discount,
-      p.main_image1 AS image,
-      c.quantity,
-      c.color,
-      c.size
-    FROM Cart c
-    JOIN Product p ON c.product_id = p.product_id
-    WHERE c.user_id = #{userId}
-  </select>
+
 
 </mapper>

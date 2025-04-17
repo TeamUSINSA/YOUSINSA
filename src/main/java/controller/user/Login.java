@@ -34,22 +34,39 @@ public class Login extends HttpServlet {
 
         UserService service = new UserServiceImpl();
 
+        System.out.println("[디버깅] 입력 userId: " + userId);
+        System.out.println("[디버깅] 입력 password: " + password);
+        
+        // ✅ user 객체 생성 후 로그인
+        User user = new User();
+        user.setUserId(userId);
+        user.setPassword(password);
+
         try {
-            User loginUser = service.login(userId, password);
+            User loginUser = service.login(user);  // ✅ 객체로 전달
 
             if (loginUser != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", loginUser.getUserId());
                 session.setAttribute("name", loginUser.getName());
+                
+                System.out.println("[디버깅] 세션 저장 완료: " + session.getAttribute("userId"));
 
                 // 아이디 저장 쿠키
                 Cookie cookie = new Cookie("saveId", saveId != null ? userId : "");
                 cookie.setMaxAge(saveId != null ? 60 * 60 * 24 * 30 : 0);
+                cookie.setPath("/");
                 response.addCookie(cookie);
+                
+                System.out.println("[디버깅] loginUser 객체 = " + loginUser);
+                System.out.println("[디버깅] loginUser.getUserId() = " + loginUser.getUserId());
+                System.out.println("[디버깅] loginUser.getPassword() = " + loginUser.getPassword());
+                System.out.println("[디버깅] loginUser.getName() = " + loginUser.getName());
 
-                // 로그인 성공 시 환영 페이지로 이동
+
                 response.sendRedirect(request.getContextPath() + "/user/loginSuccess.jsp");
             } else {
+            	 System.out.println("[디버깅] 로그인 실패");
                 request.setAttribute("err", "아이디 또는 비밀번호가 일치하지 않습니다.");
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
             }
@@ -60,4 +77,5 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
+
 }
