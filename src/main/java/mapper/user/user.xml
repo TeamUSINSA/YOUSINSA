@@ -11,6 +11,10 @@
 	<select id="selectUser" parameterType="String" resultType="user">
 		select * from `user` where user_id=#{userId}
 	</select>
+
+    <select id="isDuplicateId" parameterType="String" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM User WHERE user_id = #{userId}
+    </select>
 	
 
   <select id="selectUserPoint" parameterType="String" resultType="int">

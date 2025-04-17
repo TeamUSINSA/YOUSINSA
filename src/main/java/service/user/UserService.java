@@ -8,6 +8,8 @@ public interface UserService {
     User getUserAddressList(String userId) throws Exception;
     int getUserPoint(String userId) throws Exception;
     User login(User user) throws Exception;
+	void join(User user) throws Exception;
+	boolean isDuplicateId(String userId) throws Exception;
 
 }
 

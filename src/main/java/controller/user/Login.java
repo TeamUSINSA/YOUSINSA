@@ -20,7 +20,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/common/login.jsp").forward(request, response);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class Login extends HttpServlet {
             } else {
             	 System.out.println("[디버깅] 로그인 실패");
                 request.setAttribute("err", "아이디 또는 비밀번호가 일치하지 않습니다.");
-                request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+                request.getRequestDispatcher("/common/login.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

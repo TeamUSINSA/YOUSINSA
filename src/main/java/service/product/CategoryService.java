@@ -1,4 +1,4 @@
-package service.admin;
+package service.product;
 
 import java.util.List;
 

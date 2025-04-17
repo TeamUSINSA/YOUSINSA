@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.admin.CategoryService;
-import service.admin.CategoryServiceImpl;
+import service.product.CategoryService;
+import service.product.CategoryServiceImpl;
 
 @WebServlet("/adminCategoryDelete")
 public class AdminCategoryDelete extends HttpServlet {

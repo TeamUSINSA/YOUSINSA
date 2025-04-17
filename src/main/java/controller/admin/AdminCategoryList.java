@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import dto.product.Category;
 import dto.product.SubCategory;
-import service.admin.CategoryService;
-import service.admin.CategoryServiceImpl;
+import service.product.CategoryService;
+import service.product.CategoryServiceImpl;
 
 @WebServlet("/adminCategory")
 public class AdminCategoryList extends HttpServlet {

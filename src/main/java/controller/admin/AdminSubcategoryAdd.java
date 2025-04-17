@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.product.SubCategory;
-import service.admin.CategoryService;
-import service.admin.CategoryServiceImpl;
+import service.product.CategoryService;
+import service.product.CategoryServiceImpl;
 
 @WebServlet("/adminSubcategoryAdd")
 public class AdminSubcategoryAdd extends HttpServlet {

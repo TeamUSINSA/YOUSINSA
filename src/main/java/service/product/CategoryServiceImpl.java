@@ -1,9 +1,9 @@
-package service.admin;
+package service.product;
 
 import java.util.List;
 
-import dao.admin.CategoryDAO;
-import dao.admin.CategoryDAOImpl;
+import dao.product.CategoryDAO;
+import dao.product.CategoryDAOImpl;
 import dto.product.Category;
 import dto.product.SubCategory;
 

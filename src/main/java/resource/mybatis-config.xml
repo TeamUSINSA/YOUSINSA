@@ -27,8 +27,8 @@
 	</environments>
 	
 	<mappers>
-		<mapper resource="mapper/admin/category.xml"/>
+		<mapper resource="mapper/product/category.xml"/>
 		<mapper resource="mapper/user/user.xml"/>
-		<mapper resource="mapper/user/product.xml"/>
+		<mapper resource="mapper/product/product.xml"/>
 	</mappers>
 </configuration>

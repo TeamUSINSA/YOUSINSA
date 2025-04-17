@@ -1,4 +1,4 @@
-package dao.admin;
+package dao.product;
 
 import java.util.List;
 

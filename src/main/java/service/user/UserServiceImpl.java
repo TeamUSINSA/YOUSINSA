@@ -37,4 +37,12 @@ public class UserServiceImpl implements UserService {
     public User login(User user) throws Exception {
         return userDao.findUserByLogin(user);
     }
+    @Override
+    public void join(User user) throws Exception{
+    	userDao.insertUser(user);
+    }
+    @Override
+    public boolean isDuplicateId(String userId) throws Exception{
+        return userDao.isDuplicateId(userId);
+    }
 }

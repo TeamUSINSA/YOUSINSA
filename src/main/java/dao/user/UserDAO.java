@@ -10,4 +10,5 @@ public interface UserDAO {
 	int findUserPoint(String userId) throws Exception;
 	User findUserAddressList(String userId) throws Exception;
 	User findUserByLogin(User user) throws Exception;
+	boolean isDuplicateId(String userId) throws Exception;
 }
