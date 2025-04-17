@@ -64,7 +64,7 @@ public class Login extends HttpServlet {
                 System.out.println("[디버깅] loginUser.getName() = " + loginUser.getName());
 
 
-                response.sendRedirect(request.getContextPath() + "/user/loginSuccess.jsp");
+                response.sendRedirect(request.getContextPath() + "/common/loginSuccess.jsp");
             } else {
             	 System.out.println("[디버깅] 로그인 실패");
                 request.setAttribute("err", "아이디 또는 비밀번호가 일치하지 않습니다.");

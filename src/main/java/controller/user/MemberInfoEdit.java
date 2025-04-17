@@ -1,79 +1,95 @@
 package controller.user;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import dao.user.UserDAO;
 import dao.user.UserDAOImpl;
 import dto.user.User;
 
-/**
- * Servlet implementation class MemberInfoEdit
- */
 @WebServlet("/memberInfoEdit")
 public class MemberInfoEdit extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
-	public MemberInfoEdit() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    public MemberInfoEdit() {
+        super();
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession(false); // false = 세션 없으면 null 반환
-		User user = (session != null) ? (User) session.getAttribute("user") : null;
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		if (user == null) {
-			// 로그인 안 돼있으면 login 페이지로 리디렉트
-			response.sendRedirect("/user/login.jsp?error=needLogin");
-			return;
-		}
+        HttpSession session = request.getSession(false);
+        String userId = (session != null) ? (String) session.getAttribute("userId") : null;
 
-		// 로그인 되어 있으면 회원정보 페이지로
-		request.setAttribute("user", user);
-		request.getRequestDispatcher("/user/memberInfoEdit.jsp").forward(request, response);
-	}
+        if (userId == null) {
+            response.sendRedirect("login.jsp?error=needLogin");
+            return;
+        }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String field = request.getParameter("field");  
-		String value = request.getParameter("value");  
+        try {
+            UserDAO userDao = new UserDAOImpl();
+            User user = userDao.findUserByUserId(userId);  // DB에서 유저 전체 정보 조회
+            request.setAttribute("user", user);
+            request.getRequestDispatcher("/user/memberInfoEdit.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
+        }
+    }
 
-		// 세션에서 현재 로그인 유저 ID 가져오기
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			response.getWriter().write("unauthorized");
-			return;
-		}
-		String userId = user.getUserId();
-		UserDAO userDao = new UserDAOImpl();
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		try {
-			userDao.updateSingleField(userId, field, value);
-			response.getWriter().write("success");
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.getWriter().write("error");
-		}
-	}
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        String field = request.getParameter("field");
+        String value = request.getParameter("value");
+
+        HttpSession session = request.getSession(false);
+        String userId = (session != null) ? (String) session.getAttribute("userId") : null;
+
+        if (userId == null) {
+            response.getWriter().write("unauthorized");
+            return;
+        }
+        //폰 유효성 검사
+        if ("phone".equals(field)) {
+            if (!value.matches("\\d{10,11}")) {
+                response.getWriter().write("invalid_phone");
+                return;
+            }
+        }
+        //이메일 유효성 검사
+        if ("email".equals(field)) {
+            String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+            if (!value.matches(emailRegex)) {
+                response.getWriter().write("이메일 형식이 올바르지 않습니다.");
+                return;
+            }
+        }
+
+        //생년월일 유효성 검사
+        if ("birth".equals(field)) {
+            try {
+                java.sql.Date.valueOf(value);  // 형식 안 맞으면 예외 발생
+            } catch (IllegalArgumentException e) {
+                response.getWriter().write("생일 형식이 올바르지 않습니다.");
+                return;
+            }
+        }
+
+        try {
+            UserDAO userDao = new UserDAOImpl();
+            userDao.updateSingleField(userId, field, value);
+            response.getWriter().write("success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().write("error");
+        }
+    }
 }

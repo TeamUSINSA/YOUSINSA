@@ -18,7 +18,7 @@
   <div class="info-row">
     <label>아이디</label>
     <div class="field-group">
-      <input type="text" value="${user.username}" readonly>
+      <input type="text" value="${user.userId}" readonly>
     </div>
   </div>
 
@@ -26,7 +26,7 @@
 <div class="info-row">
   <label>비밀번호</label>
   <div class="field-group">
-    <input type="password" value="${user.userpassword}" readonly>
+    <input type="password" value="${user.password}" readonly>
     <button type="button" onclick="location.href='editPassword.jsp'">변경하기</button>
   </div>
 </div>
@@ -54,14 +54,14 @@
   <div class="info-row">
     <label>생일</label>
     <div class="field-group">
-      <input type="text" id="birthField" name="birth" value="${user.birth}" readonly>
+      <input type="date" id="birthField" name="birth" value="${user.birth}" readonly>
       <button type="button" id="birthBtn" onclick="toggleEdit('birth')">변경하기</button>
     </div>
   </div>
 
   <!-- 회원탈퇴 버튼 -->
   <div class="withdraw-wrap">
-    <a href="/user/mywithdraw.jsp" class="btn-withdraw">회원 탈퇴</a>
+    <a href="withdraw" class="btn-withdraw">회원 탈퇴</a>
   </div>
 </div>
 
@@ -144,19 +144,43 @@
 
 <!-- 수정/저장 스크립트 -->
 <script>
+const originalValues = {};
+
+//폰번호, 이메일 유효성 검사
+function isValidPhone(phone) {
+    return /^[0-9]{10,11}$/.test(phone);
+}
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 function toggleEdit(field) {
     const input = document.getElementById(field + 'Field');
     const button = document.getElementById(field + 'Btn');
 
     if (input.readOnly) {
+    	originalValues[field] = input.value;
       input.readOnly = false;
       input.style.backgroundColor = '#fff';
       button.textContent = '저장';
     } else {
       const value = input.value;
+      
+      //폰번호,이메일 유효성 검사
+      if (field === 'phone' && !isValidPhone(value)) {
+          alert('전화번호는 숫자 10~11자리여야 합니다.');
+          input.value = originalValues[field];
+          return;
+      }
+
+      if (field === 'email' && !isValidEmail(value)) {
+          alert('유효한 이메일 주소를 입력해주세요.');
+          input.value = originalValues[field];
+          return;
+      }
 
       // AJAX 요청
-      fetch('updateUserField', {
+      fetch('memberInfoEdit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -169,15 +193,19 @@ function toggleEdit(field) {
           alert(field + '이(가) 저장되었습니다.');
         } else {
           alert('저장 실패: ' + result);
+          input.value = originalValues[field];
         }
       })
       .catch(err => {
         alert('오류 발생: ' + err);
+        input.value = originalValues[field];
+      })
+      .finally(() => {
+          
+          input.readOnly = true;
+          input.style.backgroundColor = '#f9f9f9';
+          button.textContent = '변경하기';
       });
-
-      input.readOnly = true;
-      input.style.backgroundColor = '#f9f9f9';
-      button.textContent = '변경하기';
     }
   }
 </script>

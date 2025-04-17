@@ -3,16 +3,17 @@
 <%-- <!-- 공통 헤더 -->
 <%@ include file="/includes/header.jsp" %> --%>
 
-<!-- 전체 레이아웃 -->
+
 <div class="layout" style="display: flex; max-width: 1000px; margin: 0 auto; padding: 40px 20px; gap: 30px;">
 
  <%--  <!-- 사이드바 -->
   <div class="sidebar" style="width: 200px;">
     <%@ include file="/includes/mysidebar.jsp" %>
   </div> --%>
-<c:if test="${param.error eq 'needLogin'}">
-  <script>alert("로그인이 필요합니다.");</script>
-</c:if>
+<%--   <%
+  String sessionId = (String) session.getAttribute("userId");
+%> --%>
+
 
   <!-- 본문 -->
   <div class="content" style="flex: 1;">
@@ -23,7 +24,7 @@
       <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px;">회원 탈퇴 정보 작성</h3>
       <p style="font-size: 13px; color: #666;">귀하의 사유 작성은 YOUSINSA에 큰 도움이 됩니다.</p>
 
-      <form method="post" action="withdraw.do" style="margin-top: 20px;">
+      <form method="post" action="withdraw" style="margin-top: 20px;">
         
         <!-- 탈퇴 사유 -->
         <select name="reason"

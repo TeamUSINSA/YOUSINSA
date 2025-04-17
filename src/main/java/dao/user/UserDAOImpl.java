@@ -18,19 +18,16 @@ public class UserDAOImpl implements UserDAO {
 
 	}
 
-	@Override
-<<<<<<< HEAD
-	public void updateUser(User user) throws Exception {
-		sqlSession.update("mapper.member.updateUser", user);
-		sqlSession.commit();
+	/*
+	 * @Override
+	 * 
+	 * public void updateUser(User user) throws Exception {
+	 * sqlSession.update("mapper.member.updateUser", user); sqlSession.commit();
+	 * 
+	 * }
+	 */
 
-	}
 
-	@Override
-	public void deleteUser(User user) throws Exception {
-		// TODO Auto-generated method stub
-
-=======
 	public void updateSingleField(String userId, String column, String value) throws Exception {
 		Map<String, String> params = new HashMap<>();
 	    params.put("userId", userId);
@@ -44,8 +41,6 @@ public class UserDAOImpl implements UserDAO {
 	public void withdrawUser(User user) throws Exception {
 		sqlSession.update("mapper.user.withdrawUser",user);
 		sqlSession.commit();
-		
->>>>>>> 682b3c0bc01fde93f8e6f3967534e05f9bb7cff9
 	}
 
 	@Override
@@ -73,5 +68,6 @@ public class UserDAOImpl implements UserDAO {
 		int count = sqlSession.selectOne("mapper.user.isDuplicateId", userId);
 		return count > 0;
 	}
+	
 
 }

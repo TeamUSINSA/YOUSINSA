@@ -7,7 +7,7 @@ public class User {
     private String password;
     private String checkpassword;
     private String name;
-    private String phoneNum;
+    private String phone;
     private String email;
     private Date birth;
     private boolean deleted;
@@ -27,12 +27,12 @@ public class User {
     }
 
 
-    public User(String userId, String password, String checkpassword, String name, String phoneNum, String email, Date birth) {
+    public User(String userId, String password, String checkpassword, String name, String phone, String email, Date birth) {
         this.userId = userId;
         this.password = password;
         this.checkpassword = checkpassword;
         this.name = name;
-        this.phoneNum = phoneNum;
+        this.phone = phone;
         this.email = email;
         this.birth = birth;
     }
@@ -69,12 +69,12 @@ public class User {
         this.name = name;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {

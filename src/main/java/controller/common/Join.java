@@ -58,7 +58,7 @@ public class Join extends HttpServlet {
         user.setUserId(userId);
         user.setPassword(password);
         user.setName(name);
-        user.setPhoneNum(phone);
+        user.setPhone(phone);
         user.setEmail(email);
         user.setBirth(birth);
 
