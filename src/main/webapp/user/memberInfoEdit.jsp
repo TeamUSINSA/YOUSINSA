@@ -1,7 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
-<%-- <%@ include file="/includes/header.jsp" %> --%>
-
 <div class="member-info-wrap">
   <h2>회원정보</h2>
 
@@ -27,10 +25,9 @@
   <label>비밀번호</label>
   <div class="field-group">
     <input type="password" value="${user.password}" readonly>
-    <button type="button" onclick="location.href='editPassword.jsp'">변경하기</button>
+    <button type="button" onclick="location.href='changePassword'">변경하기</button>
   </div>
 </div>
-
 
   <!-- 휴대전화 -->
   <div class="info-row">
@@ -65,9 +62,6 @@
   </div>
 </div>
 
-<%-- <%@ include file="/includes/footer.jsp" %> --%>
-
-<!-- ✅ 스타일 -->
 <style>
   .member-info-wrap {
     max-width: 500px;
@@ -142,70 +136,66 @@
   }
 </style>
 
-<!-- 수정/저장 스크립트 -->
 <script>
 const originalValues = {};
 
-//폰번호, 이메일 유효성 검사
+// 유효성 검사
 function isValidPhone(phone) {
-    return /^[0-9]{10,11}$/.test(phone);
+  return /^[0-9]{10,11}$/.test(phone);
 }
 function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function toggleEdit(field) {
-    const input = document.getElementById(field + 'Field');
-    const button = document.getElementById(field + 'Btn');
+  const input = document.getElementById(field + 'Field');
+  const button = document.getElementById(field + 'Btn');
 
-    if (input.readOnly) {
-    	originalValues[field] = input.value;
-      input.readOnly = false;
-      input.style.backgroundColor = '#fff';
-      button.textContent = '저장';
-    } else {
-      const value = input.value;
-      
-      //폰번호,이메일 유효성 검사
-      if (field === 'phone' && !isValidPhone(value)) {
-          alert('전화번호는 숫자 10~11자리여야 합니다.');
-          input.value = originalValues[field];
-          return;
-      }
+  if (input.readOnly) {
+    originalValues[field] = input.value;
+    input.readOnly = false;
+    input.style.backgroundColor = '#fff';
+    button.textContent = '저장';
+  } else {
+    const value = input.value;
 
-      if (field === 'email' && !isValidEmail(value)) {
-          alert('유효한 이메일 주소를 입력해주세요.');
-          input.value = originalValues[field];
-          return;
-      }
-
-      // AJAX 요청
-      fetch('memberInfoEdit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: "field=" + field + "&value=" + encodeURIComponent(value)
-      })
-      .then(res => res.text())
-      .then(result => {
-        if (result === 'success') {
-          alert(field + '이(가) 저장되었습니다.');
-        } else {
-          alert('저장 실패: ' + result);
-          input.value = originalValues[field];
-        }
-      })
-      .catch(err => {
-        alert('오류 발생: ' + err);
-        input.value = originalValues[field];
-      })
-      .finally(() => {
-          
-          input.readOnly = true;
-          input.style.backgroundColor = '#f9f9f9';
-          button.textContent = '변경하기';
-      });
+    // 유효성 검사
+    if (field === 'phone' && !isValidPhone(value)) {
+      alert('전화번호는 숫자 10~11자리여야 합니다.');
+      input.value = originalValues[field];
+      return;
     }
+    if (field === 'email' && !isValidEmail(value)) {
+      alert('유효한 이메일 주소를 입력해주세요.');
+      input.value = originalValues[field];
+      return;
+    }
+
+    fetch('memberInfoEdit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: "field=" + field + "&value=" + encodeURIComponent(value)
+    })
+    .then(res => res.text())
+    .then(result => {
+      if (result === 'success') {
+        alert(field + '이(가) 저장되었습니다.');
+      } else {
+        alert('저장 실패: ' + result);
+        input.value = originalValues[field];
+      }
+    })
+    .catch(err => {
+      alert('오류 발생: ' + err);
+      input.value = originalValues[field];
+    })
+    .finally(() => {
+      input.readOnly = true;
+      input.style.backgroundColor = '#f9f9f9';
+      button.textContent = '변경하기';
+    });
   }
+}
 </script>

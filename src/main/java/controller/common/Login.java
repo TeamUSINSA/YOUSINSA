@@ -1,4 +1,4 @@
-package controller.user;
+package controller.common;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -30,43 +30,38 @@ public class Login extends HttpServlet {
 
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
-        String saveId = request.getParameter("saveId");
+        String saveId = request.getParameter("saveId"); // 체크박스가 체크 안 되면 null
 
         UserService service = new UserServiceImpl();
 
-        System.out.println("[디버깅] 입력 userId: " + userId);
-        System.out.println("[디버깅] 입력 password: " + password);
-        
-        // ✅ user 객체 생성 후 로그인
         User user = new User();
         user.setUserId(userId);
         user.setPassword(password);
 
         try {
-            User loginUser = service.login(user);  // ✅ 객체로 전달
+            User loginUser = service.login(user);
 
             if (loginUser != null) {
+                // ✅ 세션 저장
                 HttpSession session = request.getSession();
                 session.setAttribute("userId", loginUser.getUserId());
                 session.setAttribute("name", loginUser.getName());
-                
-                System.out.println("[디버깅] 세션 저장 완료: " + session.getAttribute("userId"));
 
-                // 아이디 저장 쿠키
-                Cookie cookie = new Cookie("saveId", saveId != null ? userId : "");
-                cookie.setMaxAge(saveId != null ? 60 * 60 * 24 * 30 : 0);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-                
-                System.out.println("[디버깅] loginUser 객체 = " + loginUser);
-                System.out.println("[디버깅] loginUser.getUserId() = " + loginUser.getUserId());
-                System.out.println("[디버깅] loginUser.getPassword() = " + loginUser.getPassword());
-                System.out.println("[디버깅] loginUser.getName() = " + loginUser.getName());
-
+                // ✅ 아이디 저장 쿠키 처리
+                if ("on".equals(saveId)) {
+                    Cookie cookie = new Cookie("saveId", userId);
+                    cookie.setMaxAge(60 * 60 * 24 * 30); // 30일
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                } else {
+                    Cookie cookie = new Cookie("saveId", "");
+                    cookie.setMaxAge(0); // 즉시 삭제
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                }
 
                 response.sendRedirect(request.getContextPath() + "/common/loginSuccess.jsp");
             } else {
-            	 System.out.println("[디버깅] 로그인 실패");
                 request.setAttribute("err", "아이디 또는 비밀번호가 일치하지 않습니다.");
                 request.getRequestDispatcher("/common/login.jsp").forward(request, response);
             }
@@ -77,5 +72,4 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
-
 }

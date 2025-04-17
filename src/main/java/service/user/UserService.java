@@ -12,6 +12,10 @@ public interface UserService {
 	boolean isDuplicateId(String userId) throws Exception;
 	boolean checkDoubleId(String userId) throws Exception;
 	void withdraw(User user) throws Exception;
+	
+	String findUserId(String name, String email, String phone) throws Exception;
+	User findUserForPasswordReset(String name, String userId, String email);
+	void updateUserPassword(String userId, String newPassword) throws Exception;
 
 }
 

@@ -28,9 +28,9 @@
     </form>
 
     <div class="mt-3 text-xs text-gray-500">
-      <a href="#">아이디 찾기</a> |
-      <a href="#">비밀번호 찾기</a> |
-      <a href="<c:url value='/user/join.jsp' />">회원가입</a>
+      <a href="findId">아이디 찾기</a> |
+      <a href="findPassword">비밀번호 찾기</a> |
+      <a href="join">회원가입</a>
     </div>
   </main>
 
