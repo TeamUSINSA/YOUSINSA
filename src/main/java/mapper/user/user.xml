@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
 <mapper namespace="mapper.user">
 	<insert id="insertUser" parameterType="user">
-		insert into `user` (user_id,password,name,phone,email,birth) 
-			values(#{userId},#{password},#{name},#{phoneNum},#{email},#{birth})
+		insert into user
+		(user_id,password,name,phone,email,birth)
+		values(#{userId},#{password},#{name},#{phoneNum},#{email},#{birth})
 	</insert>
-	
+
 	<select id="selectUser" parameterType="String" resultType="user">
-		select * from `user` where user_id=#{userId}
+		select * from user where user_id=#{userId}
 	</select>
 
+<<<<<<< HEAD
     <select id="isDuplicateId" parameterType="String" resultType="boolean">
         SELECT COUNT(*) > 0 FROM User WHERE user_id = #{userId}
     </select>
+=======
+	<update id="updateSingleField" parameterType="map">
+		UPDATE user
+		SET ${column} = #{value}
+		WHERE user_id = #{userId}
+	</update>
+>>>>>>> 682b3c0bc01fde93f8e6f3967534e05f9bb7cff9
 	
+	<update id="withdrawUser" parameterType="String">
+		update user
+		set deleted = #{deleted}, withdrawal_reason = #{withdrawalReason},withdrawal_detail=#{withdrawalDetail}
+		where user_id = #{userId}
+		
+	</update>
 
-  <select id="selectUserPoint" parameterType="String" resultType="int">
-    select point from `user` where user_id = #{userId}
-  </select>
-
-
-  <select id="selectUserAddressList" parameterType="String" resultType="user">
-    select address1, address1_detail, address2, address2_detail, address3, address3_detail
-    from user where user_id = #{userId}
-  </select>
-  
-
-<select id="loginUser" parameterType="user" resultType="user">
-  SELECT *
-  FROM `user`
-  WHERE user_id = #{userId}
-    AND password = #{password}
-</select>
-  
-	
 </mapper>

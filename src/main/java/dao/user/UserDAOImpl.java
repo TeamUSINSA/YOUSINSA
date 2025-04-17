@@ -19,6 +19,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void updateUser(User user) throws Exception {
 		sqlSession.update("mapper.member.updateUser", user);
 		sqlSession.commit();
@@ -29,6 +30,22 @@ public class UserDAOImpl implements UserDAO {
 	public void deleteUser(User user) throws Exception {
 		// TODO Auto-generated method stub
 
+=======
+	public void updateSingleField(String userId, String column, String value) throws Exception {
+		Map<String, String> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("column", column);
+	    params.put("value", value);
+	    sqlSession.update("mapper.user.updateSingleField", params);
+	    sqlSession.commit();
+	}
+
+	@Override
+	public void withdrawUser(User user) throws Exception {
+		sqlSession.update("mapper.user.withdrawUser",user);
+		sqlSession.commit();
+		
+>>>>>>> 682b3c0bc01fde93f8e6f3967534e05f9bb7cff9
 	}
 
 	@Override

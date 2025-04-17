@@ -10,6 +10,8 @@ public interface UserService {
     User login(User user) throws Exception;
 	void join(User user) throws Exception;
 	boolean isDuplicateId(String userId) throws Exception;
+	boolean checkDoubleId(String userId) throws Exception;
+	void withdraw(User user) throws Exception;
 
 }
 
