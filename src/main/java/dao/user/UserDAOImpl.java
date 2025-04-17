@@ -18,19 +18,16 @@ public class UserDAOImpl implements UserDAO {
 
 	}
 
-	@Override
-<<<<<<< HEAD
 	public void updateUser(User user) throws Exception {
 		sqlSession.update("mapper.member.updateUser", user);
 		sqlSession.commit();
 
 	}
 
-	@Override
-	public void deleteUser(User user) throws Exception {
-		// TODO Auto-generated method stub
 
-=======
+
+
+
 	public void updateSingleField(String userId, String column, String value) throws Exception {
 		Map<String, String> params = new HashMap<>();
 	    params.put("userId", userId);
@@ -45,7 +42,7 @@ public class UserDAOImpl implements UserDAO {
 		sqlSession.update("mapper.user.withdrawUser",user);
 		sqlSession.commit();
 		
->>>>>>> 682b3c0bc01fde93f8e6f3967534e05f9bb7cff9
+
 	}
 
 	@Override
@@ -73,5 +70,37 @@ public class UserDAOImpl implements UserDAO {
 		int count = sqlSession.selectOne("mapper.user.isDuplicateId", userId);
 		return count > 0;
 	}
+	@Override
+	public String findUserIdByInfo(String name, String email, String phone) throws Exception {
+	    Map<String, String> map = new HashMap<>();
+	    map.put("name", name);
+	    map.put("email", email);
+	    map.put("phone", phone);
+
+	    return sqlSession.selectOne("mapper.user.findUserId", map);
+	}
+	
+	@Override
+	public User findUserForPasswordReset(String name, String userId, String email) {
+	    Map<String, String> param = new HashMap<>();
+	    param.put("name", name);
+	    param.put("userId", userId);
+	    param.put("email", email);
+
+	    return sqlSession.selectOne("mapper.user.findUserForPasswordReset", param);
+
+	}
+	
+	@Override
+	public void updateUserPassword(String userId, String newPassword) throws Exception {
+	    Map<String, String> param = new HashMap<>();
+	    param.put("userId", userId);
+	    param.put("newPassword", newPassword);
+
+	    sqlSession.update("mapper.user.updateUserPassword", param);
+	    sqlSession.commit();
+	}
+
+
 
 }

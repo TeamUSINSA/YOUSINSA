@@ -11,4 +11,9 @@ public interface UserDAO {
 	User findUserAddressList(String userId) throws Exception;
 	User findUserByLogin(User user) throws Exception;
 	boolean isDuplicateId(String userId) throws Exception;
+	void updateUser(User user) throws Exception;
+	String findUserIdByInfo(String name, String email, String phone) throws Exception;
+	User findUserForPasswordReset(String name, String userId, String email);
+	void updateUserPassword(String userId, String newPassword) throws Exception;
+	
 }

@@ -43,7 +43,10 @@ public class Join extends HttpServlet {
         String userId = request.getParameter("userId");
         String password = request.getParameter("password");
         String name = request.getParameter("name");
-        String phone = request.getParameter("phone_num");
+        String phone = request.getParameter("phone1") + "-" +
+                request.getParameter("phone2") + "-" +
+                request.getParameter("phone3");
+
         String email = request.getParameter("email_id") + "@" + request.getParameter("email_domain");
        
         
@@ -58,13 +61,13 @@ public class Join extends HttpServlet {
         user.setUserId(userId);
         user.setPassword(password);
         user.setName(name);
-        user.setPhoneNum(phone);
+        user.setPhone(phone);
         user.setEmail(email);
         user.setBirth(birth);
 
         try {
             service.join(user);
-            response.sendRedirect(request.getContextPath() + "/common/Afterlogin.jsp");
+            response.sendRedirect(request.getContextPath() + "/afterJoin?id=" + userId);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

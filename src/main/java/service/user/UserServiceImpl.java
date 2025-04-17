@@ -63,5 +63,22 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
+	@Override
+	public String findUserId(String name, String email, String phone) throws Exception {
+	    return userDao.findUserIdByInfo(name, email, phone);
+	}
+
+	 @Override
+	    public User findUserForPasswordReset(String name, String userId, String email) {
+	        return userDao.findUserForPasswordReset(name, userId, email);
+	    }
+	 
+	 @Override
+	 public void updateUserPassword(String userId, String newPassword) throws Exception {
+	     userDao.updateUserPassword(userId, newPassword);
+	 }
+
+	
 }
