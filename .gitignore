@@ -1,1 +1,31 @@
+# === Java build output ===
+/bin/
 /build/
+/out/
+/target/
+/*.class
+
+# === IntelliJ IDEA ===
+.idea/
+*.iml
+*.iws
+
+# === Eclipse ===
+.classpath
+.project
+.settings/
+
+# === OS 별 무시할 파일 ===
+.DS_Store
+Thumbs.db
+
+# === Log, temp files ===
+*.log
+*.tmp
+
+# === 기타 ===
+/.gradle/
+/.mvn/
+*.jar
+*.war
+*.ear
