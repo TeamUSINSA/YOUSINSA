@@ -1,5 +1,8 @@
 package dao.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import dto.user.User;
@@ -16,15 +19,19 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public void updateUser(User user) throws Exception {
-		sqlSession.update("mapper.member.updateUser",user);
-        sqlSession.commit();
-		
+	public void updateSingleField(String userId, String column, String value) throws Exception {
+		Map<String, String> params = new HashMap<>();
+	    params.put("userId", userId);
+	    params.put("column", column);
+	    params.put("value", value);
+	    sqlSession.update("mapper.user.updateSingleField", params);
+	    sqlSession.commit();
 	}
 
 	@Override
-	public void deleteUser(User user) throws Exception {
-		// TODO Auto-generated method stub
+	public void withdrawUser(User user) throws Exception {
+		sqlSession.update("mapper.user.withdrawUser",user);
+		sqlSession.commit();
 		
 	}
 

@@ -51,7 +51,7 @@ public class Join extends HttpServlet {
 
         Date birth = null;
         try {
-            birth = Date.valueOf(birthStr); // "yyyy-MM-dd" 형식 필요
+            birth = Date.valueOf(birthStr); 
         } catch (IllegalArgumentException e) {
             request.setAttribute("err", "생년월일 형식이 잘못되었습니다.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
@@ -65,7 +65,7 @@ public class Join extends HttpServlet {
             service.join(user);
             response.sendRedirect("login");
         } catch (Exception e) {
-            e.printStackTrace(); // 디버깅용 로그
+            e.printStackTrace(); 
             request.setAttribute("err", "회원가입에 실패했습니다.");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
