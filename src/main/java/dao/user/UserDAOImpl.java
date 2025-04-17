@@ -39,5 +39,22 @@ public class UserDAOImpl implements UserDAO{
 	public User findUserByUserId(String userId) throws Exception {
 		return sqlSession.selectOne("mapper.user.selectUser", userId);
 	}
+	
+	@Override
+	public User findUserAddressList(String userId) throws Exception {
+		return sqlSession.selectOne("mapper.user.selectUserAddressList", userId);
+	}
+
+	@Override
+	public int findUserPoint(String userId) throws Exception {
+		return sqlSession.selectOne("mapper.user.selectUserPoint", userId);
+	}
+	
+	@Override
+	public User findUserByLogin(User user) throws Exception {
+	    return sqlSession.selectOne("mapper.user.loginUser", user);
+	}
+
+
 
 }

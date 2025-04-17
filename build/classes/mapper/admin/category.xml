@@ -4,7 +4,7 @@
 
 <mapper namespace="mapper.category">
 
-	<insert id="insertCategory" parameterType="dto.admin.Category"
+	<insert id="insertCategory" parameterType="dto.product.Category"
 		useGeneratedKeys="true" keyProperty="categoryId">
 		INSERT INTO Category (category_name)
 		VALUES (#{categoryName})
@@ -15,14 +15,14 @@
 		WHERE category_id = #{categoryId}
 	</delete>
 
-	<select id="selectCategoryList" resultType="dto.admin.Category">
+	<select id="selectCategoryList" resultType="dto.product.Category">
 		SELECT category_id AS categoryId,
 		category_name AS categoryName
 		FROM Category
 	</select>
 
 	<insert id="insertSubCategory"
-		parameterType="dto.admin.SubCategory" useGeneratedKeys="true"
+		parameterType="dto.product.SubCategory" useGeneratedKeys="true"
 		keyProperty="subCategoryId">
 		INSERT INTO SubCategory (sub_category_name, category_id)
 		VALUES (#{subCategoryName}, #{categoryId})
@@ -34,7 +34,7 @@
 	</delete>
 
 	<select id="selectSubCategoryList"
-		resultType="dto.admin.SubCategory">
+		resultType="dto.product.SubCategory">
 		SELECT sub_category_id AS subCategoryId,
 		sub_category_name AS subCategoryName,
 		category_id
