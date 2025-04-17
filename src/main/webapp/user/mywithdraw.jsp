@@ -1,17 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
-<%-- <!-- ✅ 공통 헤더 -->
+<%-- <!-- 공통 헤더 -->
 <%@ include file="/includes/header.jsp" %> --%>
 
-<!-- ✅ 전체 레이아웃 -->
+<!-- 전체 레이아웃 -->
 <div class="layout" style="display: flex; max-width: 1000px; margin: 0 auto; padding: 40px 20px; gap: 30px;">
 
- <%--  <!-- ✅ 사이드바 -->
+ <%--  <!-- 사이드바 -->
   <div class="sidebar" style="width: 200px;">
     <%@ include file="/includes/mysidebar.jsp" %>
   </div> --%>
+<c:if test="${param.error eq 'needLogin'}">
+  <script>alert("로그인이 필요합니다.");</script>
+</c:if>
 
-  <!-- ✅ 본문 -->
+  <!-- 본문 -->
   <div class="content" style="flex: 1;">
     <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 5px;">회원탈퇴</h2>
     <p style="font-size: 13px; color: #666;">그동안 YOUSINSA를 이용해 주셔서 감사합니다.</p>

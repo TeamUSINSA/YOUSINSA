@@ -21,7 +21,7 @@
 	
 	<update id="withdrawUser" parameterType="String">
 		update user
-		set deleted = 1, withdrawal_reason = #{reason},withdrawal_detail=#{detail}
+		set deleted = #{deleted}, withdrawal_reason = #{withdrawalReason},withdrawal_detail=#{withdrawalDetail}
 		where user_id = #{userId}
 		
 	</update>

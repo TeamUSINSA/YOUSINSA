@@ -19,8 +19,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void withdraw(User user) throws Exception {
-		// TODO Auto-generated method stub
-		
+		User wuser = userDao.findUserByUserId(user.getUserId());
+		userDao.withdrawUser(wuser);
 	}
 
 	@Override
