@@ -5,8 +5,9 @@
 
 <configuration>
 	<typeAliases>
-		<typeAlias type="dto.admin.Category" alias="category"/>
+		<typeAlias type="dto.product.Category" alias="category"/>
 		<typeAlias type="dto.user.User" alias="user"/>
+		<typeAlias type="dto.product.Product" alias="product"/>
 	</typeAliases>
 	
 	<environments default="development">
@@ -24,6 +25,6 @@
 	<mappers>
 		<mapper resource="mapper/admin/category.xml"/>
 		<mapper resource="mapper/user/user.xml"/>
-
+		<mapper resource="mapper/user/product.xml"/>
 	</mappers>
 </configuration>

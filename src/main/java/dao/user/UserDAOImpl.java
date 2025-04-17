@@ -1,5 +1,8 @@
 package dao.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import dto.user.User;
@@ -32,5 +35,24 @@ public class UserDAOImpl implements UserDAO{
 	public User findUserByUserId(String userId) throws Exception {
 		return sqlSession.selectOne("mapper.user.selectUser", userId);
 	}
+	
+	@Override
+	public User findUserAddressList(String userId) throws Exception {
+		return sqlSession.selectOne("mapper.user.selectUserAddressList", userId);
+	}
+
+	@Override
+	public int findUserPoint(String userId) throws Exception {
+		return sqlSession.selectOne("mapper.user.selectUserPoint", userId);
+	}
+	
+	@Override
+	public User findUserByLogin(String userId, String password) throws Exception {
+	    Map<String, String> param = new HashMap<>();
+	    param.put("userId", userId);
+	    param.put("password", password);
+	    return sqlSession.selectOne("mapper.user.loginUser", param);
+	}
+
 
 }

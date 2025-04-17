@@ -14,7 +14,7 @@ import dto.product.SubCategory;
 import service.admin.CategoryService;
 import service.admin.CategoryServiceImpl;
 
-@WebServlet("/adminCategory")
+@WebServlet("/adminCategoryList")
 public class AdminCategoryList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -22,23 +22,30 @@ public class AdminCategoryList extends HttpServlet {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+
 		CategoryService service = new CategoryServiceImpl();
 
 		try {
+			// 카테고리 리스트 조회
 			List<Category> categoryList = service.selectCategoryList();
 			List<SubCategory> subCategoryList = service.selectSubCategoryList();
-			
 
+			// request 객체에 담기
 			request.setAttribute("categoryList", categoryList);
 			request.setAttribute("subCategoryList", subCategoryList);
 
-			request.getRequestDispatcher("admin/adminCategory.jsp").forward(request, response);
+			// JSP로 포워딩
+			request.getRequestDispatcher("/admin/adminCategory.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("err", "카테고리 불러오기 실패");
-			request.getRequestDispatcher("admin/adminCategory.jsp").forward(request, response);
+			request.setAttribute("err", "카테고리 목록 불러오기 실패");
+			request.getRequestDispatcher("/admin/adminCategory.jsp").forward(request, response);
 		}
 	}
 }

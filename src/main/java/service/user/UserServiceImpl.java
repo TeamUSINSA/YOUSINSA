@@ -3,37 +3,38 @@ package service.user;
 import dao.user.UserDAO;
 import dao.user.UserDAOImpl;
 import dto.user.User;
+import service.user.UserService;
 
-public class UserServiceImpl implements UserService{
-	
-	private UserDAO userDao;
+
+public class UserServiceImpl implements UserService {
+
+    private UserDAO userDao;
+
     public UserServiceImpl() {
-        userDao = new UserDAOImpl();}
+        this.userDao = new UserDAOImpl();
+    }
 
-	@Override
-	public void join(User user) throws Exception {
-		User suser = userDao.findUserByUserId(user.getUserId());
-        if(suser != null) throw new Exception("아이디 중복 오류");
+    @Override
+    public void insertUser(User user) throws Exception {
         userDao.insertUser(user);
-	}
+    }
 
-	@Override
-	public void withdraw(User user) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public User getUserById(String userId) throws Exception {
+        return userDao.findUserByUserId(userId);
+    }
 
-	@Override
-	public User login(String userId, String password) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public User getUserAddressList(String userId) throws Exception {
+        return userDao.findUserAddressList(userId);
+    }
 
-	@Override
-	public boolean checkDoubleId(String userId) throws Exception {
-		User user = userDao.findUserByUserId(userId);
-        if(user == null) return false;
-        return true;
-	}
-
+    @Override
+    public int getUserPoint(String userId) throws Exception {
+        return userDao.findUserPoint(userId);
+    }
+    @Override
+    public User login(String userId, String password) throws Exception {
+        return userDao.findUserByLogin(userId, password);
+    }
 }
