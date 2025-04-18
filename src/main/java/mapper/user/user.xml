@@ -70,7 +70,8 @@
 
 	<update id="withdrawUser" parameterType="user">
 		update user
-		set deleted = #{deleted, jdbcType=BOOLEAN},
+		set deleted =
+		#{deleted, jdbcType=BOOLEAN},
 		withdrawal_reason = #{withdrawalReason},
 		withdrawal_detail = #{withdrawalDetail}
 		where user_id = #{userId}
@@ -83,6 +84,24 @@
 		WHERE user_id = #{userId}
 	</update>
 
+	<select id="selectLikedProducts" resultType="likelist">
+		SELECT l.like_id AS likeId,
+		l.product_id AS productId,
+		l.user_id AS userId,
+		p.name,
+		p.price,
+		p.main_image1 AS mainImage1,
+		p.description1 AS detail
+		FROM likelist l
+		JOIN product p ON l.product_id = p.product_id
+		WHERE l.user_id = #{userId}
+		ORDER BY l.like_id DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="countLikedProducts" resultType="int">
+		SELECT COUNT(*) FROM likelist WHERE user_id = #{userId}
+	</select>
 
 
 </mapper>
