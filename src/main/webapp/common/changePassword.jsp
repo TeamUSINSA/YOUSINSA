@@ -23,7 +23,7 @@
   </style>
 </head>
 <body class="bg-white text-sm text-gray-700">
-
+<jsp:include page="/header" />
 <main class="flex flex-col items-center justify-center py-24">
   <div class="border rounded-lg px-10 py-10 w-full max-w-lg shadow-sm">
     <h2 class="text-2xl font-semibold text-center mb-10">비밀번호 변경</h2>
@@ -48,6 +48,6 @@
     </form>
   </div>
 </main>
-
+ <jsp:include page="/footer" />
 </body>
 </html>

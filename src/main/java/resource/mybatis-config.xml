@@ -13,6 +13,7 @@
 		<typeAlias type="dto.user.User" alias="user"/>
 		<typeAlias type="dto.product.Product" alias="product"/>
 		<typeAlias type="dto.user.LikeList" alias="likelist"/>
+		<typeAlias type="dto.product.BannerProduct" alias="banner"/>
 	</typeAliases>
 	
 	<environments default="development">
@@ -31,5 +32,6 @@
 		<mapper resource="mapper/product/category.xml"/>
 		<mapper resource="mapper/user/user.xml"/>
 		<mapper resource="mapper/product/product.xml"/>
+		<mapper resource="mapper/product/bannerproduct.xml"/>
 	</mappers>
 </configuration>

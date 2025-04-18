@@ -45,5 +45,11 @@ public class CategoryDAOImpl implements CategoryDAO {
     public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) {
         return sqlSession.selectList("mapper.category.selectSubCategoriesByCategoryId", categoryId);
     }
+    
+    @Override
+    public List<Category> selectCategoryWithSubList() {
+        return sqlSession.selectList("mapper.category.selectCategoryWithSubList");
+    }
+
 
 }

@@ -54,5 +54,28 @@
 		SELECT * FROM subcategory
 		WHERE category_id = #{categoryId}
 	</select>
+	
+	<resultMap id="categoryWithSubResultMap" type="dto.product.Category">
+  <id property="categoryId" column="category_id" />
+  <result property="categoryName" column="category_name" />
+  <collection property="subCategoryList" ofType="dto.product.SubCategory">
+    <id property="subCategoryId" column="sub_category_id" />
+    <result property="subCategoryName" column="sub_category_name" />
+    <result property="categoryId" column="category_id" />
+  </collection>
+</resultMap>
+
+<!-- 대분류 + 소분류를 한 번에 조인 조회 -->
+<select id="selectCategoryWithSubList" resultMap="categoryWithSubResultMap">
+  SELECT 
+    c.category_id,
+    c.category_name,
+    s.sub_category_id,
+    s.sub_category_name,
+    s.category_id
+  FROM category c
+  LEFT JOIN subcategory s ON c.category_id = s.category_id
+  ORDER BY c.category_id, s.sub_category_id
+</select>
 
 </mapper>

@@ -50,5 +50,12 @@ public class CategoryServiceImpl implements CategoryService {
     public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) {
         return categoryDao.selectSubCategoriesByCategoryId(categoryId);
     }
+    
+    @Override
+    public List<Category> selectCategoryWithSubList() {
+        return categoryDao.selectCategoryWithSubList();
+    }
+
+
 
 }

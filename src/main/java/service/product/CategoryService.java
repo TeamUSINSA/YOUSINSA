@@ -14,4 +14,5 @@ public interface CategoryService {
 	void deleteSubCategoryById(int subCategoryId);
 	void deleteCategoryById(int categoryId);
 	List<SubCategory> selectSubCategoriesByCategoryId(int categoryId);
+	List<Category> selectCategoryWithSubList();
 }

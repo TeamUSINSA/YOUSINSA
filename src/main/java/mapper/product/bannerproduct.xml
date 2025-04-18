@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.bannerproduct">
+
+<select id="selectMainBannerList" resultType="banner">
+        SELECT id, name, product_id, img, position
+        FROM bannerproduct
+        WHERE position = 'main'
+        ORDER BY id ASC
+    </select>
+    
+    <select id="selectSubBannerList" resultType="banner">
+    SELECT id, name, product_id, img, position
+    FROM bannerproduct
+    WHERE position = 'sub'
+    ORDER BY id ASC
+</select>
+    
+</mapper>

@@ -6,7 +6,7 @@
 	<insert id="insertUser" parameterType="user">
 		insert into user
 		(user_id,password,name,phone,email,birth)
-		values(#{userId},#{password},#{name},#{phoneNum},#{email},#{birth})
+		values(#{userId},#{password},#{name},#{phone},#{email},#{birth})
 	</insert>
 
 	<select id="selectUser" parameterType="String" resultType="user">

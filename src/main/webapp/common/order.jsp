@@ -257,5 +257,6 @@
       });
     });
   </script>
+   <jsp:include page="/footer" />
 </body>
 </html>

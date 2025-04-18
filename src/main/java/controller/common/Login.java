@@ -26,6 +26,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.setCharacterEncoding("utf-8");
 
         String userId = request.getParameter("userId");
@@ -48,17 +49,10 @@ public class Login extends HttpServlet {
                 session.setAttribute("name", loginUser.getName());
 
                 // ✅ 아이디 저장 쿠키 처리
-                if ("on".equals(saveId)) {
-                    Cookie cookie = new Cookie("saveId", userId);
-                    cookie.setMaxAge(60 * 60 * 24 * 30); // 30일
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                } else {
-                    Cookie cookie = new Cookie("saveId", "");
-                    cookie.setMaxAge(0); // 즉시 삭제
-                    cookie.setPath("/");
-                    response.addCookie(cookie);
-                }
+                Cookie saveIdCookie = new Cookie("saveId", "on".equals(saveId) ? userId : "");
+                saveIdCookie.setMaxAge("on".equals(saveId) ? 60 * 60 * 24 * 30 : 0); // 30일 or 삭제
+                saveIdCookie.setPath("/");
+                response.addCookie(saveIdCookie);
 
                 response.sendRedirect("loginSuccess");
             } else {
@@ -72,4 +66,5 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
+
 }
