@@ -4,37 +4,41 @@
 
 <mapper namespace="mapper.product">
 
-  <!-- 상품 타입으로 전체 조회 (예: type = 'main') -->
-    <select id="selectProductsByType" resultType="dto.product.Product">
-        SELECT *
-        FROM product
-        WHERE type = #{type}
-        ORDER BY reg_date DESC
-    </select>
+	<!-- 상품 타입으로 전체 조회 (예: type = 'main') -->
+	<select id="selectProductsByType"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE type = #{type}
+		ORDER BY reg_date DESC
+	</select>
 
-    <!-- 상품 타입으로 랜덤 4개 조회 (예: type = 'popular' or 'recommend') -->
-    <select id="selectRandomProductsByType" resultType="dto.product.Product">
-        SELECT *
-        FROM product
-        WHERE type = #{type}
-        ORDER BY RAND()
-        LIMIT 4
-    </select>
+	<!-- 상품 타입으로 랜덤 4개 조회 (예: type = 'popular' or 'recommend') -->
+	<select id="selectRandomProductsByType"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE type = #{type}
+		ORDER BY RAND()
+		LIMIT 4
+	</select>
 
-<!-- 서브카테고리별 상품 목록 -->
-  <select id="selectBySubCategory" resultType="product">
-    SELECT *
-    FROM product
-    WHERE sub_category_id = #{subCategoryId}
-  </select>
+	<select id="selectProductsByCategory"
+		resultType="dto.product.Product">
+		SELECT p.*
+		FROM product p
+		JOIN subcategory s ON p.sub_category_id = s.sub_category_id
+		WHERE s.category_id = #{categoryId}
+	</select>
 
-  <!-- 대분류 카테고리에 해당하는 상품 목록 -->
-  <select id="selectByCategory" resultType="product">
-    SELECT p.*
-    FROM product p
-    JOIN subcategory s ON p.sub_category_id = s.sub_category_id
-    WHERE s.category_id = #{categoryId}
-  </select>
+	<select id="selectProductsBySubCategory"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE sub_category_id = #{subCategoryId}
+	</select>
+
+
 
 
 </mapper>
