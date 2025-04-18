@@ -5,9 +5,9 @@ import java.sql.Date;
 public class Product {
 	    private int productId;
 	    private String name;
-	    private String cost;
-	    private String price;
-	    private String discount;
+	    private int cost;
+	    private int price;
+	    private int discount;
 	    private int subCategoryId;
 	    private String type;
 	    private Date regDate;
@@ -48,27 +48,27 @@ public class Product {
 			this.name = name;
 		}
 
-		public String getCost() {
+		public int getCost() {
 			return cost;
 		}
 
-		public void setCost(String cost) {
+		public void setCost(int cost) {
 			this.cost = cost;
 		}
 
-		public String getPrice() {
+		public int getPrice() {
 			return price;
 		}
 
-		public void setPrice(String price) {
+		public void setPrice(int price) {
 			this.price = price;
 		}
 
-		public String getDiscount() {
+		public int getDiscount() {
 			return discount;
 		}
 
-		public void setDiscount(String discount) {
+		public void setDiscount(int discount) {
 			this.discount = discount;
 		}
 

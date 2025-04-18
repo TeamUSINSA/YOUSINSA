@@ -13,4 +13,7 @@ public interface CategoryDAO {
     List<SubCategory> selectSubCategoryList();
 	void deleteSubCategoryById(int subCategoryId);
 	void deleteCategoryById(int categoryId);
+	List<SubCategory> selectSubCategoriesByCategoryId(int categoryId);
+	
+	
 }

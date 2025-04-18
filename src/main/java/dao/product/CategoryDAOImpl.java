@@ -40,4 +40,10 @@ public class CategoryDAOImpl implements CategoryDAO {
     public void deleteSubCategoryById(int subCategoryId) {
         sqlSession.delete("mapper.category.deleteSubCategory", subCategoryId);
     }
+    
+    @Override
+    public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) {
+        return sqlSession.selectList("mapper.category.selectSubCategoriesByCategoryId", categoryId);
+    }
+
 }

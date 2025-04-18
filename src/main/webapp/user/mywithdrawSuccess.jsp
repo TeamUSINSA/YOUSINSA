@@ -93,7 +93,7 @@
             <p>회원탈퇴가 정상적으로 완료되었습니다.</p>
             <p>지금까지 YOUSINSA를 이용해 주셔서 진심으로 감사드립니다.</p>
             <form action="main.jsp" method="get">
-                <button class="withdraw-btn"><a href="main.jsp">메인화면으로</a></button>
+                <button class="withdraw-btn"><a href="main">메인화면으로</a></button>
             </form>
         </div>
     </div>

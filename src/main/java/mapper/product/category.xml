@@ -40,5 +40,19 @@
 		category_id
 		FROM SubCategory
 	</select>
+	
+	
+  <select id="selectAllCategories" resultType="dto.product.Category">
+		SELECT * FROM category
+	</select>
+
+	<select id="selectAllSubCategories" resultType="dto.product.SubCategory">
+		SELECT * FROM subcategory
+	</select>
+
+	<select id="selectSubCategoriesByCategoryId" resultType="dto.product.SubCategory">
+		SELECT * FROM subcategory
+		WHERE category_id = #{categoryId}
+	</select>
 
 </mapper>
