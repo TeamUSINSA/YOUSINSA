@@ -6,8 +6,8 @@ import dto.product.BannerProduct;
 
 public interface BannerProductService {
 
-	List<BannerProduct> getMainBannerList();
+	List<BannerProduct> getMainBannerList() throws Exception;
 
-	List<BannerProduct> getSubBannerList();
+	List<BannerProduct> getSubBannerList() throws Exception;
 
 }

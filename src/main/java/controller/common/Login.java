@@ -57,7 +57,7 @@ public class Login extends HttpServlet {
                 response.sendRedirect("loginSuccess");
             } else {
                 request.setAttribute("err", "아이디 또는 비밀번호가 일치하지 않습니다.");
-                request.getRequestDispatcher("/common/login.jsp").forward(request, response);
+                request.getRequestDispatcher("login").forward(request, response);
             }
 
         } catch (Exception e) {

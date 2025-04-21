@@ -7,6 +7,9 @@ public class Cart {
     private int quantity;
     private String color;
     private String size;
+    private String name;
+    private String mainImage1;
+    private int price;
 
     // 기본 생성자
     public Cart() {}
@@ -57,6 +60,30 @@ public class Cart {
 
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMainImage1() {
+		return mainImage1;
+	}
+
+	public void setMainImage1(String mainImage1) {
+		this.mainImage1 = mainImage1;
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
 	}
     
     

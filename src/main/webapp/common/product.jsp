@@ -129,38 +129,40 @@ body {
 	<!-- ✅ 상품 리스트 -->
 <c:if test="${not empty productList}">
   <div class="product-grid">
-    <c:forEach var="product" items="${productList}">
-      <div class="product-item">
-        <img src="/yousinsa/image/${product.mainImage1}" alt="${product.name}" />
-        <div class="product-info">
-          <div class="product-name">${product.name}</div>
+<c:forEach var="product" items="${productList}">
+  <div class="product-item">
+    <a href="/yousinsa/productDetail?productId=${product.productId}" style="text-decoration: none; color: inherit;">
+      <img src="/yousinsa/image/${product.mainImage1}" alt="${product.name}" />
+      <div class="product-info">
+        <div class="product-name">${product.name}</div>
 
-          <c:choose>
-            <c:when test="${product.discount > 0}">
-              <div>
-                <span style="color: crimson; font-weight: bold; margin-right: 8px;">
-                  <fmt:formatNumber value="${(product.discount * 100) / product.price}" type="number" maxFractionDigits="0" />%
-                </span>
-                <span style="color: #777; text-decoration: line-through; margin-right: 8px;">
-                  <fmt:formatNumber value="${product.price}" type="number" />원
-                </span>
-                <span style="color: red; font-weight: bold;">
-                  <fmt:formatNumber value="${product.price - product.discount}" type="number" />원
-                </span>
-              </div>
-            </c:when>
-            <c:otherwise>
-              <div>
-                <span style="color: #000;">
-                  <fmt:formatNumber value="${product.price}" type="number" />원
-                </span>
-              </div>
-            </c:otherwise>
-          </c:choose>
-
-        </div>
+        <c:choose>
+          <c:when test="${product.discount > 0}">
+            <div>
+              <span style="color: crimson; font-weight: bold; margin-right: 8px;">
+                <fmt:formatNumber value="${(product.discount * 100) / product.price}" type="number" maxFractionDigits="0" />%
+              </span>
+              <span style="color: #777; text-decoration: line-through; margin-right: 8px;">
+                <fmt:formatNumber value="${product.price}" type="number" />원
+              </span>
+              <span style="color: red; font-weight: bold;">
+                <fmt:formatNumber value="${product.price - product.discount}" type="number" />원
+              </span>
+            </div>
+          </c:when>
+          <c:otherwise>
+            <div>
+              <span style="color: #000;">
+                <fmt:formatNumber value="${product.price}" type="number" />원
+              </span>
+            </div>
+          </c:otherwise>
+        </c:choose>
       </div>
-    </c:forEach>
+    </a>
+  </div>
+</c:forEach>
+
   </div>
 </c:if>
 

@@ -15,12 +15,12 @@ public class BannerProductServiceImpl implements BannerProductService{
 	    }
 
 	    @Override
-	    public List<BannerProduct> getMainBannerList() {
+	    public List<BannerProduct> getMainBannerList() throws Exception{
 	        return bannerProductDAO.selectMainBannerList();
 	    }
 	    
 	    @Override
-	    public List<BannerProduct> getSubBannerList() {
+	    public List<BannerProduct> getSubBannerList() throws Exception{
 	        return bannerProductDAO.selectSubBannerList();
 	    }
 

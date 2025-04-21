@@ -12,42 +12,42 @@ public class CategoryDAOImpl implements CategoryDAO {
     private SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(true); // auto-commit
 
     @Override
-    public void insertCategory(Category category) {
+    public void insertCategory(Category category) throws Exception{
         sqlSession.insert("mapper.category.insertCategory", category);
     }
 
     @Override
-    public void deleteCategoryById(int categoryId) {
+    public void deleteCategoryById(int categoryId) throws Exception{
         sqlSession.delete("mapper.category.deleteCategory", categoryId);
     }
 
     @Override
-    public List<Category> selectCategoryList() {
+    public List<Category> selectCategoryList() throws Exception{
         return sqlSession.selectList("mapper.category.selectCategoryList");
     }
 
     @Override
-    public void insertSubCategory(SubCategory subCategory) {
+    public void insertSubCategory(SubCategory subCategory) throws Exception{
         sqlSession.insert("mapper.category.insertSubCategory", subCategory);
     } 
 
     @Override
-    public List<SubCategory> selectSubCategoryList() {
+    public List<SubCategory> selectSubCategoryList() throws Exception{
         return sqlSession.selectList("mapper.category.selectSubCategoryList");
     }
     
     @Override
-    public void deleteSubCategoryById(int subCategoryId) {
+    public void deleteSubCategoryById(int subCategoryId) throws Exception{
         sqlSession.delete("mapper.category.deleteSubCategory", subCategoryId);
     }
     
     @Override
-    public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) {
+    public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) throws Exception{
         return sqlSession.selectList("mapper.category.selectSubCategoriesByCategoryId", categoryId);
     }
     
     @Override
-    public List<Category> selectCategoryWithSubList() {
+    public List<Category> selectCategoryWithSubList() throws Exception{
         return sqlSession.selectList("mapper.category.selectCategoryWithSubList");
     }
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.productdetail">
+
+  <!-- 상품 상세 -->
+  <select id="selectProductById" resultType="dto.product.Product">
+    SELECT * FROM product
+    WHERE product_id = #{productId}
+  </select>
+
+  <!-- 색상, 사이즈, 재고 전체 JSON 용 -->
+  <select id="selectProductStockByProductId" resultType="dto.product.ProductStock">
+    SELECT stock_id, product_id, color, size, quantity
+    FROM productstock
+    WHERE product_id = #{productId}
+    ORDER BY color, size
+  </select>
+
+  <!-- 좋아요 수 -->
+  <select id="countLikesByProductId" resultType="int">
+    SELECT COUNT(*) FROM likelist WHERE product_id = #{productId}
+  </select>
+
+  <!-- 평균 별점 -->
+  <select id="getAvgRatingByProductId" resultType="double">
+    SELECT IFNULL(ROUND(AVG(rating), 1), 0)
+    FROM review
+    WHERE product_id = #{productId}
+  </select>
+
+  <!-- 리뷰 목록 -->
+  <select id="selectReviewsByProductId" resultType="dto.user.Review">
+    SELECT * FROM review WHERE product_id = #{productId} ORDER BY review_id DESC
+  </select>
+
+  <!-- 문의 목록 -->
+  <select id="selectInquiriesByProductId" resultType="dto.user.Inquiry">
+    SELECT * FROM inquiry WHERE product_id = #{productId} ORDER BY inquiry_id DESC
+  </select>
+
+  <!-- 좋아요 토글 관련 쿼리 추가 -->
+  <!-- 1) 사용자가 이미 좋아요를 눌렀는지 확인 -->
+  <select id="existsLike" resultType="boolean" parameterType="map">
+    SELECT COUNT(*) > 0
+    FROM likelist
+    WHERE user_id = #{userId}
+      AND product_id = #{productId}
+  </select>
+
+  <!-- 2) 좋아요 추가 -->
+  <insert id="insertLike" parameterType="map">
+    INSERT INTO likelist(user_id, product_id)
+    VALUES(#{userId}, #{productId})
+  </insert>
+
+  <!-- 3) 좋아요 삭제 -->
+  <delete id="deleteLike" parameterType="map">
+    DELETE FROM likelist
+    WHERE user_id = #{userId}
+      AND product_id = #{productId}
+  </delete>
+
+</mapper>
