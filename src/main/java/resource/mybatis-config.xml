@@ -4,6 +4,12 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+<properties>
+	<!-- 유효성 확인 -->
+    <property name="poolPingEnabled" value="true"/>
+    <property name="poolPingQuery" value="SELECT 1"/>
+    <property name="poolPingConnectionsNotUsedFor" value="10000"/>
+  </properties>
 <settings>
     <setting name="mapUnderscoreToCamelCase" value="true"/>
   </settings>
