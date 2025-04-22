@@ -4,10 +4,10 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
-<settings>
-    <setting name="mapUnderscoreToCamelCase" value="true"/>
-  </settings>
-  
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
 	<typeAliases>
 		<typeAlias type="dto.product.Category" alias="category"/>
 		<typeAlias type="dto.user.User" alias="user"/>
@@ -19,27 +19,31 @@
 		<typeAlias type="dto.order.Coupon" alias="coupon"/>
 		<typeAlias type="dto.order.Order" alias="order"/>
 	</typeAliases>
-	
+
 	<environments default="development">
 		<environment id="development">
-			<transactionManager type="JDBC"/>
+			<transactionManager type="JDBC" />
 			<dataSource type="POOLED">
-				<property name="driver" value="org.mariadb.jdbc.Driver"/>
-				<property name="url" value="jdbc:mariadb://localhost:3306/yousinsa"/>
-				<property name="username" value="root"/>
-				<property name="password" value="7564"/>
+				<property name="driver" value="org.mariadb.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mariadb://localhost:3306/yousinsa" />
+				<property name="username" value="root" />
+				<property name="password" value="7564" />
 			</dataSource>
 		</environment>
 	</environments>
-	
+
 	<mappers>
-		<mapper resource="mapper/product/category.xml"/>
-		<mapper resource="mapper/user/user.xml"/>
-		<mapper resource="mapper/product/product.xml"/>
-		<mapper resource="mapper/product/bannerproduct.xml"/>
-		<mapper resource="mapper/product/productdetail.xml"/>
-		<mapper resource="mapper/order/cart.xml"/>
-		<mapper resource="mapper/order/coupon.xml"/>
-		<mapper resource="mapper/order/order.xml"/>
+
+<mapper resource="mapper/admin/adminProduct.xml" />
+<mapper resource="mapper/product/category.xml" />
+<mapper resource="mapper/user/user.xml" />
+<mapper resource="mapper/product/product.xml" />
+<mapper resource="mapper/product/bannerproduct.xml" />
+<mapper resource="mapper/product/productdetail.xml" />
+<mapper resource="mapper/order/cart.xml" />
+<mapper resource="mapper/order/coupon.xml" />
+<mapper resource="mapper/order/order.xml" />
+
 	</mappers>
 </configuration>

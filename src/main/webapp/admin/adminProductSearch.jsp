@@ -83,12 +83,20 @@
 <body>
     <h2>상품검색</h2>
     <div class="container">
-        <form method="post" action="${contextPath}/searchProduct">
+        <form method="post" action="${contextPath}/adminproductsearch">
             <div class="search-options">
-                <label><input type="radio" name="searchType" value="name" checked> 상품명</label>
-                <label><input type="radio" name="searchType" value="code"> 제품코드</label>
+                <c:choose>
+                	<c:when test="${searchType eq 'name' }">
+		                <label><input type="radio" name="searchType" value="name" checked> 상품명</label>
+        		        <label><input type="radio" name="searchType" value="product_id"> 제품코드</label>
+                	</c:when>
+                	<c:otherwise>
+		                <label><input type="radio" name="searchType" value="name" > 상품명</label>
+        		        <label><input type="radio" name="searchType" value="product_id" checked> 제품코드</label>                	
+                	</c:otherwise>
+                </c:choose>
             </div>
-            <input type="text" name="keyword" required />
+            <input type="text" name="keyword" required value="${keyword }"/>
             <button type="submit" class="search-btn">검색</button>
         </form>
 
@@ -105,9 +113,9 @@
                 <c:when test="${not empty productList}">
                     <c:forEach var="product" items="${productList}">
                         <tr>
-                            <td><img src="${product.image}" alt="이미지" class="product-img" /></td>
+                            <td><img src="image?filename=${product.mainImage1}" alt="이미지" class="product-img" /></td>
                             <td>${product.name}</td>
-                            <td>${product.code}</td>
+                            <td>${product.productId}</td>
                         </tr>
                     </c:forEach>
                 </c:when>

@@ -25,6 +25,7 @@ public class ProductList extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         try {
             categoryService = new CategoryServiceImpl();
 
@@ -56,5 +57,6 @@ public class ProductList extends HttpServlet {
             request.setAttribute("err", "상품 목록 불러오는 중 오류 발생");
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
+
     }
 }
