@@ -16,6 +16,8 @@
 		<typeAlias type="dto.product.BannerProduct" alias="banner"/>
 		<typeAlias type="dto.user.Review" alias="review"/>
 		<typeAlias type="dto.order.Cart" alias="cart"/>
+		<typeAlias type="dto.order.Coupon" alias="coupon"/>
+		<typeAlias type="dto.order.Order" alias="order"/>
 	</typeAliases>
 	
 	<environments default="development">
@@ -37,5 +39,7 @@
 		<mapper resource="mapper/product/bannerproduct.xml"/>
 		<mapper resource="mapper/product/productdetail.xml"/>
 		<mapper resource="mapper/order/cart.xml"/>
+		<mapper resource="mapper/order/coupon.xml"/>
+		<mapper resource="mapper/order/order.xml"/>
 	</mappers>
 </configuration>

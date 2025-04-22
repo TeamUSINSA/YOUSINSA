@@ -23,9 +23,9 @@ public class AdminCategoryAdd extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        CategoryService service = new CategoryServiceImpl();
-
         try {
+        	 CategoryService service = new CategoryServiceImpl();
+        	 
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/plain; charset=UTF-8");
 

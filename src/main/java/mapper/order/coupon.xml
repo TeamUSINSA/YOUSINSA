@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.coupon">
+
+  <!-- 1. 전체 유효 쿠폰 조회 -->
+  <select id="selectValidCoupons"
+          resultType="coupon">
+    SELECT
+      coupon_id, name, description,
+      discount_amount, start_date, end_date,
+      type, active
+    FROM coupon
+    WHERE active = 1
+      AND type = 'normal'
+      AND CURDATE() BETWEEN start_date AND end_date
+  </select>
+
+  <!-- 2. 사용자별 아직 다운받지 않은 유효 쿠폰 조회 -->
+  <select id="selectValidCouponsByUser"
+          parameterType="string"
+          resultType="coupon">
+    SELECT
+      c.coupon_id, c.name, c.description,
+      c.discount_amount, c.start_date, c.end_date,
+      c.type, c.active
+    FROM coupon c
+    WHERE c.active = 1
+      AND c.type = 'normal'
+      AND CURDATE() BETWEEN c.start_date AND c.end_date
+      AND c.coupon_id NOT IN (
+        SELECT coupon_id
+        FROM usercoupon
+        WHERE user_id = #{userId}
+      )
+  </select>
+
+  <!-- 3. 사용자 쿠폰 다운로드(저장) -->
+  <insert id="insertUserCoupon"
+          parameterType="map">
+    INSERT INTO usercoupon (coupon_id, user_id, used)
+    VALUES (#{couponId}, #{userId}, 0)
+  </insert>
+
+</mapper>
+

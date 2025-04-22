@@ -23,10 +23,11 @@ public class AdminCategoryDelete extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain; charset=UTF-8");
 
-        CategoryService service = new CategoryServiceImpl();
+      
 
         try {
             // ✅ categoryId를 파라미터로 받기
+        	CategoryService service = new CategoryServiceImpl();
             int id = Integer.parseInt(request.getParameter("categoryId"));
 
             // ✅ ID 기준으로 삭제
