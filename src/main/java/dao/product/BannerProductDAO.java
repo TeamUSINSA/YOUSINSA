@@ -6,9 +6,9 @@ import dto.product.BannerProduct;
 
 public interface BannerProductDAO {
 
-	List<BannerProduct> selectMainBannerList();
+	List<BannerProduct> selectMainBannerList() throws Exception;
 
-	List<BannerProduct> selectSubBannerList();
+	List<BannerProduct> selectSubBannerList() throws Exception;
 
 }
 	

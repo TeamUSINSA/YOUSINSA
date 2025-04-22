@@ -48,6 +48,12 @@ public class ProductStock {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductStock [stockId=" + stockId + ", productId=" + productId + ", color=" + color + ", size=" + size
+				+ ", quantity=" + quantity + "]";
+	}
 	
 	
 }

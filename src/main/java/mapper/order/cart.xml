@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.cart">
+
+
+  <!-- ✅ 2. 장바구니에 상품 추가 -->
+  <insert id="insertCart" parameterType="cart">
+    INSERT INTO cart (user_id, product_id, quantity, color, size)
+    VALUES (#{userId}, #{productId}, #{quantity}, #{color}, #{size})
+  </insert>
+
+  <!-- ✅ 3. 장바구니에서 특정 상품 삭제 -->
+  <delete id="deleteCartById">
+    DELETE FROM cart
+    WHERE cart_id = #{cartId}
+  </delete>
+
+  <!-- ✅ 4. 사용자의 장바구니 전체 삭제 -->
+  <delete id="deleteCartByUserId">
+    DELETE FROM cart
+    WHERE user_id = #{userId}
+  </delete>
+
+  <!-- ✅ 5. 수량 변경 -->
+  <update id="updateCartQuantity">
+    UPDATE cart
+    SET quantity = #{quantity}
+    WHERE cart_id = #{cartId}
+  </update>
+
+  <!-- ✅ 6. 특정 상품이 이미 장바구니에 있는지 확인 (중복 방지) -->
+  <select id="selectCartByUserAndProduct" resultType="cart">
+    SELECT *
+    FROM cart
+    WHERE user_id = #{userId}
+      AND product_id = #{productId}
+      AND color = #{color}
+      AND size = #{size}
+  </select>
+  
+  <select id="selectCartListByUserId" parameterType="string" resultType="cart">
+  SELECT 
+    c.cart_id AS cartId,
+    c.user_id AS userId,
+    c.product_id AS productId,
+    c.quantity,
+    c.color,
+    c.size,
+    p.name,
+    p.main_image1 AS mainImage1,
+    p.price
+  FROM cart c
+  JOIN product p ON c.product_id = p.product_id
+  WHERE c.user_id = #{userId}
+</select>
+
+  
+
+</mapper>

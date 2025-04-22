@@ -6,15 +6,20 @@ import dto.product.Category;
 import dto.product.SubCategory;
 
 public interface CategoryDAO {
-    void insertCategory(Category category);
-    List<Category> selectCategoryList();
+	void insertCategory(Category category) throws Exception;
 
-    void insertSubCategory(SubCategory subCategory);
-    List<SubCategory> selectSubCategoryList();
-	void deleteSubCategoryById(int subCategoryId);
-	void deleteCategoryById(int categoryId);
-	List<SubCategory> selectSubCategoriesByCategoryId(int categoryId);
-	List<Category> selectCategoryWithSubList();
-	
-	
+	List<Category> selectCategoryList() throws Exception;
+
+	void insertSubCategory(SubCategory subCategory) throws Exception;
+
+	List<SubCategory> selectSubCategoryList() throws Exception;
+
+	void deleteSubCategoryById(int subCategoryId) throws Exception;
+
+	void deleteCategoryById(int categoryId) throws Exception;
+
+	List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) throws Exception;
+
+	List<Category> selectCategoryWithSubList() throws Exception;
+
 }

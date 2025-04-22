@@ -50,5 +50,57 @@
     ORDER BY num DESC
     LIMIT #{row}, 10
   </select>
+  
+  <select id="selectProductList" parameterType="Map" resultType="product">
+  	select product_id as c, name as name, main_image1 as mainImage1 from product where ${type} like '%${keyword}%'
+  </select>
 
+<select id="selectProductById" parameterType="int" resultType="dto.product.Product">
+  SELECT
+    product_id,
+    name,
+    cost,
+    price,
+    discount,
+    sub_category_id,
+    type,
+    reg_date,
+    description1,
+    description2,
+    main_image1,
+    main_image2,
+    main_image3,
+    main_image4,
+    image1,
+    image2,
+    image3,
+    image4,
+    image5,
+    image6,
+    image7,
+    image8,
+    image9,
+    image10,
+    size_chart
+  FROM product
+  WHERE product_id = #{productId}
+</select>
+
+<insert id="insertProduct" parameterType="dto.product.Product">
+  INSERT INTO product (
+    name, cost, price, discount, sub_category_id, type,
+    reg_date, description1, description2,
+    main_image1, main_image2, main_image3, main_image4,
+    image1, image2, image3, image4, image5, image6, image7, image8, image9, image10,
+    size_chart
+  )
+  VALUES (
+    #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, #{type},
+    NOW(), #{description1}, #{description2},
+    #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4},
+    #{image1}, #{image2}, #{image3}, #{image4}, #{image5},
+    #{image6}, #{image7}, #{image8}, #{image9}, #{image10},
+    #{sizeChart}
+  )
+</insert>
 </mapper>

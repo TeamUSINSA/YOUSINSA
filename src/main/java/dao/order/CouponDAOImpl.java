@@ -1,0 +1,49 @@
+package dao.order;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import dto.order.Coupon;
+import utils.MybatisSqlSessionFactory;
+
+public class CouponDAOImpl implements CouponDAO {
+
+	private SqlSession sqlSession;
+
+	public CouponDAOImpl() {
+		sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(true); // auto commit
+	}
+	
+	 @Override
+	    public List<Coupon> selectValidCoupons() throws Exception {
+	        // active=1, type='normal', 오늘 날짜 사이의 쿠폰 전체 조회
+	        return sqlSession.selectList(
+	            "mapper.coupon.selectValidCoupons"
+	        );
+	    }
+
+	    @Override
+	    public List<Coupon> selectValidCouponsByUser(String userId) throws Exception {
+	        // 사용자가 아직 다운받지 않은 유효 쿠폰 조회
+	        return sqlSession.selectList(
+	            "mapper.coupon.selectValidCouponsByUser",
+	            userId
+	        );
+	    }
+
+	    @Override
+	    public int insertUserCoupon(int couponId, String userId) throws Exception {
+	        Map<String,Object> params = new HashMap<>();
+	        params.put("couponId", couponId);
+	        params.put("userId",   userId);
+	        return sqlSession.insert(
+	            "mapper.coupon.insertUserCoupon",
+	            params
+	        );
+	    }
+
+
+}

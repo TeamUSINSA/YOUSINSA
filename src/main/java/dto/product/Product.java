@@ -1,6 +1,8 @@
 package dto.product;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Product {
 	    private int productId;
@@ -28,6 +30,45 @@ public class Product {
 	    private String image9;
 	    private String image10;
 	    private String sizeChart;
+	 // Product.java 안에 아래 추가
+
+	    private String category1;
+	    private String category2;
+	    private String code;
+	    
+	    private String sizeImage;
+
+	    public String getSizeImage() {
+	        return sizeImage;
+	    }
+
+	    public void setSizeImage(String sizeImage) {
+	        this.sizeImage = sizeImage;
+	    }
+
+	    public String getCode() {
+	        return code;
+	    }
+
+	    public void setCode(String code) {
+	        this.code = code;
+	    }
+
+	    public String getCategory1() {
+	        return category1;
+	    }
+
+	    public void setCategory1(String category1) {
+	        this.category1 = category1;
+	    }
+
+	    public String getCategory2() {
+	        return category2;
+	    }
+
+	    public void setCategory2(String category2) {
+	        this.category2 = category2;
+	    }
 
 
 	    public Product() {}
@@ -231,6 +272,45 @@ public class Product {
 		public void setSizeChart(String sizeChart) {
 			this.sizeChart = sizeChart;
 		}
-	    
-	    
+		public List<String> getImageList() {
+		    List<String> list = new ArrayList<>();
+
+		    if (this.getMainImage1() != null) list.add(this.getMainImage1());
+		    if (this.getMainImage2() != null) list.add(this.getMainImage2());
+		    if (this.getMainImage3() != null) list.add(this.getMainImage3());
+		    if (this.getMainImage4() != null) list.add(this.getMainImage4());
+
+		    return list;
+		}
+		
+		public int getDiscountPrice() {
+            if (price > 0 && discount > 0) {
+                return price - (price * discount / 100);
+            }
+            return price;
+        }
+		
+		public List<String> getDescriptionImages() {
+		    List<String> list = new ArrayList<>();
+		    
+		    if (this.getImage1() != null) list.add(this.getImage1());
+		    if (this.getImage2() != null) list.add(this.getImage2());
+		    if (this.getImage3() != null) list.add(this.getImage3());
+		    if (this.getImage4() != null) list.add(this.getImage4());
+		    if (this.getImage5() != null) list.add(this.getImage5());
+		    if (this.getImage6() != null) list.add(this.getImage6());
+		    if (this.getImage7() != null) list.add(this.getImage7());
+		    if (this.getImage8() != null) list.add(this.getImage8());
+		    if (this.getImage9() != null) list.add(this.getImage9());
+		    if (this.getImage10() != null) list.add(this.getImage10());
+
+		    return list;
+		}
+		
+		public String getDescription() {
+		    StringBuilder sb = new StringBuilder();
+		    if (description1 != null) sb.append(description1);
+		    if (description2 != null) sb.append("\n").append(description2);
+		    return sb.toString();
+		}
 }

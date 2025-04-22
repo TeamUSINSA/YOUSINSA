@@ -16,12 +16,12 @@ public class BannerProductDAOImpl implements BannerProductDAO {
     }
 
     @Override
-    public List<BannerProduct> selectMainBannerList() {
+    public List<BannerProduct> selectMainBannerList() throws Exception{
         return sqlSession.selectList("mapper.bannerproduct.selectMainBannerList");
     }
     
     @Override
-    public List<BannerProduct> selectSubBannerList() {
+    public List<BannerProduct> selectSubBannerList() throws Exception{
         return sqlSession.selectList("mapper.bannerproduct.selectSubBannerList");
     }
 }

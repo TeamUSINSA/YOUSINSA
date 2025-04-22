@@ -22,7 +22,7 @@ public class User {
 	private String address2Detail;
 	private String address3;
 	private String address3Detail;
-	private String totalPoint;
+	private int totalPoint;
 
 	public User() {
 	}
@@ -190,11 +190,11 @@ public class User {
 		this.address3Detail = address3Detail;
 	}
 
-	public String getTotalPoint() {
+	public int getTotalPoint() {
 		return totalPoint;
 	}
 
-	public void setTotalPoint(String totalPoint) {
+	public void setTotalPoint(int totalPoint) {
 		this.totalPoint = totalPoint;
 	}
 

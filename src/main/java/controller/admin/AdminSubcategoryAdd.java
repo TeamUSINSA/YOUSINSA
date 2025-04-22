@@ -25,9 +25,9 @@ public class AdminSubcategoryAdd extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain; charset=UTF-8");
 
-        CategoryService service = new CategoryServiceImpl();
-
         try {
+        	 CategoryService service = new CategoryServiceImpl();
+        	 
             String subCategoryName = request.getParameter("subCategoryName");
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
 
