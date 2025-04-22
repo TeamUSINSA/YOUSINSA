@@ -15,7 +15,7 @@ public interface ProductDAO {
 	List<Product> selectProductsByCategory(int categoryId) throws Exception;
 
 	Product selectProductById(int productId) throws Exception;
-	
+
 	int insertProduct(Product product) throws Exception;
 
 }

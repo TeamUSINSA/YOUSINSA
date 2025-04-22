@@ -5,6 +5,10 @@ eclipse.preferences.version=1
 encoding//src/main/webapp/admin/adminCategory.jsp=UTF-8
 encoding//src/main/webapp/admin/adminSideBar.jsp=UTF-8
 encoding//src/main/webapp/admin/adminSideBarStyle.jsp=UTF-8
+<<<<<<< HEAD
+=======
+encoding//src/main/webapp/common/cart.jsp=UTF-8
+>>>>>>> 1974fc7046b9715291c0731aec8058e7672583b4
 encoding//src/main/webapp/common/changePassword.jsp=UTF-8
 encoding//src/main/webapp/user/mysidebar.jsp=UTF-8
 encoding/<project>=UTF-8

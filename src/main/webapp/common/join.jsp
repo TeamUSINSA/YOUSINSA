@@ -21,7 +21,7 @@ String username = (String) session.getAttribute("username");
 </style>
 </head>
 <body class="bg-white text-sm text-gray-700">
-	
+	<jsp:include page="/header" />
 
 	<!-- 회원가입 폼 -->
 	<main class="flex flex-col items-center justify-center py-24">
@@ -140,6 +140,6 @@ String username = (String) session.getAttribute("username");
   </script>
 
 	</main>
-
+ <jsp:include page="/footer" />
 </body>
 </html>

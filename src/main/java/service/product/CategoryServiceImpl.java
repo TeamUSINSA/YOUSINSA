@@ -11,7 +11,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryDAO categoryDao;
 
-    public CategoryServiceImpl() {
+    public CategoryServiceImpl() throws Exception{
         this.categoryDao = new CategoryDAOImpl();
     }
 
@@ -50,5 +50,12 @@ public class CategoryServiceImpl implements CategoryService {
     public List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) throws Exception{
         return categoryDao.selectSubCategoriesByCategoryId(categoryId);
     }
+    
+    @Override
+    public List<Category> selectCategoryWithSubList() throws Exception{
+        return categoryDao.selectCategoryWithSubList();
+    }
+
+
 
 }

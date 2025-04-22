@@ -23,12 +23,12 @@ public class ProductDAOImpl implements ProductDAO{
     
 
     @Override
-    public List<Product> selectProductsBySubCategory(int subCategoryId) {
+    public List<Product> selectProductsBySubCategory(int subCategoryId) throws Exception{
         return sqlSession.selectList("mapper.product.selectProductsBySubCategory", subCategoryId);
     }
 
     @Override
-    public List<Product> selectProductsByCategory(int categoryId) {
+    public List<Product> selectProductsByCategory(int categoryId) throws Exception{
         return sqlSession.selectList("mapper.product.selectProductsByCategory", categoryId);
     }
 

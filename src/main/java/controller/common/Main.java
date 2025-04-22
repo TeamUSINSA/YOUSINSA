@@ -5,51 +5,48 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import dto.product.Product;
+import dto.product.BannerProduct;
 import service.product.ProductService;
 import service.product.ProductServiceImpl;
+import service.product.BannerProductService;
+import service.product.BannerProductServiceImpl;
 
-/**
- * Servlet implementation class Main
- */
 @WebServlet("/main")
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public Main() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		ProductService productService = new ProductServiceImpl();
+		BannerProductService bannerService = new BannerProductServiceImpl();
 
 		try {
-			List<Product> mainList = productService.getProductsByType("main");
-			List<Product> subList = productService.getProductsByType("sub");
+			// ✅ 배너 테이블에서 메인/서브 배너 조회
+			List<BannerProduct> mainBannerList = bannerService.getMainBannerList();
+			List<BannerProduct> subBannerList = bannerService.getSubBannerList();
+
+			// ✅ 기존 인기상품, 추천상품은 product 테이블 기준 유지
 			List<Product> popularList = productService.getRandomProductsByType("popular", 4);
 			List<Product> recommendList = productService.getRandomProductsByType("recommend", 4);
 
-			request.setAttribute("mainList", mainList);
-			request.setAttribute("subList", subList);
+			// request에 담기
+			request.setAttribute("mainBannerList", mainBannerList);
+			request.setAttribute("subBannerList", subBannerList);
 			request.setAttribute("popularList", popularList);
 			request.setAttribute("recommendList", recommendList);
 
 			request.getRequestDispatcher("/common/main.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "상품 불러오기 실패");
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "메인 페이지 로딩 실패");
 		}
-
 	}
-
 }

@@ -58,6 +58,7 @@
   </style>
 </head>
 <body>
+<jsp:include page="/header" />
   <div class="container">
     <h2>아이디 찾기 결과</h2>
     <c:choose>
@@ -74,5 +75,6 @@
       <a href="main" class="btn-gray">메인으로</a>
     </div>
   </div>
+   <jsp:include page="/footer" />
 </body>
 </html>

@@ -14,4 +14,6 @@ public interface CategoryService {
 	void deleteSubCategoryById(int subCategoryId) throws Exception;
 	void deleteCategoryById(int categoryId) throws Exception;
 	List<SubCategory> selectSubCategoriesByCategoryId(int categoryId) throws Exception;
+	List<Category> selectCategoryWithSubList() throws Exception;
+
 }
