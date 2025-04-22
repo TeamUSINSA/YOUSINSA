@@ -50,7 +50,7 @@
 		SELECT * FROM subcategory
 	</select>
 
-	<select id="selectSubCategoriesByCategoryId" resultType="dto.product.SubCategory">
+	<select id="selectSubCategoriesByCategoryId" resultType="dto.product.SubCategory" parameterType="Integer">
 		SELECT * FROM subcategory
 		WHERE category_id = #{categoryId}
 	</select>

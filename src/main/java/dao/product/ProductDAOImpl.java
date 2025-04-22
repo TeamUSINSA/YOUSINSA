@@ -32,4 +32,15 @@ public class ProductDAOImpl implements ProductDAO{
         return sqlSession.selectList("mapper.product.selectProductsByCategory", categoryId);
     }
 
+    @Override
+    public Product selectProductById(int productId) throws Exception {
+    	return sqlSession.selectOne("mapper.product.selectProductById", productId);
+    }
+
+	@Override
+	public int insertProduct(Product product) throws Exception {
+		// TODO Auto-generated method stub
+		 return sqlSession.insert("mapper.admin.product.insertProduct", product);
+	}
+
 }

@@ -1,13 +1,10 @@
 =\=\=\=\=\=\=
 <<<<<<<=HEAD
->>>>>>>=feature/withdraw
+>>>>>>>=branch 'main' of https\://github.com/TeamUSINSA/YOUSINSA.git
 eclipse.preferences.version=1
 encoding//src/main/webapp/admin/adminCategory.jsp=UTF-8
 encoding//src/main/webapp/admin/adminSideBar.jsp=UTF-8
 encoding//src/main/webapp/admin/adminSideBarStyle.jsp=UTF-8
-<<<<<<< HEAD
-=======
 encoding//src/main/webapp/common/changePassword.jsp=UTF-8
 encoding//src/main/webapp/user/mysidebar.jsp=UTF-8
->>>>>>> branch 'main' of https://github.com/TeamUSINSA/YOUSINSA.git
 encoding/<project>=UTF-8

@@ -27,31 +27,31 @@ public class ProductList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String categoryIdParam = request.getParameter("categoryId");
-        String subCategoryIdParam = request.getParameter("subCategoryId");
-
-        List<Category> categoryList = categoryService.selectCategoryList();
-        List<SubCategory> subCategoryList = categoryService.selectSubCategoryList();
-        List<Product> productList = null;
-
-        try {
-            if (subCategoryIdParam != null) {
-                int subCategoryId = Integer.parseInt(subCategoryIdParam);
-                productList = productService.getProductsBySubCategory(subCategoryId);
-            } else if (categoryIdParam != null) {
-                int categoryId = Integer.parseInt(categoryIdParam);
-                productList = productService.getProductsByCategory(categoryId);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("productList size = " + (productList != null ? productList.size() : "null"));
-
-        request.setAttribute("categoryList", categoryList);
-        request.setAttribute("subCategoryList", subCategoryList);
-        request.setAttribute("productList", productList);
-        request.setAttribute("categoryId", categoryIdParam);
-        request.setAttribute("subCategoryId", subCategoryIdParam);
+//        String categoryIdParam = request.getParameter("categoryId");
+//        String subCategoryIdParam = request.getParameter("subCategoryId");
+//
+//        List<Category> categoryList = categoryService.selectCategoryList();
+//        List<SubCategory> subCategoryList = categoryService.selectSubCategoryList();
+//        List<Product> productList = null;
+//
+//        try {
+//            if (subCategoryIdParam != null) {
+//                int subCategoryId = Integer.parseInt(subCategoryIdParam);
+//                productList = productService.getProductsBySubCategory(subCategoryId);
+//            } else if (categoryIdParam != null) {
+//                int categoryId = Integer.parseInt(categoryIdParam);
+//                productList = productService.getProductsByCategory(categoryId);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("productList size = " + (productList != null ? productList.size() : "null"));
+//
+//        request.setAttribute("categoryList", categoryList);
+//        request.setAttribute("subCategoryList", subCategoryList);
+//        request.setAttribute("productList", productList);
+//        request.setAttribute("categoryId", categoryIdParam);
+//        request.setAttribute("subCategoryId", subCategoryIdParam);
 
         request.getRequestDispatcher("/common/product.jsp").forward(request, response);
     }
