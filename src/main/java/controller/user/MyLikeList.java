@@ -30,7 +30,7 @@ public class MyLikeList extends HttpServlet {
 		String userId = (session != null) ? (String) session.getAttribute("userId") : null;
 
 		if (userId == null) {
-			response.sendRedirect(request.getContextPath() + "/login.jsp?error=needLogin");
+			response.sendRedirect(request.getContextPath() + "/login");
 			return;
 		}
 

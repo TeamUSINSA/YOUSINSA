@@ -21,4 +21,9 @@ public class LikeServiceImpl implements LikeService {
     public int countLikedProducts(String userId) throws Exception {
         return likeDAO.countLikedProducts(userId);
     }
+
+	@Override
+	public void removeLike(int likeId) throws Exception {
+		likeDAO.deleteLikeById(likeId);
+	}
 }
