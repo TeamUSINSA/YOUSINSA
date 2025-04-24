@@ -60,7 +60,7 @@
 
 <body>
 <h2>상품 수정</h2>
-<form action="productUpdate.do" method="post" enctype="multipart/form-data">
+<form action="/yousinsa/admin/adminCategory.jsp" method="post" enctype="multipart/form-data">
     <div class="container">
         <div class="left">
             <div class="main-image">

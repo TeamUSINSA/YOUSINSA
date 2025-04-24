@@ -71,47 +71,40 @@
 </style>
 </head>
 <body>
-
+<%@ include file="/common/header.jsp" %>
 	<div class="layout">
-		<!-- 사이드바 -->
-		<div class="sidebar" style="width: 200px;">
-			<%@ include file="mysidebar.jsp"%>
-		</div>
+	<!-- 사이드바 -->
+	<div class="sidebar" style="width: 200px;">
+		<%@ include file="mysidebar.jsp"%>
+	</div>
 
-		<!-- 본문 -->
-		<div class="content">
-			<h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">좋아요</h2>
-			<p style="font-size: 13px; color: #555;">좋아요 누르신 상품 목록입니다.</p>
+	<!-- 본문 -->
+	<div class="content">
+		<h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">좋아요</h2>
+		<p style="font-size: 13px; color: #555;">좋아요 누르신 상품 목록입니다.</p>
 
-			<!-- 좋아요 목록 -->
-			<div id="likeListContainer">
-				<c:forEach var="item" items="${likeList}">
-					<div class="product-card">
-						<a
-							href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}">
-							<img src="${item.mainImage1}" alt="${item.name}"
+		<!-- 좋아요 목록 -->
+		<div id="likeListContainer">
+			<c:forEach var="item" items="${likeList}">
+				<div class="product-card">
+					<a href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}">
+						<img src="/yousinsa/image/${item.mainImage1}" alt="${item.name}"
 							style="width: 90px; height: 110px; object-fit: cover; border-radius: 5px;">
-						</a>
-						<div style="flex: 1;">
-							<div style="font-weight: bold; margin-bottom: 5px;">
-								<a
-									href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}"
-									style="color: inherit; text-decoration: none;">
-									${item.name} </a>
-							</div>
-							<div style="font-size: 13px; color: #666; margin-bottom: 10px;">${item.detail}</div>
-							<div style="display: flex; gap: 10px;">
-								<form action="unlike" method="post" style="display: inline;">
-									<input type="hidden" name="likeId" value="${item.likeId}">
-									<button type="submit" class="btn like-btn">좋아요 취소</button>
-								</form>
-								<a href="/product/detail?productId=${item.productId}"
-									class="btn buy-btn">구매하러 가기</a>
-							</div>
+					</a>
+					<div style="flex: 1;">
+						<div style="font-weight: bold; margin-bottom: 5px;">
+							<a href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}"
+								style="color: inherit; text-decoration: none;">${item.name}</a>
+						</div>
+						<div style="font-size: 13px; color: #666; margin-bottom: 10px;">${item.detail}</div>
+						<div style="display: flex; gap: 10px;">
+							<button class="btn like-btn" onclick="cancelLike(${item.likeId}, this)">좋아요 취소</button>
+							<a href="/product/detail?productId=${item.productId}" class="btn buy-btn">구매하러 가기</a>
 						</div>
 					</div>
-				</c:forEach>
-			</div>
+				</div>
+			</c:forEach>
+		</div>
 
 			<!-- 페이지네이션 -->
 			<c:choose>
@@ -151,6 +144,80 @@
 	</div>
 
 
+<!-- AJAX 스크립트 -->
+<script>
+const userId = "${sessionScope.userId}";
+const curPage = Number("${pageInfo.curPage}");
 
+function cancelLike(likeId, button) {
+	  if (!confirm("정말 좋아요를 취소하시겠습니까?")) return;
+
+	  fetch('unlike', {
+	    method: 'POST',
+	    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	    body: "likeId=" + likeId
+	  })
+	  .then(res => res.text())
+	  .then(result => {
+	    if (result.trim() === 'success') {
+	      alert('좋아요가 취소되었습니다.');
+
+	      // 삭제된 카드 제거
+	      const card = button.closest('.product-card');
+	      card.remove();
+
+	      // 💡 카드 삭제 이후 DOM이 반영된 다음에 offset 계산
+	      setTimeout(() => {
+	        const cardsAfterDelete = document.querySelectorAll('.product-card').length;
+	        let offset = (curPage - 1) * 5 + cardsAfterDelete;
+	        if (isNaN(offset) || offset < 0) offset = 0;
+
+	        console.log("🟡 curPage =", curPage);
+	        console.log("🟡 offset =", offset);
+
+	        fetch(`loadMoreLikes?userId=${userId}&offset=${offset}&limit=1`)
+	          .then(res => {
+	            if (!res.ok) throw new Error("서버 오류");
+	            return res.json();
+	          })
+	          .then(data => {
+	            if (data.length > 0) {
+	              const item = data[0];
+	              const container = document.getElementById("likeListContainer");
+	              const newCard = document.createElement("div");
+	              newCard.className = "product-card";
+	              newCard.innerHTML = `
+	                <a href="/yousinsa/product/detail?productId=${item.productId}">
+	                  <img src="/yousinsa/image/${item.mainImage1}" style="width: 90px; height: 110px; object-fit: cover; border-radius: 5px;">
+	                </a>
+	                <div style="flex: 1;">
+	                  <div style="font-weight: bold; margin-bottom: 5px;">
+	                    <a href="/yousinsa/product/detail?productId=${item.productId}" style="color: inherit; text-decoration: none;">${item.name}</a>
+	                  </div>
+	                  <div style="font-size: 13px; color: #666; margin-bottom: 10px;">${item.detail}</div>
+	                  <div style="display: flex; gap: 10px;">
+	                    <button class="btn like-btn" onclick="cancelLike(${item.likeId}, this)">좋아요 취소</button>
+	                    <a href="/yousinsa/product/detail?productId=${item.productId}" class="btn buy-btn">구매하러 가기</a>
+	                  </div>
+	                </div>`;
+	              container.appendChild(newCard);
+	            }
+	          })
+	          .catch(err => {
+	            console.error("불러오기 실패:", err);
+	          });
+	      }, 0); // setTimeout으로 DOM 반영 이후 실행
+	    } else {
+	      alert('좋아요 취소 실패: ' + result);
+	    }
+	  })
+	  .catch(err => {
+	    console.error("AJAX 오류:", err);
+	    alert('오류 발생: ' + err);
+	  });
+	}
+
+</script>
+<%@ include file="/common/footer.jsp" %>
 </body>
 </html>

@@ -5,11 +5,23 @@ import java.sql.Date;
 public class Point {
 	private int pointId;
 	private Date date;
-	private int point;
+	private int point;          // 양수: 적립, 음수: 사용
 	private int orderId;
 	private String userId;
+	
+	private int balance;        // 누적 포인트 화면용
 
 	public Point() {
+	}
+
+
+	public int getBalance() {
+		return balance;
+	}
+
+
+	public void setBalance(int balance) {
+		this.balance = balance;
 	}
 
 
