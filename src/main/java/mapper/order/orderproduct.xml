@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.orderproduct">
+
+  <!-- 상품 정보 조회 -->
+  <select id="selectProductById" resultType="product">
+    SELECT *
+    FROM product
+    WHERE product_id = #{productId}
+  </select>
+
+  <!-- 주문 기본 정보 저장 -->
+  <insert id="insertOrderList" parameterType="order" useGeneratedKeys="true" keyProperty="orderId">
+    INSERT INTO order_list (
+      user_id,
+      receiver_name,
+      receiver_phone,
+      base_address,
+      detail_address,
+      used_points,
+      payment_method
+    ) VALUES (
+      #{userId},
+      #{receiverName},
+      #{receiverPhone},
+      #{baseAddress},
+      #{detailAddress},
+      #{usedPoints},
+      #{paymentMethod}
+    )
+  </insert>
+
+  <!-- 주문 상품 항목 저장 -->
+  <insert id="insertOrderItem" parameterType="order">
+    INSERT INTO order_item (
+      order_id,
+      product_id,
+      name,
+      image,
+      color,
+      size,
+      quantity,
+      unit_price,
+      coupon_id
+    ) VALUES (
+      #{orderId},
+      #{productId},
+      #{name},
+      #{image},
+      #{color},
+      #{size},
+      #{quantity},
+      #{unitPrice},
+      #{couponId}
+    )
+  </insert>
+
+  <!-- 사용자 주문 내역 조회 -->
+  <select id="selectOrdersByUser" parameterType="string" resultType="order">
+    SELECT 
+      o.user_id,
+      o.receiver_name,
+      o.receiver_phone,
+      o.base_address,
+      o.detail_address,
+      o.used_points,
+      o.payment_method,
+      i.product_id,
+      i.name,
+      i.image,
+      i.color,
+      i.size,
+      i.quantity,
+      i.unit_price,
+      i.coupon_id
+    FROM order_list o
+    JOIN order_item i ON o.order_id = i.order_id
+    WHERE o.user_id = #{userId}
+    ORDER BY o.order_id DESC
+  </select>
+
+</mapper>

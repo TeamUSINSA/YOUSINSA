@@ -260,7 +260,7 @@ body {
 			<a href="main">YOUSINSA</a>
 		</div>
 		<div class="top-menu">
-			<a href="#">쿠폰</a> <a href="#">공지사항</a> <a href="#">알림</a> <a
+			<a href="coupon">쿠폰</a> <a href="#">공지사항</a> <a href="#">알림</a> <a
 				href="cart">장바구니</a>
 
 			<c:choose>

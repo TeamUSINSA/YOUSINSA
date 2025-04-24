@@ -28,10 +28,18 @@ public class ProductDAOImpl implements ProductDAO {
 		return sqlSession.selectList("mapper.product.selectProductsBySubCategory", subCategoryId);
 	}
 
+
 	@Override
 	public List<Product> selectProductsByCategory(int categoryId) throws Exception {
 		return sqlSession.selectList("mapper.product.selectProductsByCategory", categoryId);
 	}
+
+    
+    @Override
+    public Product selectById(int productId) throws Exception {
+        return sqlSession.selectOne("mapper.orderproduct.selectProductById", productId);
+    }
+
 
 	@Override
 	public Product selectProductById(int productId) throws Exception {

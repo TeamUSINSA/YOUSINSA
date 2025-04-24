@@ -28,7 +28,6 @@ public class AdminCategoryList extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 
-	
 
 		try {
 			CategoryService service = new CategoryServiceImpl();

@@ -70,7 +70,8 @@ public class Withdraw extends HttpServlet {
 			response.sendRedirect(request.getContextPath() +"/withdrawSuccess");
 		}catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("error");
+			request.setAttribute("err", "탈퇴 중 오류가 발생했습니다.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 

@@ -15,9 +15,12 @@ public interface ProductDAO {
 
 	List<Product> selectProductsByCategory(int categoryId) throws Exception;
 
+	Product selectById(int productId) throws Exception;
+
 	Product selectProductById(int productId) throws Exception;
 
 	int insertProduct(Product product) throws Exception;
+
 
 	List<Product> getTop10Products(String start, String end) throws Exception;
 
@@ -27,5 +30,6 @@ public interface ProductDAO {
 	
 	List<String> getAllMainCategories() throws Exception;
     List<String> getAllSubCategories() throws Exception;
+
 
 }
