@@ -10,10 +10,13 @@ public class OrderItem {
     private String color;
     private String size;
     
+
     private String name;
     private String mainImage1;
     private int price;
     private boolean hasReview;
+
+
 
     public OrderItem() {}
 

@@ -1,9 +1,11 @@
 package service.order;
 
 import java.util.List;
+
 import dao.order.CartDAO;
 import dao.order.CartDAOImpl;
 import dto.order.Cart;
+import dto.order.Order;
 
 public class CartServiceImpl implements CartService {
 
@@ -42,4 +44,10 @@ public class CartServiceImpl implements CartService {
     public Cart getCartItem(Cart cart) throws Exception{
         return cartDAO.selectCartByUserAndProduct(cart);
     }
+    
+    @Override
+    public List<Order> selectOrderItemsByCartIds(List<Integer> cartIds) throws Exception {
+        return cartDAO.selectOrderItemsByCartIds(cartIds);
+    }
+
 }

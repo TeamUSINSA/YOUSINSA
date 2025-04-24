@@ -1,6 +1,9 @@
 package service.user;
 
+import java.util.List;
+
 import dto.user.User;
+import dto.user.UserCoupon;
 
 public interface UserService {
 	void insertUser(User user) throws Exception;
@@ -16,6 +19,7 @@ public interface UserService {
 	String findUserId(String name, String email, String phone) throws Exception;
 	User findUserForPasswordReset(String name, String userId, String email);
 	void updateUserPassword(String userId, String newPassword) throws Exception;
+	List<UserCoupon> getUnusedCoupons(String userId) throws Exception;
 
 }
 

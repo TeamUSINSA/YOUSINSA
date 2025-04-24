@@ -198,8 +198,10 @@
       toggleRejectReasons(); // 초기 상태 적용
     });
   </script>
+  <jsp:include page="adminSideBarStyle.jsp" />
 </head>
 <body>
+<jsp:include page="adminSideBar.jsp" />
 <div class="container">
   <h2>반품 접수 - 상세</h2>
 

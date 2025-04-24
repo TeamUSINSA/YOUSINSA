@@ -5,100 +5,184 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>장바구니</title>
-  <style>
-    body { margin: 0; font-family: 'Noto Sans KR', sans-serif; background: #fff; color: #222; }
-    .cart-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-    .cart-title { font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 24px; }
-    .cart-table { width: 100%; border-collapse: collapse; }
-    .cart-table thead th { padding: 14px 8px; border-bottom: 1px solid #ddd; background-color: #fafafa; font-weight: bold; text-align: center; }
-    .cart-table tbody td { padding: 16px 8px; border-bottom: 1px solid #eee; text-align: center; vertical-align: middle; }
-    .cart-item { display: flex; align-items: center; gap: 16px; text-align: left; }
-    .cart-item img { width: 60px; height: 60px; border: 1px solid #ddd; object-fit: cover; }
-    .cart-info { display: flex; flex-direction: column; font-size: 14px; }
-    .cart-qty { display: flex; justify-content: center; align-items: center; gap: 6px; }
-    .cart-actions { text-align: right; }
-    button { background: #333; color: #fff; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-    button:hover { background: #000; }
-    .cart-top-actions, .cart-bottom-actions { display: flex; justify-content: flex-end; max-width: 1000px; margin: 20px auto; gap: 10px; }
-  </style>
+<meta charset="UTF-8" />
+<title>장바구니</title>
+<style>
+body {
+	margin: 0;
+	font-family: 'Noto Sans KR', sans-serif;
+	background: #fff;
+	color: #222;
+}
+
+.cart-container {
+	max-width: 1000px;
+	margin: 40px auto;
+	padding: 0 20px;
+}
+
+.cart-title {
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 24px;
+}
+
+.cart-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.cart-table thead th {
+	padding: 14px 8px;
+	border-bottom: 1px solid #ddd;
+	background-color: #fafafa;
+	font-weight: bold;
+	text-align: center;
+}
+
+.cart-table tbody td {
+	padding: 16px 8px;
+	border-bottom: 1px solid #eee;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.cart-item {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	text-align: left;
+}
+
+.cart-item img {
+	width: 60px;
+	height: 60px;
+	border: 1px solid #ddd;
+	object-fit: cover;
+}
+
+.cart-info {
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+}
+
+.cart-qty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+}
+
+.cart-actions {
+	text-align: right;
+}
+
+button {
+	background: #333;
+	color: #fff;
+	border: none;
+	padding: 6px 10px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+button:hover {
+	background: #000;
+}
+
+.cart-top-actions, .cart-bottom-actions {
+	display: flex;
+	justify-content: flex-end;
+	max-width: 1000px;
+	margin: 20px auto;
+	gap: 10px;
+}
+</style>
 </head>
 <body>
 
-<jsp:include page="/header" />
-<h2 class="cart-title">장바구니</h2>
+	<jsp:include page="/header" />
+	<h2 class="cart-title">장바구니</h2>
 
-<c:if test="${empty cartList}">
-  <p style="text-align: center;">장바구니에 상품이 없습니다.</p>
-</c:if>
+	<c:if test="${empty cartList}">
+		<p style="text-align: center;">장바구니에 상품이 없습니다.</p>
+	</c:if>
 
-<c:if test="${not empty cartList}">
-  <div class="cart-container">
-    <div class="cart-top-actions">
-      <button onclick="deleteSelected()">선택항목 삭제</button>
-    </div>
+	<c:if test="${not empty cartList}">
+		<div class="cart-container">
+			<div class="cart-top-actions">
+				<button onclick="deleteSelected()">선택항목 삭제</button>
+			</div>
 
-    <form id="cartForm" method="post">
-      <table class="cart-table">
-        <thead>
-          <tr>
-            <th><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
-            <th>상품정보</th>
-            <th>수량</th>
-            <th>금액</th>
-            <th>삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          <c:forEach var="item" items="${cartList}">
-            <tr data-cart-id="${item.cartId}" data-unit="${item.price}">
-              <td><input type="checkbox" class="itemCheckbox" value="${item.cartId}"></td>
-              <td>
-                <div class="cart-item">
-                  <img src="/yousinsa/image/${item.mainImage1}" alt="${item.name}">
-                  <div class="cart-info">
-                    <div><b>${item.name}</b></div>
-                    <div>옵션: ${item.color} / ${item.size}</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="cart-qty">
-                  <button type="button" class="qty-btn" onclick="changeQty(this, -1)">-</button>
-                  <span class="qty">${item.quantity}</span>
-                  <button type="button" class="qty-btn" onclick="changeQty(this, 1)">+</button>
-                </div>
-              </td>
-              <td>
-                <span class="price">
-                  <fmt:formatNumber value="${item.price * item.quantity}" type="number" />
-                </span>원
-              </td>
-              <td class="cart-actions">
-                <button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
-              </td>
-            </tr>
-          </c:forEach>
-        </tbody>
-      </table>
-    </form>
+			<form id="cartForm" method="post">
+				<table class="cart-table">
+					<thead>
+						<tr>
+							<th><input type="checkbox" id="selectAll"
+								onclick="toggleAll(this)"></th>
+							<th>상품정보</th>
+							<th>수량</th>
+							<th>금액</th>
+							<th>삭제</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="item" items="${cartList}">
+							<tr data-cart-id="${item.cartId}" data-unit="${item.price}">
+								<td><input type="checkbox" class="itemCheckbox"
+									name="cartId" value="${item.cartId}"></td>
+								<td>
+									<div class="cart-item">
+										<img src="/yousinsa/image/${item.mainImage1}"
+											alt="${item.name}">
+										<div class="cart-info">
+											<div>
+												<b>${item.name}</b>
+											</div>
+											<div>옵션: ${item.color} / ${item.size}</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<div class="cart-qty">
+										<button type="button" class="qty-btn"
+											onclick="changeQty(this, -1)">-</button>
+										<span class="qty">${item.quantity}</span>
+										<button type="button" class="qty-btn"
+											onclick="changeQty(this, 1)">+</button>
+									</div>
+								</td>
+								<td><span class="price"> <fmt:formatNumber
+											value="${item.price * item.quantity}" type="number" />
+								</span>원</td>
+								<td class="cart-actions">
+									<button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
+								</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</form>
 
-    <div class="cart-bottom-actions">
-      <button onclick="orderSelected()">선택상품 주문</button>
-      <button onclick="orderAll()">전체상품 주문</button>
-    </div>
-     <div class="cart-total" style="max-width:1000px; margin:0 auto 40px; text-align:right; font-size:16px; font-weight:bold;">
-    선택 합계: <span id="selectedSum">0</span>원
-  </div>
-  </div>
-</c:if>
+			<div class="cart-bottom-actions">
+				<button onclick="orderSelected()">선택상품 주문</button>
+				<button onclick="orderAll()">전체상품 주문</button>
+			</div>
+			<div class="cart-total"
+				style="max-width: 1000px; margin: 0 auto 40px; text-align: right; font-size: 16px; font-weight: bold;">
+				선택 합계: <span id="selectedSum">0</span>원
+			</div>
+		</div>
+	</c:if>
 
-<jsp:include page="/footer" />
+	<jsp:include page="/footer" />
 
-<script>
+	<script>
 
-const contextPath = '<%= request.getContextPath() %>';
+const contextPath = '<%=request.getContextPath()%>';
 
 function toggleAll(master) {
   document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = master.checked);
@@ -130,24 +214,28 @@ function deleteSelected() {
 }
 
 function orderSelected() {
-  const selected = getSelectedIds();
-  if (selected.length === 0) return alert("주문할 항목을 선택해주세요.");
+	  const selected = getSelectedIds();
+	  if (selected.length === 0) {
+	    alert("주문할 항목을 선택해주세요.");
+	    return;
+	  }
 
-  const form = document.createElement('form');
-  form.method = 'post';
-  form.action = contextPath + '/cartOrder';
+	  const form = document.createElement('form');
+	  form.method = 'post';
+	  form.action = contextPath + '/order';
 
-  selected.forEach(id => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'cartIds';
-    input.value = id;
-    form.appendChild(input);
-  });
+	  selected.forEach(id => {
+	    const input = document.createElement('input');
+	    input.type = 'hidden';
+	    input.name = 'cartId';
+	    input.value = id;
+	    form.appendChild(input);
+	  });
 
-  document.body.appendChild(form);
-  form.submit();
-}
+	  document.body.appendChild(form);
+	  form.submit();
+	}
+
 
 function changeQty(btn, delta) {
 	  const row     = btn.closest("tr");
@@ -197,13 +285,11 @@ function changeQty(btn, delta) {
 
 
 function orderAll() {
-  const form = document.createElement('form');
-  form.method = 'post';
-  form.action = contextPath + '/cartOrderAll';
-  document.body.appendChild(form);
-  form.submit();
-}
-
+	   document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = true);
+	   const form = document.getElementById('cartForm');
+	   form.action = contextPath + '/order';
+	   form.submit();
+	 }
 function deleteSingle(cartId) {
   if (!confirm("해당 상품을 삭제하시겠습니까?")) return;
 
@@ -222,7 +308,7 @@ function deleteSingle(cartId) {
 }
 </script>
 
-<script>
+	<script>
 document.addEventListener('DOMContentLoaded', () => {
   const totalPriceEl    = document.getElementById('selectedSum');
 

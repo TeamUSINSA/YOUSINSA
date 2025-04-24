@@ -18,6 +18,7 @@ public class OrderList {
     private String receiverName;
     private String receiverPhone;
     private String receiverAddress;
+
     private int usedPoint;         
     private int couponDiscount;
     
@@ -26,6 +27,7 @@ public class OrderList {
     public List<OrderItem> getItems() {
 		return items;
 	}
+
 
 	public void setItems(List<OrderItem> items) {
 		this.items = items;
@@ -145,6 +147,8 @@ public class OrderList {
 	public void setReceiverAddress(String receiverAddress) {
 		this.receiverAddress = receiverAddress;
 	}
+
+	
 }
 
 

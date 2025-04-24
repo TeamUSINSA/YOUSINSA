@@ -16,42 +16,37 @@ import service.product.CategoryServiceImpl;
 
 @WebServlet("/adminCategoryAdd")
 public class AdminCategoryAdd extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public AdminCategoryAdd() {
-        super();
-    }
+	public AdminCategoryAdd() {
+		super();
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-<<<<<<< HEAD
-=======
-    	request.setCharacterEncoding("utf-8");
-    	
-    	
-        CategoryService service = new CategoryServiceImpl();
->>>>>>> branch 'main' of https://github.com/TeamUSINSA/YOUSINSA.git
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        try {
-        	 CategoryService service = new CategoryServiceImpl();
-        	 
-            request.setCharacterEncoding("UTF-8");
-            response.setContentType("text/plain; charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
 
-            String name = request.getParameter("categoryName");
+		try {
 
-            Category category = new Category();
-            category.setCategoryName(name);
+			CategoryService service = new CategoryServiceImpl();
+			request.setCharacterEncoding("UTF-8");
+			response.setContentType("text/plain; charset=UTF-8");
 
-            service.insertCategory(category); 
+			String name = request.getParameter("categoryName");
 
-            int id = category.getCategoryId();
-            response.getWriter().write("success," + id + "," + name);
+			Category category = new Category();
+			category.setCategoryName(name);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().write("fail");
-        }
-    }
+			service.insertCategory(category);
+
+			int id = category.getCategoryId();
+			response.getWriter().write("success," + id + "," + name);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("fail");
+		}
+	}
 }

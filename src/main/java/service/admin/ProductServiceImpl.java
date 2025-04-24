@@ -5,6 +5,7 @@ import java.util.List;
 import dao.admin.ProductDAO;
 import dao.admin.ProductDAOImpl;
 import dto.product.Product;
+import dto.product.ProductStock;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -40,4 +41,9 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> selectProductsBySubCategoryId(int subCategoryId) throws Exception {
         return productDAO.selectProductsBySubCategoryId(subCategoryId);
     }
+
+	@Override
+	public void setProductStockList(List<ProductStock> productStockList) throws Exception {
+		productDAO.insertProductStockList(productStockList);
+	}
 }

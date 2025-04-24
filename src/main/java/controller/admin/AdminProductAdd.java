@@ -1,6 +1,7 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,118 +15,176 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import dto.product.Category;
 import dto.product.Product;
-import dto.product.SubCategory;
+import dto.product.ProductStock;
+import service.admin.ProductService;
+import service.admin.ProductServiceImpl;
 import service.product.CategoryService;
 import service.product.CategoryServiceImpl;
 
+/**
+ * Servlet implementation class AdminProductAdd
+ */
 @WebServlet("/adminproductadd")
 public class AdminProductAdd extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public AdminProductAdd() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
-	// 상품 등록 폼 진입
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CategoryService service = new CategoryServiceImpl();
 		try {
 			List<Category> categoryList = service.selectCategoryList();
-			List<SubCategory> subCategoryList = service
-					.selectSubCategoriesByCategoryId(categoryList.get(0).getCategoryId());
-
 			request.setAttribute("categoryList", categoryList);
-			request.setAttribute("subCategoryList", subCategoryList);
+			request.setAttribute("subCategoryList", service.selectSubCategoriesByCategoryId(categoryList.get(0).getCategoryId()));
 			request.getRequestDispatcher("admin/adminProductAdd.jsp").forward(request, response);
-
-		} catch (Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
-			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 
-	// 상품 등록 처리
-	
-    	@Override
-    	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    	        throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String path = request.getServletContext().getRealPath("upload");
+		int size = 10*1024*1024;
 
-    	    Product product = new Product();
-
-    	    try {
-    	        // 🔹 MultipartRequest 초기화
-    	        String path = request.getServletContext().getRealPath("upload");
-    	        int size = 10 * 1024 * 1024;
-
-    	        MultipartRequest multi = new MultipartRequest(
-    	            request,
-    	            path,
-    	            size,
-    	            "utf-8",
-    	            new DefaultFileRenamePolicy()
-    	        );
-
-    	        // 🔹 값 세팅
-    	        product.setName(multi.getParameter("name"));
-    	        product.setCode(multi.getParameter("code"));
-    	        product.setCategory1(multi.getParameter("category1"));
-    	        product.setCategory2(multi.getParameter("category2"));
-    	        product.setType(multi.getParameter("type"));
-    	        product.setDescription1(multi.getParameter("description1"));
-    	        product.setDescription2(multi.getParameter("description2"));
-    	        product.setSizeChart(multi.getFilesystemName("sizeChart")); // sizeImage -> sizeChart로 반영
-    	        product.setSizeImage(multi.getFilesystemName("sizeChart")); // 혹시 둘 다 쓰고 있다면 둘 다 유지 가능
-
-    	        String costStr = multi.getParameter("cost");
-    	        if (costStr != null && !costStr.isEmpty()) {
-    	            product.setCost(Integer.parseInt(costStr));
-    	        }
-
-    	        String priceStr = multi.getParameter("price");
-    	        if (priceStr != null && !priceStr.isEmpty()) {
-    	            product.setPrice(Integer.parseInt(priceStr));
-    	        }
-
-    	        String discountStr = multi.getParameter("discount");
-    	        if (discountStr != null && !discountStr.isEmpty()) {
-    	            product.setDiscount(Integer.parseInt(discountStr));
-    	        }
-
-    	        String subCategoryIdStr = multi.getParameter("subCategory");
-    	        if (subCategoryIdStr != null && !subCategoryIdStr.isEmpty()) {
-    	            product.setSubCategoryId(Integer.parseInt(subCategoryIdStr));
-    	        }
-
-    	        // 이미지 파일들
-    	        product.setMainImage1(multi.getFilesystemName("mainImage1"));
-    	        product.setMainImage2(multi.getFilesystemName("mainImage2"));
-    	        product.setMainImage3(multi.getFilesystemName("mainImage3"));
-    	        product.setMainImage4(multi.getFilesystemName("mainImage4"));
-
-    	        product.setImage1(multi.getFilesystemName("image1"));
-    	        product.setImage2(multi.getFilesystemName("image2"));
-    	        product.setImage3(multi.getFilesystemName("image3"));
-    	        product.setImage4(multi.getFilesystemName("image4"));
-    	        product.setImage5(multi.getFilesystemName("image5"));
-    	        product.setImage6(multi.getFilesystemName("image6"));
-    	        product.setImage7(multi.getFilesystemName("image7"));
-    	        product.setImage8(multi.getFilesystemName("image8"));
-    	        product.setImage9(multi.getFilesystemName("image9"));
-    	        product.setImage10(multi.getFilesystemName("image10"));
-
-    	        // 🔹 DB 저장
-    	        service.admin.ProductService service = new service.admin.ProductServiceImpl();
-    	        service.insertProduct(product);
-    	        System.out.println("✅ 상품이 DB에 성공적으로 저장되었습니다.");
-
-    	        // 🔹 결과 전달
-    	        request.setAttribute("product", product);
-    	        request.getRequestDispatcher("/admin/adminProductDetail.jsp").forward(request, response);
-
-    	    } catch (Exception e) {
-    	        e.printStackTrace();
-    	        request.setAttribute("errorMessage", "상품 등록 중 오류가 발생했습니다.");
-    	        request.getRequestDispatcher("/error.jsp").forward(request, response);
-    	    }
-    	}
-       
-    }
-
+		MultipartRequest multi = new MultipartRequest(request,path,size,"utf-8", new DefaultFileRenamePolicy());
+		
+	    Integer productId = Integer.parseInt(multi.getParameter("productId"));
+	    String name = multi.getParameter("name");
+	    Integer cost = Integer.parseInt(multi.getParameter("cost"));
+	    Integer price  = Integer.parseInt(multi.getParameter("price"));    
+	    Integer discount = Integer.parseInt(multi.getParameter("discount"));
+	    Integer subCategory = Integer.parseInt(multi.getParameter("subCategory"));
+	    String description1 = multi.getParameter("description1");;
+	    String mainImage1 = multi.getFilesystemName("mainImage1");
+	    String mainImage2 = multi.getFilesystemName("mainImage2");
+	    String mainImage3 = multi.getFilesystemName("mainImage3");
+	    String mainImage4 = multi.getFilesystemName("mainImage4");
+	    String image1 = multi.getFilesystemName("image1");
+	    String image2 = multi.getFilesystemName("image2");
+	    String image3 = multi.getFilesystemName("image3");
+	    String image4 = multi.getFilesystemName("image4");
+	    String sizeChart = multi.getFilesystemName("sizeChart");
+	    
+	    Product product = new Product();
+	    product.setProductId(productId);
+	    product.setName(name);
+	    product.setCost(cost);
+	    product.setPrice(price);
+	    product.setDiscount(discount);
+	    product.setSubCategoryId(subCategory);
+	    product.setDescription1(description1);
+	    product.setMainImage1(mainImage1);
+	    product.setMainImage2(mainImage2);
+	    product.setMainImage3(mainImage3);
+	    product.setMainImage4(mainImage4);
+	    product.setImage1(image1);
+	    product.setImage2(image2);
+	    product.setImage3(image3);
+	    product.setImage4(image4);
+	    product.setSizeChart(sizeChart);
+	    
+	    //option
+	    String[] colorList = multi.getParameterValues("color");
+	    String[] fSizeList = multi.getParameterValues("size-f");
+	    String[] xsSizeList = multi.getParameterValues("size-xs");
+	    String[] sSizeList = multi.getParameterValues("size-s");
+	    String[] mSizeList = multi.getParameterValues("size-m");
+	    String[] lSizeList = multi.getParameterValues("size-l");
+	    String[] xlSizeList = multi.getParameterValues("size-xl");
+	    
+	    List<ProductStock> stockList = new ArrayList<>();
+	    for(int i=0; i<colorList.length; i++) {
+	    	if(fSizeList[i]!=null && fSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(fSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("free");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}
+	    	if(xsSizeList[i]!=null && xsSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(xsSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("xs");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}
+	    	if(sSizeList[i]!=null && sSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(sSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("s");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}
+	    	if(mSizeList[i]!=null && mSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(mSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("m");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}
+	    	if(lSizeList[i]!=null && lSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(lSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("l");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}
+	    	if(xlSizeList[i]!=null && xlSizeList[i].trim().length()>0) {
+	    		Integer quantity = Integer.parseInt(xlSizeList[i]);
+	    		if(quantity>0) {
+	    	    	ProductStock stock = new ProductStock();
+	    	    	stock.setProductId(productId);
+	    	    	stock.setColor(colorList[i]);
+		    		stock.setSize("xl");
+		    		stock.setQuantity(quantity);
+			    	stockList.add(stock);
+	    		}
+	    	}		
+	    }
+	    System.out.println(product);
+	    System.out.println(stockList);
+	    
+	    try {
+	    	ProductService service = new ProductServiceImpl();
+	    	service.insertProduct(product);
+	    	service.setProductStockList(stockList);
+	    	request.setAttribute("productId", product.getProductId());
+	    	request.getRequestDispatcher("productDetail").forward(request, response);
+	    }  catch(Exception e) {
+	    	e.printStackTrace();
+	    	request.getRequestDispatcher("error.jsp").forward(request, response);
+	    }
+	}
+}

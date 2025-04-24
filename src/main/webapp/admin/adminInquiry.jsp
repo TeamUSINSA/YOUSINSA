@@ -1,111 +1,89 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
+  <meta charset="UTF-8">
   <title>1:1 문의</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background-color: #f9f9f9;
-      padding: 30px 0;
-    }
-
-    .container {
-      width: 768px;
-      margin: 0 auto;
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 30px;
-    }
-
-    .filter {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .filter button {
-      margin-left: auto;
-      padding: 6px 16px;
-      border: none;
-      background-color: #333;
-      color: white;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    th, td {
-      padding: 12px 10px;
-      border-top: 1px solid #ccc;
-      text-align: left;
-      position: relative;
-    }
-
-    .expand-row {
-      display: none;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-
-    .expand-content {
-      display: flex;
-      gap: 20px;
-    }
-
-    .expand-content img {
-      width: 120px;
-      height: auto;
-    }
-
-    textarea {
-      width: 100%;
-      height: 100px;
-      margin-top: 10px;
-      padding: 10px;
-    }
-
-    .reply-btn {
-      margin-top: 10px;
-      background: black;
-      color: white;
-      padding: 6px 14px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .status-waiting {
-      color: #ff6600;
-      font-weight: bold;
-    }
-
-    .arrow {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-  </style>
+   <!-- ✅ 꼭 있어야 함! -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex">
+    <!-- ✅ Sidebar -->
+    <div class="w-64 bg-white shadow-md h-screen sticky top-0">
+      <jsp:include page="adminSideBar.jsp" />
+    </div>
+
+    <!-- ✅ Main Content -->
+    <div class="flex-1 p-10">
+      <div class="max-w-5xl mx-auto bg-white p-8 shadow rounded">
+        <h2 class="text-xl font-bold mb-6">1:1 문의</h2>
+
+        <!-- ✅ Filter -->
+        <form method="get" action="${pageContext.request.contextPath}/admininquiry" class="flex gap-4 items-center mb-6">
+          <label><input type="radio" name="filter" value="all" class="mr-1" <c:if test="${param.filter == 'all' || empty param.filter}">checked</c:if>> 전체</label>
+          <label><input type="radio" name="filter" value="done" class="mr-1" <c:if test="${param.filter == 'done'}">checked</c:if>> 답변 완료</label>
+          <label><input type="radio" name="filter" value="waiting" class="mr-1" <c:if test="${param.filter == 'waiting'}">checked</c:if>> 답변 대기</label>
+          <button type="submit" class="ml-auto px-4 py-2 bg-black text-white rounded">검색</button>
+        </form>
+
+        <!-- ✅ Inquiry Table -->
+        <table class="w-full text-sm border-t border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-3 text-left">문의일시</th>
+              <th class="p-3 text-left">회원명(ID)</th>
+              <th class="p-3 text-left">문의사유</th>
+              <th class="p-3 text-left">답변상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:forEach var="inquiry" items="${inquiryList}">
+              <c:set var="status" value="${inquiry.status}" />
+              <tr class="toggle-row border-t" data-id="${inquiry.inquiryId}">
+                <td class="p-3">${inquiry.questionDate}</td>
+                <td class="p-3">${inquiry.userId}</td>
+                <td class="p-3">${inquiry.type}</td>
+                <td class="p-3 status-cell ${status eq '답변 대기' ? 'text-orange-500 font-semibold' : ''}">
+                  ${status} <span class="arrow float-right">▼</span>
+                </td>
+              </tr>
+
+              <tr class="expand-row hidden bg-gray-50">
+                <td colspan="4" class="p-4">
+                  <div class="flex gap-6">
+                    <img src="${inquiry.image}" class="w-28 h-auto rounded border" alt="상품 이미지">
+                    <div class="flex-1">
+                      <p class="mb-2 font-semibold">제목: ${inquiry.title}</p>
+                      <p class="mb-4">내용: ${inquiry.content}</p>
+                      <textarea class="w-full border p-3 rounded mb-3" placeholder="답변을 입력해주세요">${inquiry.answer}</textarea>
+                      <button class="reply-btn bg-black text-white px-4 py-2 rounded">답변 등록</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </c:forEach>
+          </tbody>
+        </table>
+
+        <!-- ✅ Return Button -->
+        <div class="text-center mt-10">
+          <button onclick="location.href='${pageContext.request.contextPath}/adminCategory'" class="bg-gray-700 text-white px-5 py-2 rounded">관리자 메인으로 돌아가기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     $(function () {
-      // 토글 펼치기
+      // Toggle row
       $("tbody").on("click", ".toggle-row", function () {
         const $row = $(this);
-        const $arrow = $row.find(".arrow");
         const $expand = $row.next(".expand-row");
+        const $arrow = $row.find(".arrow");
 
         $(".expand-row").not($expand).hide();
         $(".arrow").text("▼");
@@ -119,94 +97,29 @@
         }
       });
 
-      // 답변 등록 (또는 수정)
+      // Reply submit
       $("tbody").on("click", ".reply-btn", function () {
         const $expand = $(this).closest(".expand-row");
-        const $textarea = $expand.find("textarea");
-        const content = $textarea.val().trim();
-        const $row = $expand.prev();
-        const $statusCell = $row.find(".status-cell");
+        const inquiryId = $expand.prev().data("id");
+        const answer = $expand.find("textarea").val().trim();
+        const $statusCell = $expand.prev().find(".status-cell");
 
-        if (!content) {
+        if (!answer) {
           alert("답변을 입력해주세요.");
           return;
         }
 
-        // 상태가 대기였으면 '답변 완료'로 바꿔줌
-        if ($statusCell.text().trim() !== "답변 완료") {
-          $statusCell.text("답변 완료").removeClass("status-waiting");
-        }
-
-        alert("답변이 등록(수정)되었습니다.");
-        $expand.hide();
-        $row.find(".arrow").text("▼");
+        $.post("admininquiryreply", { inquiryId, answer }, function (result) {
+          if (result === "success") {
+            $statusCell.text("답변 완료").removeClass("text-orange-500");
+            alert("답변이 등록되었습니다.");
+            location.reload();
+          } else {
+            alert("답변 등록 실패");
+          }
+        });
       });
     });
   </script>
-</head>
-<body>
-<div class="container">
-  <h2>1:1 문의</h2>
-
-  <!-- 필터 -->
-  <form method="get" action="inquiry.jsp" class="filter">
-    <label><input type="radio" name="filter" value="all" checked> 전체</label>
-    <label><input type="radio" name="filter" value="done"> 답변 완료</label>
-    <label><input type="radio" name="filter" value="waiting"> 답변 대기</label>
-    <button type="submit">검색</button>
-  </form>
-
-  <!-- 문의 목록 -->
-  <table>
-    <thead>
-    <tr>
-      <th>문의일시</th>
-      <th>회원명(ID)</th>
-      <th>문의사유</th>
-      <th>답변상태</th>
-    </tr>
-    </thead>
-    <tbody>
-    <c:forEach var="qna" items="${qnaList}">
-      <!-- 답변 상태 판별 -->
-      <c:choose>
-        <c:when test="${not empty qna.reply}">
-          <c:set var="status" value="답변 완료"/>
-        </c:when>
-        <c:otherwise>
-          <c:set var="status" value="답변 대기"/>
-        </c:otherwise>
-      </c:choose>
-
-      <!-- 메인 행 -->
-      <tr class="toggle-row" data-id="${qna.id}">
-        <td>${qna.date}</td>
-        <td>${qna.userId}</td>
-        <td>${qna.category}</td>
-        <td class="status-cell ${status eq '답변 대기' ? 'status-waiting' : ''}">
-          ${status}
-          <span class="arrow">▼</span>
-        </td>
-      </tr>
-
-      <!-- 펼쳐지는 상세 행 -->
-      <tr class="expand-row">
-        <td colspan="4">
-          <div class="expand-content">
-            <img src="${qna.imageUrl}" alt="상품 이미지">
-            <div class="content">
-              <p><strong>제목:</strong> ${qna.title}</p>
-              <p><strong>내용:</strong> ${qna.content}</p>
-
-              <textarea placeholder="답변을 입력해주세요">${qna.reply}</textarea>
-              <button class="reply-btn">답변 등록</button>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </c:forEach>
-    </tbody>
-  </table>
-</div>
 </body>
 </html>

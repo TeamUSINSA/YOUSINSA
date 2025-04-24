@@ -93,4 +93,15 @@ public class UserDAOImpl implements UserDAO {
 	    sqlSession.update("mapper.user.updateUserPassword", param);
 	    sqlSession.commit();
 	}
+	
+	 @Override
+	    public User findById(String userId) throws Exception {
+	        return sqlSession.selectOne("mapper.user.findById", userId);
+	    }
+
+	    @Override
+	    public User findByMemberNo(int memberNo) throws Exception {
+	        return sqlSession.selectOne("mapper.user.findByMemberNo", memberNo);
+	    }
+	
 }

@@ -79,8 +79,10 @@
             object-fit: cover;
         }
     </style>
+    <jsp:include page="adminSideBarStyle.jsp" />
 </head>
 <body>
+<jsp:include page="adminSideBar.jsp" />
     <h2>상품검색</h2>
     <div class="container">
         <form method="post" action="${contextPath}/adminproductsearch">

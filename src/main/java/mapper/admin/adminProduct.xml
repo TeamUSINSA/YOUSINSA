@@ -39,6 +39,7 @@
   <!-- ✅ 상품 등록 -->
   <insert id="insertProduct" parameterType="dto.product.Product">
     INSERT INTO product (
+      product_id,
       name, cost, price, discount, sub_category_id, type,
       reg_date, description1, description2,
       main_image1, main_image2, main_image3, main_image4,
@@ -46,6 +47,7 @@
       size_chart
     )
     VALUES (
+      #{productId},
       #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, #{type},
       NOW(), #{description1}, #{description2},
       #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4},
@@ -61,5 +63,21 @@
     WHERE product_id = #{productId}
   </delete>
 
+	<insert id="insertStock" parameterType="List" useGeneratedKeys="true" keyProperty="stock_id">
+	 INSERT INTO productstock(
+          product_id
+        , color
+        , size
+        , quantity
+    ) VALUES 
+    <foreach collection="list" item="item" separator=",">
+    (
+          #{item.productId}
+        , #{item.color}
+        , #{item.size}
+        , #{item.quantity}
+    )
+    </foreach>
+	</insert>
 
 </mapper>

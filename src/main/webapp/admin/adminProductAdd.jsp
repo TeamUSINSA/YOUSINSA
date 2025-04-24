@@ -317,9 +317,11 @@ img {
 }
 
 </style>
+<jsp:include page="adminSideBarStyle.jsp" />
     </head>
 
     <body>
+    <jsp:include page="adminSideBar.jsp" />
     <div class="layout">
          <div class="sidebar" style="width: 200px;">
       </div>
@@ -341,10 +343,10 @@ img {
                 
                 <div class="thumbnail-box" id="thumbnailBox">
                 </div>
-                <input type="file" id="mainImage1" name="file" accept="image/*" style="display:none" name="mainImage1" onchange="readURL(this,'main-image')">
-                <input type="file" id="mainImage2" name="file" accept="image/*" style="display:none" name="mainImage2" onchange="readURL(this,'sub-thumb1')">
-                <input type="file" id="mainImage3" name="file" accept="image/*" style="display:none" name="mainImage3" onchange="readURL(this,'sub-thumb2')">
-                <input type="file" id="mainImage4" name="file" accept="image/*" style="display:none" name="mainImage4" onchange="readURL(this,'sub-thumb3')">
+                <input type="file" id="mainImage1" accept="image/*" style="display:none" name="mainImage1" onchange="readURL(this,'main-image')">
+                <input type="file" id="mainImage2" accept="image/*" style="display:none" name="mainImage2" onchange="readURL(this,'sub-thumb1')">
+                <input type="file" id="mainImage3" accept="image/*" style="display:none" name="mainImage3" onchange="readURL(this,'sub-thumb2')">
+                <input type="file" id="mainImage4" accept="image/*" style="display:none" name="mainImage4" onchange="readURL(this,'sub-thumb3')">
             </div>
             
 
@@ -364,11 +366,11 @@ img {
                         </select>
                         <span style="margin-left: auto; font-size: 12px;">카테고리 선택</span>
                     </div>
-                    <div><input type="text" name="name" placeholder="상품명 입력" style="width: 100%;"></div>
-                    <div><input type="text" name="productId" placeholder="제품코드 입력" style="width: 100%;"></div>
-                    <div><input type="text" name="cost" placeholder="원가 입력" style="width: 100%;"></div>
-                    <div><input type="text" name="price" placeholder="판매가 입력" style="width: 100%;"></div>
-                    <div><input type="text" name="discount" placeholder="할인가 입력" style="width: 100%;" ></div>
+                    <div><input type="text" name="name" placeholder="상품명 입력" style="width: 100%;" required></div>
+                    <div><input type="text" name="productId" placeholder="제품코드 입력" style="width: 100%;" required></div>
+                    <div><input type="text" name="cost" placeholder="원가 입력" style="width: 100%;" required></div>
+                    <div><input type="text" name="price" placeholder="판매가 입력" style="width: 100%;" required></div>
+                    <div><input type="text" name="discount" placeholder="할인가 입력" style="width: 100%;" required></div>
                 </div>
 
                 <div class="dynamic-options">
@@ -394,11 +396,11 @@ img {
             <input type="file" accept="image/*" style="display:none" name="image2" id="imageDetail2" onchange="readURL(this,'image2')">
             <input type="file" accept="image/*" style="display:none" name="image3" id="imageDetail3" onchange="readURL(this,'image3')">
             <input type="file" accept="image/*" style="display:none" name="image4" id="imageDetail4" onchange="readURL(this,'image4')">
-            <input type="text" id="bigImageTitle" placeholder="제품 설명글 입력" name="description1"/>
+            <input type="text" id="bigImageTitle" placeholder="제품 설명글 입력" name="description1" required/>
             <div class="big-preview-box" id="sizeImageBox">
             	<div class="big-img-slot hide" id="sizeImageSlot"><span class="x" id="sizeImage-x">✖</span><img id="sizeImage"></div></div>
             <input type="file" id="sizeImageInput" accept="image/*" style="display:none" name="sizeChart" onchange="sizeImageChange(this,'sizeImage')">
-            <span class="add-btn" id="sizeImageUploadBtn" onclick="$('#sizeImageInput').click()">+ 사이즈 설명</span>
+            <span class="add-btn" id="sizeImageUploadBtn" onclick="$('#sizeImageInput').click()">+ 사이즈 이미지</span>
         </div>
         <div class="final-submit-section">
             <button class="submit-btn">등록하기</button>
@@ -497,7 +499,7 @@ img {
     	const block = $('<div class="color-block"></div>')
         const headerRow = $('<div class="option-row"></div>');
         
-        const colorLabel = $("<span>색 상</span>&nbsp;<input type='text' name='color'>")
+        const colorLabel = $("<span>색 상</span>&nbsp;<input type='text' name='color' required>")
 
         const removeColorBtn = $("<span style='color:red'>✖</span>")
         removeColorBtn.click(function() {
@@ -517,7 +519,7 @@ img {
         
         const oneSizeTable = `<table class="option_table" id="sizeTable">
         	<tr><td>사이즈</td><td>재고량</td></tr>
-        	<tr><td>F</td><td><input type="number" name="size-f"/></td></tr>
+        	<tr><td>F</td><td><input type="number" name="size-f" required/></td></tr>
         	<tr style="display:none"><td>XS</td><td><input type="number" name="size-xs"/></td></tr>
         	<tr style="display:none"><td>S</td><td><input type="number" name="size-s"/></td></tr>
         	<tr style="display:none"><td>M</td><td><input type="number" name="size-m"/></td></tr>

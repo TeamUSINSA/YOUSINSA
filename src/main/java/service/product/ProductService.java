@@ -13,5 +13,7 @@ public interface ProductService {
 	List<Product> getProductsBySubCategory(int subCategoryId) throws Exception;
 
 	List<Product> getProductsByCategory(int categoryId) throws Exception;
+	
+	Product selectById(int productId) throws Exception;
 
 }
