@@ -56,6 +56,25 @@
   WHERE c.user_id = #{userId}
 </select>
 
-  
+ 
+ <select id="selectOrderItemsByCartIds" parameterType="list" resultType="order">
+  SELECT 
+    c.cart_id,
+    c.product_id,
+    c.user_id,
+    c.quantity,
+    c.color,
+    c.size,
+    p.name,
+    p.main_image1 AS image,
+    p.price AS unit_price
+  FROM cart c
+  JOIN product p ON c.product_id = p.product_id
+  WHERE c.cart_id IN 
+  <foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+    #{id}
+  </foreach>
+</select>
+ 
 
 </mapper>

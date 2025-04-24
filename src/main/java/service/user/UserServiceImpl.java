@@ -1,14 +1,23 @@
 package service.user;
 
+import java.util.List;
+
+import dao.user.UserCouponDAO;
+import dao.user.UserCouponDAOImpl;
 import dao.user.UserDAO;
 import dao.user.UserDAOImpl;
 import dto.user.User;
+import dto.user.UserCoupon;
 
 public class UserServiceImpl implements UserService{
 	
 	private UserDAO userDao;
+	private UserCouponDAO couponDAO;
+	
     public UserServiceImpl() {
-        userDao = new UserDAOImpl();}
+        userDao = new UserDAOImpl();
+        couponDAO  = new UserCouponDAOImpl();
+    }
 
 	@Override
 	public void join(User user) throws Exception {
@@ -54,8 +63,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User getUserById(String userId) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		return userDao.findUserByUserId(userId);
 	}
 
 	@Override
@@ -80,5 +88,8 @@ public class UserServiceImpl implements UserService{
 	     userDao.updateUserPassword(userId, newPassword);
 	 }
 
-	
+	 @Override
+	    public List<UserCoupon> getUnusedCoupons(String userId) throws Exception {
+	        return couponDAO.selectUnusedCouponsByUserId(userId);
+	    }
 }

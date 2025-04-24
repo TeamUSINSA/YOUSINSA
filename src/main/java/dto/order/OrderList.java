@@ -17,6 +17,8 @@ public class OrderList {
     private String receiverName;
     private String receiverPhone;
     private String receiverAddress;
+    private int usedPoint;
+    private int couponDiscount;
 
     // 기본 생성자
     public OrderList() {}
@@ -116,6 +118,24 @@ public class OrderList {
 	public void setReceiverAddress(String receiverAddress) {
 		this.receiverAddress = receiverAddress;
 	}
+
+	public int getUsedPoint() {
+		return usedPoint;
+	}
+
+	public void setUsedPoint(int usedPoint) {
+		this.usedPoint = usedPoint;
+	}
+
+	public int getCouponDiscount() {
+		return couponDiscount;
+	}
+
+	public void setCouponDiscount(int couponDiscount) {
+		this.couponDiscount = couponDiscount;
+	}
+	
+	
 }
 
 

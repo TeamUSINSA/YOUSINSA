@@ -33,5 +33,8 @@ public class ProductServiceImpl implements ProductService{
         return productDAO.selectProductsByCategory(categoryId);
     }
 
-
+    @Override
+    public Product selectById(int productId) throws Exception {
+        return productDAO.selectById(productId);
+    }
 }

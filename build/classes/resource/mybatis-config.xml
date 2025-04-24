@@ -18,6 +18,8 @@
 		<typeAlias type="dto.order.Cart" alias="cart"/>
 		<typeAlias type="dto.order.Coupon" alias="coupon"/>
 		<typeAlias type="dto.order.Order" alias="order"/>
+		<typeAlias type="dto.order.OrderItem" alias="orderItem"/>
+		<typeAlias type="dto.user.UserCoupon" alias="userCoupon"/>
 	</typeAliases>
 	
 	<environments default="development">
@@ -40,6 +42,7 @@
 		<mapper resource="mapper/product/productdetail.xml"/>
 		<mapper resource="mapper/order/cart.xml"/>
 		<mapper resource="mapper/order/coupon.xml"/>
-		<mapper resource="mapper/order/order.xml"/>
+		<mapper resource="mapper/order/orderproduct.xml"/>
+		<mapper resource="mapper/user/usercoupon.xml"/>
 	</mappers>
 </configuration>

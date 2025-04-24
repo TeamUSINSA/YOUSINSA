@@ -31,5 +31,10 @@ public class ProductDAOImpl implements ProductDAO{
     public List<Product> selectProductsByCategory(int categoryId) throws Exception{
         return sqlSession.selectList("mapper.product.selectProductsByCategory", categoryId);
     }
+    
+    @Override
+    public Product selectById(int productId) throws Exception {
+        return sqlSession.selectOne("mapper.orderproduct.selectProductById", productId);
+    }
 
 }

@@ -2,16 +2,22 @@ package dao.order;
 
 import java.util.List;
 
+import dto.order.Coupon;
 import dto.order.Order;
-import dto.order.OrderItem;
-import dto.order.OrderList;
+import dto.user.User;
+import dto.user.UserCoupon;
 
 public interface OrderDAO {
 
-	int insertOrder(Order order) throws Exception;
+	void insertOrderList(Order order) throws Exception;
 
-	void insertOrderItem(OrderItem item) throws Exception;
+	void insertOrderItem(Order order) throws Exception;
 
-	List<OrderList> selectOrderListByUser(String userId) throws Exception;
+	List<Order> selectOrdersByUser(String userId) throws Exception;
 
+	User selectUserById(String userId) throws Exception;
+
+	void markCouponUsed(UserCoupon uc) throws Exception;
+
+	List<Coupon> selectUnusedCouponsByUserId(String userId) throws Exception;
 }

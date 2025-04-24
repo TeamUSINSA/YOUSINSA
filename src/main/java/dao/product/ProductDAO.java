@@ -14,4 +14,5 @@ public interface ProductDAO {
 
 	List<Product> selectProductsByCategory(int categoryId) throws Exception;
 
+	Product selectById(int productId) throws Exception;
 }

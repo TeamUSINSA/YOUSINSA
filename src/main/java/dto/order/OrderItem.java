@@ -9,6 +9,7 @@ public class OrderItem {
     private int couponId;
     private String color;
     private String size;
+    
 
     public OrderItem() {}
 

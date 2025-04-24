@@ -2,15 +2,21 @@
 package service.order;
 
 import java.util.List;
+
+import dto.order.Coupon;
 import dto.order.Order;
-import dto.order.OrderItem;
-import dto.order.OrderList;
 
 public interface OrderService {
 
-    int insertOrder(Order order) throws Exception;
+	void insertOrderList(Order order) throws Exception;
 
-    void insertOrderItem(OrderItem item) throws Exception;
+	void insertOrderItem(Order order) throws Exception;
 
-    List<OrderList> selectOrderListByUser(String userId) throws Exception;
+	List<Order> selectOrdersByUser(String userId) throws Exception;
+
+	void insertOrderList(List<Order> orderList) throws Exception;
+
+	List<Order> selectOrderItemsByCartIds(List<Integer> cartIds) throws Exception;
+
+	List<Coupon> getUnusedCoupons(String userId) throws Exception;
 }

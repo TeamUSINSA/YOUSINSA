@@ -1,10 +1,13 @@
 package dao.order;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import dto.order.Cart;
+import dto.order.Order;
 import utils.MybatisSqlSessionFactory;
 
 public class CartDAOImpl implements CartDAO {
@@ -44,4 +47,12 @@ public class CartDAOImpl implements CartDAO {
     public Cart selectCartByUserAndProduct(Cart cart) throws Exception{
         return sqlSession.selectOne("mapper.cart.selectCartByUserAndProduct", cart);
     }
+
+    @Override
+    public List<Order> selectOrderItemsByCartIds(List<Integer> cartIds) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("cartIds", cartIds);
+        return sqlSession.selectList("mapper.cart.selectOrderItemsByCartIds", param);
+    }
+
 }
