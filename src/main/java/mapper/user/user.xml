@@ -85,7 +85,8 @@
 	</update>
 
 	<select id="selectLikedProducts" resultType="likelist">
-		SELECT l.like_id AS likeId,
+		SELECT l.like_id AS
+		likeId,
 		l.product_id AS productId,
 		l.user_id AS userId,
 		p.name,
@@ -94,14 +95,45 @@
 		p.description1 AS detail
 		FROM likelist l
 		JOIN product p ON l.product_id = p.product_id
-		WHERE l.user_id = #{userId}
+		WHERE l.user_id =
+		#{userId}
 		ORDER BY l.like_id DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<select id="countLikedProducts" resultType="int">
-		SELECT COUNT(*) FROM likelist WHERE user_id = #{userId}
+		SELECT COUNT(*) FROM
+		likelist WHERE user_id = #{userId}
 	</select>
 
+	<select id="findById" parameterType="String" resultType="user">
+		SELECT * FROM user WHERE user_id = #{userId}
+	</select>
+
+	<select id="findByMemberNo" parameterType="int"
+		resultType="user">
+		SELECT * FROM user WHERE member_no = #{memberNo}
+	</select>
+
+	<select id="selectAllInquiries" resultType="dto.user.Inquiry">
+		SELECT * FROM inquiry ORDER BY question_date DESC
+	</select>
+
+	<select id="selectInquiryById" resultType="dto.user.Inquiry"
+		parameterType="int">
+		SELECT * FROM inquiry WHERE inquiry_id = #{inquiryId}
+	</select>
+
+	<insert id="insertInquiry" parameterType="dto.user.Inquiry">
+		INSERT INTO inquiry (title, content, user_id, type, status, question_date,
+		product_id)
+		VALUES (#{title}, #{content}, #{userId}, #{type}, #{status},
+		#{questionDate}, #{productId})
+	</insert>
+
+	<update id="updateInquiryAnswer" parameterType="map">
+		UPDATE inquiry SET answer = #{answer}, status = '답변 완료' WHERE inquiry_id =
+		#{inquiryId}
+	</update>
 
 </mapper>

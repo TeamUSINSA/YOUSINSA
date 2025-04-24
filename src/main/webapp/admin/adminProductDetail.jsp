@@ -56,9 +56,11 @@
             font-size: 15px; resize: vertical; border-radius: 6px; border: 1px solid #ccc;
         }
     </style>
+    <jsp:include page="adminSideBarStyle.jsp" />
 </head>
 
 <body>
+<jsp:include page="adminSideBar.jsp" />
 <h2>상품 수정</h2>
 <form action="/yousinsa/admin/adminCategory.jsp" method="post" enctype="multipart/form-data">
     <div class="container">

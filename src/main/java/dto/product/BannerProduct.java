@@ -1,15 +1,17 @@
 package dto.product;
 
+import java.sql.Timestamp;
+
 public class BannerProduct {
     private int id;
     private String name;
     private int productId;
     private String img;
     private String position;
+    private Timestamp regDate;  // 추가
 
     public BannerProduct() {}
 
-    
     public int getId() {
         return id;
     }
@@ -50,4 +52,11 @@ public class BannerProduct {
         this.position = position;
     }
 
+    public Timestamp getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(Timestamp regDate) {
+        this.regDate = regDate;
+    }
 }

@@ -11,7 +11,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private CategoryDAO categoryDao;
 
-    public CategoryServiceImpl() throws Exception{
+    public CategoryServiceImpl() {
         this.categoryDao = new CategoryDAOImpl();
     }
 

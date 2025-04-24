@@ -3,6 +3,7 @@ package service.admin;
 import java.util.List;
 
 import dto.product.Product;
+import dto.product.ProductStock;
 
 public interface ProductService {
 
@@ -24,5 +25,6 @@ public interface ProductService {
     // (선택) 서브카테고리 기준으로 상품 조회
     List<Product> selectProductsBySubCategoryId(int subCategoryId) throws Exception;
     
+    void setProductStockList(List<ProductStock> productStockList) throws Exception;
     
 }

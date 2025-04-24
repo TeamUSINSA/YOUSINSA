@@ -23,9 +23,8 @@ public class AdminSubcategoryDelete extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain; charset=UTF-8");
 
-        CategoryService service = new CategoryServiceImpl();
-
         try {
+        	CategoryService service = new CategoryServiceImpl();
             int subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
             service.deleteSubCategoryById(subCategoryId);
             response.getWriter().write("success");
