@@ -10,7 +10,7 @@
     <div class="menu-item"><a href="myAddress">나의 주소지</a></div>
     <hr>
     <div class="menu-item"><a href="mycart">장바구니</a></div>
-    <div class="menu-item"><a href="myOrderList">주문 / 배송조회</a></div>
+    <div class="menu-item"><a href="myOrders">주문 / 배송조회</a></div>
     <div class="menu-item"><a href="myCancelList">취소 / 반품 내역</a></div>
     <div class="menu-item"><a href="myLikeList">좋아요 목록</a></div>
     <div class="menu-item"><a href="myRestockList">재입고 확인</a></div>
@@ -28,44 +28,44 @@
 
 <style>
   .sidebar {
-    width: 150px;
-    border-right: 1px solid #ccc;
-    padding: 20px 10px;
-    font-family: 'Arial', sans-serif;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  }
+    width: 200px;
+    background-color: #fff;
+    padding: 20px 15px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
 
-  .sidebar h3 {
-    font-size: 14px;
-    margin: 0 0 10px 0;
-    text-align: center;
-  }
 
-  .menu-section {
-    margin-bottom: 20px;
-  }
+    .sidebar h4 {
+        margin: 20px 0 10px;
+        font-size: 14px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #ddd;
+        color: #444;
+    }
 
-  .menu-item {
-    font-size: 13px;
-    margin: 8px 0;
-    text-align: center;
-  }
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-  .menu-item a {
-    text-decoration: none;
-    color: #333;
-  }
+    .sidebar li {
+        margin: 6px 0;
+    }
 
-  .menu-item a:hover {
-    text-decoration: underline;
-    color: #007bff;
-  }
+    .sidebar a {
+        display: block;
+        color: #333;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 6px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
 
-  .sidebar hr {
-    margin: 10px 0;
-    border: none;
-    border-top: 1px solid #ddd;
-  }
+    .sidebar a:hover {
+        background-color: #f0f0f0;
+    }
 </style>

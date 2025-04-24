@@ -8,7 +8,7 @@ public class Return {
     private String reason;
     private String userId;
     private int orderItemId;
-    private boolean approved;
+    private int approved;
     private String rejectReason;
 
 
@@ -65,12 +65,12 @@ public class Return {
 	}
 
 
-	public boolean isApproved() {
+	public int isApproved() {
 		return approved;
 	}
 
 
-	public void setApproved(boolean approved) {
+	public void setApproved(int approved) {
 		this.approved = approved;
 	}
 

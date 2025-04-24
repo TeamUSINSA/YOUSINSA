@@ -21,11 +21,26 @@ public class Order {
     private int shippingFee;     
     private int usedPoints;       
     private int finalPayment;
+    
+    private String deliveryStatus;
 
     public Order() {}
+    
+    
+
+    public String getDeliveryStatus() {
+		return deliveryStatus;
+	}
 
 
-    public int getOrderId() { return orderId; }
+
+	public void setDeliveryStatus(String deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
+	}
+
+
+
+	public int getOrderId() { return orderId; }
     public void setOrderId(int orderId) { this.orderId = orderId; }
 
     public String getUserId() { return userId; }

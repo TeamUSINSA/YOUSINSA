@@ -76,4 +76,184 @@
     ORDER BY order_date DESC
   </select>
 
+<!-- 주문 + 주문 아이템 + 상품 정보 한번에 조회 -->
+  <resultMap id="orderWithItemsResultMap" type="dto.order.Order">
+    <id property="orderId" column="order_id" />
+    <result property="userId" column="user_id" />
+    <result property="orderDate" column="order_date" />
+    <result property="totalPrice" column="total_price" />
+    <result property="deliveryStatus" column="delivery_status" />
+    
+    <result property="totalDiscount" column="total_discount" />
+<result property="usedPoints" column="used_points" />
+<result property="finalPayment" column="final_payment" />
+    
+    <result property="paymentMethod" column="payment_method"/>
+    <result property="deliveryRequest" column="delivery_request"/>
+    <result property="receiverName" column="receiver_name"/>
+    <result property="receiverPhone" column="receiver_phone"/>
+    <result property="receiverAddress" column="receiver_address"/>
+    <result property="totalDiscount" column="total_discount"/>
+    <result property="usedPoints" column="used_points"/>
+    <result property="finalPayment" column="final_payment"/>
+    
+    <collection property="items" ofType="dto.order.OrderItem">
+      <id property="orderItemId" column="order_item_id" />
+      <result property="productId" column="product_id" />
+      <result property="quantity" column="quantity" />
+      <result property="status" column="item_status" />
+      <result property="color" column="color" />
+      <result property="size" column="size" />
+      <result property="name" column="product_name" />
+      <result property="price" column="price" />
+      <result property="mainImage1" column="main_image1" />
+    </collection>
+  </resultMap>
+
+<resultMap id="orderListWithItemsResultMap" type="dto.order.OrderList">
+  <!-- OrderList 필드 -->
+    <id     property="orderId"         column="order_id"/>
+    <result property="orderDate"       column="order_date"/>
+    <result property="totalPrice"      column="total_price"/>
+    <result property="deliveryStatus"  column="delivery_status"/>
+    <result property="deliveryRequest" column="delivery_request"/>
+    <result property="deliveryMethod"  column="delivery_method"/>
+    <result property="paymentMethod"   column="payment_method"/>
+    <result property="userId"          column="user_id"/>
+    <result property="pointId"         column="point_id"/>
+    <result property="receiverName"    column="receiver_name"/>
+    <result property="receiverPhone"   column="receiver_phone"/>
+    <result property="receiverAddress" column="receiver_address"/>
+    <result property="usedPoint"       column="used_point"/>
+    <result property="couponDiscount"  column="coupon_discount"/>
+    <!-- OrderItem 리스트 -->
+    <collection property="items" ofType="dto.order.OrderItem">
+      <id     property="orderItemId" column="order_item_id"/>
+      <result property="productId"   column="product_id"/>
+      <result property="quantity"    column="quantity"/>
+      <result property="status"      column="status"/>
+      <result property="couponId"    column="coupon_id"/>
+      <result property="color"       column="color"/>
+      <result property="size"        column="size"/>
+      <result property="name"        column="product_name"/>
+      <result property="price"       column="price"/>
+      <result property="mainImage1"  column="main_image1"/>
+    </collection>
+  </resultMap>
+  <!-- 주문 상세 조회 (order + order_item 조인) -->
+  <select id="selectOrderWithItemsByUserId"
+          parameterType="string"
+          resultMap="orderWithItemsResultMap">
+    SELECT
+  o.order_id,
+  o.user_id,
+  o.order_date,
+  o.total_price,
+  o.delivery_status,
+
+  i.order_item_id,
+  i.product_id,
+  i.quantity,
+  i.status AS item_status,
+  i.color,
+  i.size,
+
+  p.name AS product_name,
+  p.cost AS price, 
+  p.main_image1
+FROM orderlist o
+JOIN orderitem i ON o.order_id = i.order_id
+JOIN product p ON i.product_id = p.product_id
+WHERE o.user_id = #{userId}
+ORDER BY o.order_date DESC, i.order_item_id ASC
+  </select>
+  
+  <select id="selectOrdersByUserAndDate" parameterType="map" resultMap="orderWithItemsResultMap">
+    SELECT
+        o.order_id,
+        o.user_id,
+        o.order_date,
+        o.total_price,
+        o.delivery_status,
+
+        i.order_item_id,
+        i.product_id,
+        i.quantity,
+        i.status AS item_status,
+        i.color,
+        i.size,
+
+        p.name AS product_name,
+        p.cost AS price,
+        p.main_image1
+
+    FROM orderlist o
+    JOIN orderitem i ON o.order_id = i.order_id
+    JOIN product p ON i.product_id = p.product_id
+    WHERE o.user_id = #{userId}
+      AND o.order_date BETWEEN #{startDate} AND #{endDate}
+    ORDER BY o.order_date DESC, i.order_item_id ASC
+</select>
+
+<select id="selectOrderByDateRange" parameterType="map" resultMap="orderWithItemsResultMap">
+  SELECT 
+    o.order_id,
+    o.user_id,
+    o.order_date,
+    o.total_price,
+    o.delivery_status,
+    
+    i.order_item_id,
+    i.product_id,
+    i.quantity,
+    i.status AS item_status,
+    i.color,
+    i.size,
+    
+    p.name AS product_name,
+    p.cost AS price,
+    p.main_image1
+  FROM orderlist o
+  JOIN orderitem i ON o.order_id = i.order_id
+  JOIN product p ON i.product_id = p.product_id
+  WHERE o.user_id = #{userId}
+    AND o.order_date BETWEEN #{startDate} AND #{endDate}
+  ORDER BY o.order_date DESC, i.order_item_id ASC
+</select>
+
+<select id="getOrderDetailById" parameterType="int"
+          resultMap="orderListWithItemsResultMap">
+    SELECT
+    o.order_id,
+    o.order_date,
+    o.total_price,
+    o.delivery_status,
+    o.delivery_request,
+    o.delivery_method,
+    o.payment_method,
+    o.user_id,
+    o.point_id,
+    o.receiver_name,
+    o.receiver_phone,
+    o.receiver_address,
+    o.used_point,
+    o.coupon_discount,
+    oi.order_item_id,
+    oi.product_id,
+    oi.quantity,
+    oi.status,
+    oi.color,
+    oi.size,
+    p.name        AS product_name,
+    p.cost       AS price,
+    p.main_image1 AS main_image1
+  FROM orderlist o
+  LEFT JOIN orderitem oi ON o.order_id = oi.order_id
+  LEFT JOIN product   p  ON oi.product_id = p.product_id
+  WHERE o.order_id = #{orderId}
+  </select>
+
+<select id="countReviewsByOrderItemId" parameterType="int" resultType="int">
+  SELECT COUNT(*) FROM review WHERE order_item_id = #{orderItemId}
+</select>
 </mapper>

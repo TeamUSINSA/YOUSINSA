@@ -87,19 +87,19 @@
 		<div id="likeListContainer">
 			<c:forEach var="item" items="${likeList}">
 				<div class="product-card">
-					<a href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}">
+					<a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}">
 						<img src="/yousinsa/image/${item.mainImage1}" alt="${item.name}"
 							style="width: 90px; height: 110px; object-fit: cover; border-radius: 5px;">
 					</a>
 					<div style="flex: 1;">
 						<div style="font-weight: bold; margin-bottom: 5px;">
-							<a href="${pageContext.request.contextPath}/product/detail?productId=${item.productId}"
+							<a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}"
 								style="color: inherit; text-decoration: none;">${item.name}</a>
 						</div>
 						<div style="font-size: 13px; color: #666; margin-bottom: 10px;">${item.detail}</div>
 						<div style="display: flex; gap: 10px;">
 							<button class="btn like-btn" onclick="cancelLike(${item.likeId}, this)">좋아요 취소</button>
-							<a href="/product/detail?productId=${item.productId}" class="btn buy-btn">구매하러 가기</a>
+							<a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}" class="btn buy-btn">구매하러 가기</a>
 						</div>
 					</div>
 				</div>

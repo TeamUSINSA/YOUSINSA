@@ -1,6 +1,7 @@
 // src/main/java/service/order/impl/OrderServiceImpl.java
 package service.order;
 
+import java.sql.Date;
 import java.util.List;
 
 import dao.order.OrderDAO;
@@ -27,4 +28,21 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderList> selectOrderListByUser(String userId) throws Exception {
         return orderDAO.selectOrderListByUser(userId);
     }
+
+	@Override
+	public List<Order> getOrdersWithItemsByUserId(String userId) throws Exception {
+		return orderDAO.getOrderWithItemsByUserId(userId);
+	}
+
+	@Override
+	public List<Order> getOrdersByDateRange(String userId, Date startDate, Date endDate) throws Exception {
+		return orderDAO.getOrdersByDateRange(userId, startDate, endDate);
+	}
+
+	@Override
+	public OrderList getOrderDetail(int orderId) throws Exception {
+		return orderDAO.getOrderDetailById(orderId);
+	}
+
+	
 }

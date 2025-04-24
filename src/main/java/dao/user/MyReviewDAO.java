@@ -11,4 +11,6 @@ public interface MyReviewDAO {
 	Review getReviewById(int reviewId) throws Exception; 
 	void updateReview(Review review) throws Exception;
 	void deleteReview(int reviewId) throws Exception;
+	int countReviewByOrderItem(int orderItemId) throws Exception;
+	int countReviewsByOrderItemId(int orderItemId) throws Exception;
 }

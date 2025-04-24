@@ -1,6 +1,7 @@
 package dto.order;
 
 import java.sql.Date;
+import java.util.List;
 
 public class OrderList {
 
@@ -17,8 +18,20 @@ public class OrderList {
     private String receiverName;
     private String receiverPhone;
     private String receiverAddress;
+    private int usedPoint;         
+    private int couponDiscount;
+    
+    private List<OrderItem> items;
+    
+    public List<OrderItem> getItems() {
+		return items;
+	}
 
-    // 기본 생성자
+	public void setItems(List<OrderItem> items) {
+		this.items = items;
+	}
+
+	// 기본 생성자
     public OrderList() {}
 
 	public int getOrderId() {
@@ -27,6 +40,22 @@ public class OrderList {
 
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
+	}
+
+	public int getUsedPoint() {
+		return usedPoint;
+	}
+
+	public void setUsedPoint(int usedPoint) {
+		this.usedPoint = usedPoint;
+	}
+
+	public int getCouponDiscount() {
+		return couponDiscount;
+	}
+
+	public void setCouponDiscount(int couponDiscount) {
+		this.couponDiscount = couponDiscount;
 	}
 
 	public Date getOrderDate() {

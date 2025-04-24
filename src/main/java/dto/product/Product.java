@@ -30,6 +30,7 @@ public class Product {
 	    private String image9;
 	    private String image10;
 	    private String sizeChart;
+	    private String sizeType;
 	 // Product.java 안에 아래 추가
 
 	    private String category1;

@@ -9,8 +9,54 @@ public class OrderItem {
     private int couponId;
     private String color;
     private String size;
+    
+    private String name;
+    private String mainImage1;
+    private int price;
+    private boolean hasReview;
 
     public OrderItem() {}
+
+    
+	public boolean isHasReview() {
+		return hasReview;
+	}
+
+
+	public void setHasReview(boolean hasReview) {
+		this.hasReview = hasReview;
+	}
+
+
+	public int getprice() {
+		return price;
+	}
+
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getMainImage1() {
+		return mainImage1;
+	}
+
+
+	public void setMainImage1(String mainImage1) {
+		this.mainImage1 = mainImage1;
+	}
+
 
 	public int getOrderItemId() {
 		return orderItemId;
