@@ -14,11 +14,11 @@
 
   <!-- 주문 기본 정보 저장 -->
   <insert id="insertOrderList" parameterType="order" useGeneratedKeys="true" keyProperty="orderId">
-    INSERT INTO order_list (
+    INSERT INTO orderlist (
       user_id,
       receiver_name,
       receiver_phone,
-      base_address,
+      receiver_address,
       detail_address,
       used_points,
       payment_method

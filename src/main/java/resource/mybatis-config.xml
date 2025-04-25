@@ -22,7 +22,8 @@
 		<typeAlias type="dto.order.Order" alias="order"/>
 		<typeAlias type="dto.order.OrderItem" alias="orderItem"/>
 		<typeAlias type="dto.user.UserCoupon" alias="userCoupon"/>
-
+		<typeAlias type="dto.order.OrderList" alias="orderList"/>
+		<typeAlias type="dto.product.ProductStock" alias="productStock"/>
 	</typeAliases>
 
 	<environments default="development">
@@ -50,7 +51,8 @@
 		<mapper resource="mapper/user/usercoupon.xml"/>
 		<mapper resource="mapper/order/order.xml" />
 		<mapper resource="mapper/admin/adminProduct.xml" />
-
-
+		<mapper resource="mapper/order/orderlist.xml" />
+		<mapper resource="mapper/product/productstock.xml"/>
+		<mapper resource="mapper/order/orderitem.xml" />
 	</mappers>
 </configuration>

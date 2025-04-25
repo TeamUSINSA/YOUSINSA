@@ -19,7 +19,10 @@ public class OrderList {
     private String receiverAddress;
     private int usedPoint;
     private int couponDiscount;
-
+    private String paymentStatus; 
+    private String paymentKey; 
+    private Date approvedAt;
+    
     // 기본 생성자
     public OrderList() {}
 
@@ -133,6 +136,30 @@ public class OrderList {
 
 	public void setCouponDiscount(int couponDiscount) {
 		this.couponDiscount = couponDiscount;
+	}
+
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getPaymentKey() {
+		return paymentKey;
+	}
+
+	public void setPaymentKey(String paymentKey) {
+		this.paymentKey = paymentKey;
+	}
+
+	public Date getApprovedAt() {
+		return approvedAt;
+	}
+
+	public void setApprovedAt(Date approvedAt) {
+		this.approvedAt = approvedAt;
 	}
 	
 	

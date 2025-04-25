@@ -6,6 +6,7 @@ import java.util.List;
 import dao.order.CouponDAO;
 import dao.order.CouponDAOImpl;
 import dto.order.Coupon;
+import dto.user.UserCoupon;
 
 public class CouponServiceImpl implements CouponService {
 
@@ -24,5 +25,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void downloadCoupon(int couponId, String userId) throws Exception {
         couponDAO.insertUserCoupon(couponId, userId);
+    }
+    
+    @Override
+    public void markCouponUsed(String userId, int couponId) throws Exception {
+        UserCoupon uc = new UserCoupon();
+        uc.setUserId(userId);
+        uc.setCouponId(couponId);
+        uc.setUsed(true);
+        couponDAO.updateUserCouponUsed(uc);
     }
 }

@@ -20,6 +20,13 @@
 		WHERE uc.user_id = #{userId}
 		AND uc.used = false
 	</select>
+	
+	<update id="updateUserCouponUsed" parameterType="dto.user.UserCoupon">
+    UPDATE user_coupon
+    SET used = #{used}
+    WHERE user_id = #{userId}
+      AND coupon_id = #{couponId}
+  </update>
 
 
 </mapper>

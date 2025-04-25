@@ -3,6 +3,7 @@ package dao.order;
 import java.util.List;
 
 import dto.order.Coupon;
+import dto.user.UserCoupon;
 
 public interface CouponDAO {
 
@@ -11,5 +12,7 @@ public interface CouponDAO {
 	List<Coupon> selectValidCouponsByUser(String userId) throws Exception;
 
 	List<Coupon> selectValidCoupons() throws Exception;
+	
+	void updateUserCouponUsed(UserCoupon uc) throws Exception;
 
 }

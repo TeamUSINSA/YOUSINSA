@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.order">
+<!--  주문 전체 조회  -->
+<select id="selectAllOrders" resultType="dto.order.OrderList"> SELECT order_id, user_id, order_date, total_price, delivery_status, delivery_request, delivery_method, payment_method, point_id, receiver_name, receiver_phone, receiver_address FROM orderlist ORDER BY order_date DESC </select>
+<!--  총 페이지 수 계산 (한 페이지에 10개씩 기준)  -->
+<select id="getTotalPages" resultType="int"> SELECT CEIL(COUNT(*) / 10.0) FROM orderlist </select>
+<select id="findOrdersByUserId" parameterType="String" resultType="dto.order.OrderList"> SELECT order_id, order_date, delivery_status AS status FROM orderlist WHERE user_id = #{userId} ORDER BY order_date DESC </select>
+<select id="findOrderById" parameterType="int" resultType="dto.order.OrderList"> SELECT order_id, user_id, order_date, total_price, delivery_status AS status, delivery_request, delivery_method, payment_method, point_id, receiver_name, receiver_phone, receiver_address FROM orderlist WHERE order_id = #{orderId} </select>
+<select id="selectExchangesByApproved" resultType="dto.order.Exchange" parameterType="int"> SELECT * FROM exchange WHERE approved = #{approved} ORDER BY exchange_date DESC </select>
+<select id="selectExchangeById" parameterType="int" resultType="dto.order.Exchange"> SELECT * FROM exchange WHERE exchange_id = #{exchangeId} </select>
+<select id="selectFilteredOrders" resultType="dto.order.OrderList" parameterType="map">
+SELECT * FROM orderlist WHERE 1=1
+<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
+<if test="status != null and status != ''"> AND delivery_status = #{status} </if>
+<if test="period != null and period != ''"> AND order_date >= DATE_SUB(NOW(), INTERVAL #{period} DAY) </if>
+ORDER BY order_date DESC
+
+
+
+</select>
+
+<update id="updateUserCouponUsed" parameterType="dto.user.UserCoupon">
+    UPDATE user_coupon
+    SET used = #{used}
+    WHERE user_id = #{userId}
+      AND coupon_id = #{couponId}
+  </update>
+</mapper>

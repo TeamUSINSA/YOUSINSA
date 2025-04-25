@@ -130,46 +130,52 @@ button:hover {
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="item" items="${cartList}">
-							<tr data-cart-id="${item.cartId}" data-unit="${item.price}">
-								<td><input type="checkbox" class="itemCheckbox"
-									name="cartId" value="${item.cartId}"></td>
-								<td>
-									<div class="cart-item">
-										<img src="/yousinsa/image/${item.mainImage1}"
-											alt="${item.name}">
-										<div class="cart-info">
-											<div>
-												<b>${item.name}</b>
-											</div>
-											<div>옵션: ${item.color} / ${item.size}</div>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="cart-qty">
-										<button type="button" class="qty-btn"
-											onclick="changeQty(this, -1)">-</button>
-										<span class="qty">${item.quantity}</span>
-										<button type="button" class="qty-btn"
-											onclick="changeQty(this, 1)">+</button>
-									</div>
-								</td>
-								<td><span class="price"> <fmt:formatNumber
-											value="${item.price * item.quantity}" type="number" />
-								</span>원</td>
-								<td class="cart-actions">
-									<button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
-								</td>
-							</tr>
-						</c:forEach>
+<c:forEach var="item" items="${cartList}">
+  <tr
+    data-cart-id="${item.cartId}"
+    data-product-id="${item.productId}"
+    data-color="${item.color}"
+    data-size="${item.size}"
+    data-quantity="${item.quantity}"
+    data-unit="${item.price}">
+    <td>
+      <input type="checkbox" class="itemCheckbox">
+    </td>
+    <td>
+      <!-- 기존 코드 유지 -->
+      <div class="cart-item">
+        <img src="${pageContext.request.contextPath}/image/${item.mainImage1}" alt="${item.name}">
+        <div class="cart-info">
+          <div><b>${item.name}</b></div>
+          <div>옵션: ${item.color} / ${item.size}</div>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div class="cart-qty">
+        <button type="button" onclick="changeQty(this, -1)">-</button>
+        <span class="qty">${item.quantity}</span>
+        <button type="button" onclick="changeQty(this, 1)">+</button>
+      </div>
+    </td>
+    <td>
+      <span class="price">
+        <fmt:formatNumber value="${item.price * item.quantity}" type="number"/>원
+      </span>
+    </td>
+    <td class="cart-actions">
+      <button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
+    </td>
+  </tr>
+</c:forEach>
+
 					</tbody>
 				</table>
 			</form>
 
 			<div class="cart-bottom-actions">
-				<button onclick="orderSelected()">선택상품 주문</button>
-				<button onclick="orderAll()">전체상품 주문</button>
+<button id="orderSelectedBtn" class="button" onclick="orderSelected()">선택상품 주문</button>
+  <button id="orderAllBtn" class="button button-black" onclick="orderAll()">전체상품 주문</button>
 			</div>
 			<div class="cart-total"
 				style="max-width: 1000px; margin: 0 auto 40px; text-align: right; font-size: 16px; font-weight: bold;">
@@ -181,7 +187,7 @@ button:hover {
 	<jsp:include page="/footer" />
 
 	<script>
-
+	const ctx = '<%=request.getContextPath()%>';
 const contextPath = '<%=request.getContextPath()%>';
 
 function toggleAll(master) {
@@ -214,27 +220,14 @@ function deleteSelected() {
 }
 
 function orderSelected() {
-	  const selected = getSelectedIds();
-	  if (selected.length === 0) {
-	    alert("주문할 항목을 선택해주세요.");
-	    return;
-	  }
-
-	  const form = document.createElement('form');
-	  form.method = 'post';
-	  form.action = contextPath + '/order';
-
-	  selected.forEach(id => {
-	    const input = document.createElement('input');
-	    input.type = 'hidden';
-	    input.name = 'cartId';
-	    input.value = id;
-	    form.appendChild(input);
-	  });
-
-	  document.body.appendChild(form);
-	  form.submit();
-	}
+    const rows = Array.from(
+      document.querySelectorAll('.itemCheckbox:checked')
+    ).map(cb => cb.closest('tr'));
+    if (rows.length === 0) {
+      return alert('주문할 항목을 선택해주세요.');
+    }
+    submitOrderForm(rows);
+  }
 
 
 function changeQty(btn, delta) {
@@ -285,11 +278,15 @@ function changeQty(btn, delta) {
 
 
 function orderAll() {
-	   document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = true);
-	   const form = document.getElementById('cartForm');
-	   form.action = contextPath + '/order';
-	   form.submit();
-	 }
+    const rows = Array.from(
+      document.querySelectorAll('.itemCheckbox')
+    ).map(cb => cb.closest('tr'));
+    if (rows.length === 0) {
+      return alert('장바구니에 상품이 없습니다.');
+    }
+    submitOrderForm(rows);
+  }
+  
 function deleteSingle(cartId) {
   if (!confirm("해당 상품을 삭제하시겠습니까?")) return;
 
@@ -360,6 +357,85 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSelectedSum();
 });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const buyBtn = document.getElementById('buyNowBtn');
+  if (!buyBtn) return;
+
+  buyBtn.addEventListener('click', () => {
+    // 1) 선택된 옵션 수집
+    const items = Array.from(
+      document.querySelectorAll('.selected-item')
+    ).map(div => ({
+      productId: '<c:out value="${product.productId}"/>',
+      color:     div.dataset.color,
+      size:      div.dataset.size,
+      quantity:  parseInt(div.querySelector('.count').textContent, 10)
+    }));
+
+    if (items.length === 0) {
+      alert('옵션을 하나 이상 선택해주세요.');
+      return;
+    }
+
+    // 2) GET 폼 생성
+    const form = document.createElement('form');
+    form.method = 'get';
+    form.action = '<c:url value="/order" />';
+
+    // 3) hidden inputs 추가
+    items.forEach(it => {
+      ['productId','color','size','quantity'].forEach(name => {
+        const input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = name;
+        input.value = it[name];
+        form.appendChild(input);
+      });
+    });
+
+    // 4) 전송
+    document.body.appendChild(form);
+    form.submit();
+  });
+});
+
+function submitOrderForm(rows) {
+    const form = document.createElement('form');
+    form.method = 'get';
+    form.action = ctx + '/order';
+
+    rows.forEach(row => {
+      // 1) 상품 정보
+      ['productId','color','size','quantity'].forEach(name => {
+        const input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = name;
+        input.value = row.dataset[name];
+        form.appendChild(input);
+      });
+      // 2) (선택 주문이라면) cartId도 함께 넘겨서 주문 후 삭제할 수 있게
+      const cartInput = document.createElement('input');
+      cartInput.type  = 'hidden';
+      cartInput.name  = 'cartId';
+      cartInput.value = row.dataset.cartId;
+      form.appendChild(cartInput);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  // 버튼에 이벤트 걸기
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('orderSelectedBtn')
+            .addEventListener('click', orderSelected);
+    document.getElementById('orderAllBtn')
+            .addEventListener('click', orderAll);
+  });
+</script>
+
+
 
 </body>
 </html>

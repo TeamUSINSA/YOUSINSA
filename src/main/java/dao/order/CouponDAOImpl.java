@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.order.Coupon;
+import dto.user.UserCoupon;
 import utils.MybatisSqlSessionFactory;
 
 public class CouponDAOImpl implements CouponDAO {
@@ -43,6 +44,11 @@ public class CouponDAOImpl implements CouponDAO {
 	            "mapper.coupon.insertUserCoupon",
 	            params
 	        );
+	    }
+	    
+	    @Override
+	    public void updateUserCouponUsed(UserCoupon uc) throws Exception {
+	        sqlSession.update("mapper.order.updateUserCouponUsed", uc);
 	    }
 
 

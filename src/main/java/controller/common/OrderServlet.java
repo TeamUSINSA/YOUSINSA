@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.order.Order;
+import dto.order.OrderList;
 import dto.user.User;
 import dto.user.UserCoupon;
+import service.order.OrderListService;
+import service.order.OrderListServiceImpl;
 import service.order.OrderService;
 import service.order.OrderServiceImpl;
 import service.product.ProductService;
@@ -28,6 +31,7 @@ public class OrderServlet extends HttpServlet {
 	private ProductService productService = new ProductServiceImpl();
 	private OrderService orderService = new OrderServiceImpl();
 	private UserService userService = new UserServiceImpl();
+	private OrderListService orderListService = new OrderListServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,6 +73,7 @@ public class OrderServlet extends HttpServlet {
 
 				orderList.add(o);
 			}
+			
 
 			// — 2) 유저 정보
 			User user = userService.getUserById(userId);
@@ -76,10 +81,23 @@ public class OrderServlet extends HttpServlet {
 			// — 3) 사용 가능한 쿠폰 목록
 			List<UserCoupon> couponList = userService.getUnusedCoupons(userId);
 
-			// — 뷰에 전달
+			int totalPrice = orderList.stream().mapToInt(o -> o.getUnitPrice() * o.getQuantity()).sum();
+
+
+			OrderList pending = new OrderList();
+			pending.setUserId(userId);
+			pending.setTotalPrice(totalPrice);
+
+			pending.setPaymentStatus("PENDING");
+			orderListService.createPendingOrder(pending);
+			
+
+
 			req.setAttribute("productList", orderList);
 			req.setAttribute("user", user);
 			req.setAttribute("couponList", couponList);
+
+			req.setAttribute("pendingOrderId", pending.getOrderId());
 
 			req.getRequestDispatcher("/common/order.jsp").forward(req, resp);
 

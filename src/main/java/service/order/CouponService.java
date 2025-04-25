@@ -11,4 +11,5 @@ public interface CouponService {
     List<Coupon> selectValidCouponsByUser(String userId) throws Exception;
     /** 사용자 쿠폰 다운로드 처리 */
     void downloadCoupon(int couponId, String userId) throws Exception;
+	void markCouponUsed(String userId, int couponId) throws Exception;
 }
