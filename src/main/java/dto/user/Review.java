@@ -10,6 +10,7 @@ public class Review {
     private int productId;
     private Date regDate;
     private int rating;
+    private int orderItemId;
     
     private String productName;
     private String color;
@@ -18,6 +19,7 @@ public class Review {
     private String productImage;
     
     public Review() {}
+    
     
 	public Review(String content, String image, String userId, int productId, int rating) {
 		super();
@@ -29,6 +31,14 @@ public class Review {
 	}
 	
 	
+
+	public int getOrderItemId() {
+		return orderItemId;
+	}
+
+	public void setOrderItemId(int orderItemId) {
+		this.orderItemId = orderItemId;
+	}
 
 	public String getProductImage() {
 		return productImage;

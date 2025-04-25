@@ -16,12 +16,39 @@ public class BannerProductDAOImpl implements BannerProductDAO {
     }
 
     @Override
-    public List<BannerProduct> selectMainBannerList() throws Exception{
+    public List<BannerProduct> selectMainBannerList() throws Exception {
         return sqlSession.selectList("mapper.bannerproduct.selectMainBannerList");
     }
-    
+
     @Override
-    public List<BannerProduct> selectSubBannerList() throws Exception{
+    public List<BannerProduct> selectSubBannerList() throws Exception {
         return sqlSession.selectList("mapper.bannerproduct.selectSubBannerList");
+    }
+
+    @Override
+    public List<BannerProduct> selectAllBannerList() throws Exception {
+        return sqlSession.selectList("mapper.bannerproduct.selectAllBannerList");
+    }
+
+    @Override
+    public void insertBanner(BannerProduct banner) throws Exception {
+        sqlSession.insert("mapper.bannerproduct.insertBanner", banner);
+        sqlSession.commit();
+    }
+
+    @Override
+    public void deleteBanner(int id) throws Exception {
+        sqlSession.delete("mapper.bannerproduct.deleteBanner", id);
+        sqlSession.commit(); // 꼭 커밋!
+    }
+
+    @Override
+    public List<BannerProduct> selectAll() throws Exception {
+        return sqlSession.selectList("mapper.bannerproduct.selectAll");
+    }
+
+    @Override
+    public BannerProduct findBannerById(int id) throws Exception {
+        return sqlSession.selectOne("mapper.bannerproduct.findBannerById", id);
     }
 }

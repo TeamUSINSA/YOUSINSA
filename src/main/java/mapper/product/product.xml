@@ -103,4 +103,49 @@
     #{sizeChart}
   )
 </insert>
+<select id="getTop10Products" resultType="map">
+    SELECT 
+        p.name AS name,
+        p.product_id AS code,
+        SUM(i.quantity) AS quantity,
+        SUM(i.quantity * p.price) AS sales
+    FROM orderitem i
+    JOIN product p ON i.product_id = p.product_id
+    JOIN orderlist o ON i.order_id = o.order_id
+    WHERE o.order_date BETWEEN #{start} AND #{end}
+    GROUP BY p.name, p.product_id
+    ORDER BY sales DESC
+    LIMIT 10
+</select>
+
+<select id="getTotalSales" resultType="int" parameterType="map">
+   SELECT 
+    COALESCE(SUM(i.quantity * p.price), 0)
+FROM 
+    orderitem i
+JOIN 
+    product p ON i.product_id = p.product_id
+JOIN 
+    orderlist o ON i.order_id = o.order_id
+JOIN 
+    subcategory s ON p.sub_category_id = s.sub_category_id
+JOIN 
+    category c ON s.category_id = c.category_id
+WHERE 
+    o.order_date BETWEEN #{startDate} AND #{endDate}
+</select>
+
+<!-- 대분류 카테고리명 목록 -->
+<select id="getAllMainCategories" resultType="string">
+    SELECT DISTINCT c.category_name
+    FROM category c
+    ORDER BY c.category_name
+</select>
+
+<!-- 소분류 카테고리명 목록 -->
+<select id="getAllSubCategories" resultType="string">
+    SELECT DISTINCT s.sub_category_name
+    FROM subcategory s
+    ORDER BY s.sub_category_name
+</select>
 </mapper>

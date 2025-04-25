@@ -102,9 +102,11 @@
                     cursor: pointer;
                 }
             </style>
+            <jsp:include page="adminSideBarStyle.jsp" />
         </head>
 
         <body>
+        <jsp:include page="adminSideBar.jsp" />
             <div class="container">
                 <h2>주문상세</h2>
 

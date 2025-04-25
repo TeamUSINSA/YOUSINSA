@@ -1,323 +1,254 @@
-<!DOCTYPE html>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
 <html lang="ko">
-
 <head>
-<meta charset="UTF-8">
-<title>카테고리 관리</title>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-body {
-	margin: 0;
-	padding: 0;
-	font-family: '맑은 고딕', sans-serif;
-	background-color: #f9f9f9;
-}
+  <meta charset="UTF-8">
+  <title>카테고리 관리</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <jsp:include page="adminSideBarStyle.jsp" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: '맑은 고딕', sans-serif;
+      background-color: #f9f9f9;
+    }
 
-h2 {
-	width: 700px;
-	margin: 50px auto 10px auto;
-	text-align: left;
-	font-size: 20px;
-}
+    .outer-wrapper {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f9f9f9;
+    }
 
-.outer-wrapper {
-	display: flex;
-	justify-content: center;
-	min-height: 100vh;
-	background-color: #f9f9f9;
-	padding: 40px 0;
-}
+    .inner-wrapper {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 20px;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
 
-.inner-wrapper {
-	display: flex;
-	width: auto;
-	max-width: 1100px;
-	align-items: flex-start;
-	gap: 20px;
-}
+    .content {
+      flex: 1;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
 
-.sidebar {
-	width: 200px;
-	background-color: #fff;
-	padding: 20px 15px;
-	border-radius: 8px;
-	box-sizing: border-box;
-	box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-}
+    h2 {
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
 
-.content {
-	padding: 30px;
-	border-radius: 10px;
-}
+    .section {
+      margin-bottom: 40px;
+    }
 
-.container {
-	width: 100%;
-	margin-bottom: 50px;
-	background-color: #fff;
-	padding: 30px;
-	border-radius: 10px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
 
-.section {
-	margin-bottom: 40px;
-}
+    input[type="text"], select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
 
-h3 {
-	font-size: 16px;
-	margin-bottom: 15px;
-}
+    button.add {
+      background-color: #333;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-.input-row {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin-bottom: 15px;
-}
+    button.add:hover {
+      background-color: #555;
+    }
 
-input[type="text"], select {
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	font-size: 14px;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-button.add {
-	background-color: #333;
-	color: white;
-	border: none;
-	padding: 8px 14px;
-	border-radius: 4px;
-	cursor: pointer;
-}
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
 
-button.add:hover {
-	background-color: #555;
-}
+    th {
+      background-color: #f5f5f5;
+    }
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 10px;
-}
+    button.delete {
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
 
-th, td {
-	padding: 10px;
-	border-bottom: 1px solid #eee;
-	text-align: left;
-}
-
-th {
-	background-color: #f5f5f5;
-}
-
-button.delete {
-	background-color: red;
-	color: white;
-	border: none;
-	border-radius: 20px;
-	padding: 4px 12px;
-	font-size: 13px;
-	cursor: pointer;
-}
-
-button.delete:hover {
-	background-color: darkred;
-}
-</style>
-<jsp:include page="adminSideBarStyle.jsp" />
+    button.delete:hover {
+      background-color: darkred;
+    }
+  </style>
 </head>
-
 <body>
-	<div class="outer-wrapper">
-		<div class="inner-wrapper">
+  <div class="outer-wrapper">
+    <div class="inner-wrapper">
 
-			<jsp:include page="adminSideBar.jsp" />
+      <!-- ✅ 사이드바 포함 (한 번만) -->
+      <jsp:include page="adminSideBar.jsp" />
 
-			<div class="content">
-				<h2>카테고리 관리</h2>
-				<div class="container">
-					<div class="section">
-						<h3>대분류 관리</h3>
-						<div class="input-row">
-							<input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
-							<button class="add" id="mainAddBtn">추가</button>
-						</div>
-						<table id="mainCategoryTable">
-							<thead>
-								<tr>
-									<th>대분류명</th>
-									<th>삭제</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="cat" items="${categoryList}">
-									<tr>
-										<td>${cat.categoryName}</td>
-										<td><button class="delete"
-												onclick="deleteMainCategory(${cat.categoryId}, this)">삭제</button>
-										</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
+      <div class="content">
+        <h2>카테고리 관리</h2>
 
-					<div class="section">
-						<h3>소분류 관리</h3>
-						<div class="input-row">
-							<select id="mainCategorySelect">
-								<option value="">대분류 선택</option>
-								<c:forEach var="cat" items="${categoryList}">
-									<option value="${cat.categoryId}"
-										data-name="${cat.categoryName}">${cat.categoryName}</option>
-								</c:forEach>
-							</select> <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
-							<button class="add" id="subAddBtn">추가</button>
-						</div>
-						<table id="subCategoryTable">
-							<thead>
-								<tr>
-									<th>소분류명</th>
-									<th>대분류명</th>
-									<th>삭제</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="sub" items="${subCategoryList}">
-									<tr>
-										<td>${sub.subCategoryName}</td>
-										<td><c:forEach var="cat" items="${categoryList}">
-												<c:if test="${cat.categoryId == sub.categoryId}">
-                                    ${cat.categoryName}
-                                </c:if>
-											</c:forEach></td>
-										<td><button class="delete"
-												onclick="deleteSubCategory(${sub.subCategoryId}, this)">삭제</button>
-										</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
+        <!-- ✅ 대분류 -->
+        <div class="section">
+          <h3>대분류 관리</h3>
+          <div class="input-row">
+            <input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
+            <button class="add" id="mainAddBtn">추가</button>
+          </div>
+          <table id="mainCategoryTable">
+            <thead>
+              <tr><th>대분류명</th><th>삭제</th></tr>
+            </thead>
+            <tbody>
+              <c:forEach var="cat" items="${categoryList}">
+                <tr>
+                  <td>${cat.categoryName}</td>
+                  <td><button class="delete" onclick="deleteMainCategory(${cat.categoryId}, this)">삭제</button></td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+        </div>
 
-$(function () {
+        <!-- ✅ 소분류 -->
+        <div class="section">
+          <h3>소분류 관리</h3>
+          <div class="input-row">
+            <select id="mainCategorySelect">
+              <option value="">대분류 선택</option>
+              <c:forEach var="cat" items="${categoryList}">
+                <option value="${cat.categoryId}">${cat.categoryName}</option>
+              </c:forEach>
+            </select>
+            <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
+            <button class="add" id="subAddBtn">추가</button>
+          </div>
+          <table id="subCategoryTable">
+            <thead>
+              <tr><th>소분류명</th><th>대분류명</th><th>삭제</th></tr>
+            </thead>
+            <tbody>
+              <c:forEach var="sub" items="${subCategoryList}">
+                <tr>
+                  <td>${sub.subCategoryName}</td>
+                  <td>
+                    <c:forEach var="cat" items="${categoryList}">
+                      <c:if test="${cat.categoryId == sub.categoryId}">
+                        ${cat.categoryName}
+                      </c:if>
+                    </c:forEach>
+                  </td>
+                  <td><button class="delete" onclick="deleteSubCategory(${sub.subCategoryId}, this)">삭제</button></td>
+                </tr>
+              </c:forEach>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
-	$("#mainAddBtn").click(function () {
-	    const categoryName = $("#mainCategoryInput").val().trim();
-	    if (!categoryName) return;
-	    
+  <!-- ✅ JS 스크립트 포함 -->
+  <script>
+    $(function () {
+      $("#mainAddBtn").click(function () {
+        const name = $("#mainCategoryInput").val().trim();
+        if (!name) return;
 
-	    $.ajax({
-	        url: '/yousinsa/adminCategoryAdd',
-	        type: 'post',
-	        data: { categoryName: categoryName },
-	        success: function (result) {
-	            const parts = result.split(",");
-	            if (parts[0] === "success") {
-	                const categoryId = parts[1];
-	                const name = parts[2];
+        $.post("/yousinsa/adminCategoryAdd", { categoryName: name }, function (result) {
+          const [status, id, savedName] = result.split(",");
+          if (status === "success") {
+            $("#mainCategoryTable tbody").append(`
+              <tr>
+                <td>${savedName}</td>
+                <td><button class="delete" onclick="deleteMainCategory(${id}, this)">삭제</button></td>
+              </tr>
+            `);
+            $("#mainCategorySelect").append(`<option value="${id}">${savedName}</option>`);
+            $("#mainCategoryInput").val("");
+            alert("대분류 추가 완료");
+          } else {
+            alert("추가 실패");
+          }
+        });
+      });
 
-	                $("#mainCategoryTable tbody").append(`
-	                    <tr>
-	                        <td>${name}</td>
-	                        <td><button class="delete" onclick="deleteMainCategory(${categoryId}, this)">삭제</button></td>
-	                    </tr>
-	                `);
+      $("#subAddBtn").click(function () {
+        const name = $("#subCategoryInput").val().trim();
+        const parentId = $("#mainCategorySelect").val();
+        const parentName = $("#mainCategorySelect option:selected").text();
+        if (!name || !parentId) return;
 
-	                $("#mainCategorySelect").append(`<option value="${categoryId}">${name}</option>`);
-	                $("#mainCategoryInput").val("");
-	                alert("대분류 추가 완료");
-	            } else {
-	                alert("대분류 추가 실패");
-	            }
-	        }
-	    });
-	});
-
-	$("#subAddBtn").click(function () {
-	    const subCategoryName = $("#subCategoryInput").val().trim();
-	    const categoryId = $("#mainCategorySelect").val();
-	    const categoryName = $("#mainCategorySelect option:selected").text();
-
-	    if (!subCategoryName || !categoryId) return;
-
-	    $.ajax({
-	        url: '/yousinsa/adminSubcategoryAdd',
-	        type: 'post',
-	        data: {
-	            subCategoryName: subCategoryName,
-	            categoryId: categoryId
-	        },
-	        success: function (result) {
-	            const parts = result.split(",");
-	            if (parts[0] === "success") {
-	                const subCategoryId = parts[1];
-	                const subName = parts[2];
-
-	                $("#subCategoryTable tbody").append(`
-	                    <tr>
-	                        <td>${subName}</td>
-	                        <td>${categoryName}</td>
-	                        <td><button class="delete" onclick="deleteSubCategory(${subCategoryId}, this)">삭제</button></td>
-	                    </tr>
-	                `);
-
-	                $("#subCategoryInput").val("");
-	            } else {
-	                alert("추가 실패");
-	            }
-	        }
-	    });
-	});
-
-}); 
-
-function deleteMainCategory(categoryId, btn) {
-    if (!confirm("삭제하시겠습니까?")) return;
-
-    $.ajax({
-        url: '/yousinsa/adminCategoryDelete',
-        type: 'post',
-        data: { categoryId: categoryId },
-        success: function (result) {
-            if (result === "success") {
-                $(btn).closest("tr").remove();
-                $(`#mainCategorySelect option[value="${categoryId}"]`).remove();
-                alert("삭제 완료");
-            } else {
-                alert("삭제 실패");
-            }
-        }
+        $.post("/yousinsa/adminSubcategoryAdd", {
+          subCategoryName: name,
+          categoryId: parentId
+        }, function (result) {
+          const [status, id, savedName] = result.split(",");
+          if (status === "success") {
+            $("#subCategoryTable tbody").append(`
+              <tr>
+                <td>${savedName}</td>
+                <td>${parentName}</td>
+                <td><button class="delete" onclick="deleteSubCategory(${id}, this)">삭제</button></td>
+              </tr>
+            `);
+            $("#subCategoryInput").val("");
+          } else {
+            alert("추가 실패");
+          }
+        });
+      });
     });
-}
 
-function deleteSubCategory(subCategoryId, btn) {
-    if (!confirm("소분류를 삭제하시겠습니까?")) return;
-
-    $.ajax({
-        url: '/yousinsa/adminSubcategoryDelete',
-        type: 'post',
-        data: { subCategoryId: subCategoryId },
-        success: function (result) {
-            if (result === "success") {
-                $(btn).closest("tr").remove();
-                alert("삭제 완료");
-            } else {
-                alert("삭제 실패");
-            }
+    function deleteMainCategory(id, btn) {
+      if (!confirm("삭제하시겠습니까?")) return;
+      $.post("/yousinsa/adminCategoryDelete", { categoryId: id }, function (result) {
+        if (result === "success") {
+          $(btn).closest("tr").remove();
+          $(`#mainCategorySelect option[value="${id}"]`).remove();
+        } else {
+          alert("삭제 실패");
         }
-    });
-}
+      });
+    }
 
-
-</script>
+    function deleteSubCategory(id, btn) {
+      if (!confirm("소분류를 삭제하시겠습니까?")) return;
+      $.post("/yousinsa/adminSubcategoryDelete", { subCategoryId: id }, function (result) {
+        if (result === "success") {
+          $(btn).closest("tr").remove();
+        } else {
+          alert("삭제 실패");
+        }
+      });
+    }
+  </script>
 </body>
 </html>

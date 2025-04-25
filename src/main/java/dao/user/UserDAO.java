@@ -15,5 +15,6 @@ public interface UserDAO {
 	String findUserIdByInfo(String name, String email, String phone) throws Exception;
 	User findUserForPasswordReset(String name, String userId, String email);
 	void updateUserPassword(String userId, String newPassword) throws Exception;
-	
+	User findById(String userId) throws Exception;
+	User findByMemberNo(int memberNo) throws Exception;
 }

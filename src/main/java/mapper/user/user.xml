@@ -96,6 +96,41 @@
 		likelist WHERE user_id = #{userId}
 	</select>
 
+
+	<select id="findById" parameterType="String" resultType="user">
+		SELECT *
+		FROM user WHERE user_id = #{userId}
+	</select>
+
+	<select id="findByMemberNo" parameterType="int"
+		resultType="user">
+		SELECT * FROM user WHERE member_no = #{memberNo}
+	</select>
+
+	<select id="selectAllInquiries" resultType="dto.user.Inquiry">
+		SELECT * FROM inquiry
+		ORDER BY question_date DESC
+	</select>
+
+	<select id="selectInquiryById" resultType="dto.user.Inquiry"
+		parameterType="int">
+		SELECT * FROM inquiry WHERE inquiry_id = #{inquiryId}
+	</select>
+
+	<insert id="insertInquiry" parameterType="dto.user.Inquiry">
+		INSERT INTO inquiry
+		(title, content, user_id, type, status, question_date,
+		product_id)
+		VALUES (#{title}, #{content}, #{userId}, #{type}, #{status},
+		#{questionDate}, #{productId})
+	</insert>
+
+	<update id="updateInquiryAnswer" parameterType="map">
+		UPDATE inquiry
+		SET answer = #{answer}, status = '답변 완료' WHERE inquiry_id =
+		#{inquiryId}
+	</update>
+
 	<delete id="deleteLikeById" parameterType="int">
 		DELETE from likelist
 		where like_id = #{likeId}
@@ -103,101 +138,109 @@
 
 	<insert id="insertReview" parameterType="review">
 		INSERT INTO review
-		(content, image, user_id, product_id, reg_date, rating)
-		VALUES
-		(#{content}, #{image}, #{userId}, #{productId}, NOW(),
-		#{rating})
+      (content, image, user_id, product_id, reg_date, rating, order_item_id)
+    VALUES
+      (#{content}, #{image}, #{userId}, #{productId}, NOW(), #{rating}, #{orderItemId})
 	</insert>
+	
+	<!-- 특정 주문 아이템에 이미 후기가 있는지 체크 -->
+  <select id="countReviewByOrderItem" parameterType="int" resultType="int">
+    SELECT COUNT(*) 
+      FROM review 
+     WHERE order_item_id = #{orderItemId}
+  </select>
 
 	<select id="getReviewsByUserId" resultType="review">
-		SELECT 
-    r.review_id AS reviewId,
-    r.content,
-    r.image,
-    r.user_id AS userId,
-    r.product_id AS productId,
-    r.reg_date AS regDate,
-    r.rating,
-    p.name AS productName,
-    
-    (SELECT oi.color 
-     FROM orderitem oi 
-     WHERE oi.product_id = r.product_id 
-     LIMIT 1) AS color,
-     
-    (SELECT oi.size 
-     FROM orderitem oi 
-     WHERE oi.product_id = r.product_id 
-     LIMIT 1) AS size,
-     
-    (SELECT ol.order_date 
-     FROM orderlist ol 
-     WHERE ol.order_id = (
-         SELECT oi.order_id 
-         FROM orderitem oi 
-         WHERE oi.product_id = r.product_id 
-         LIMIT 1
-     )
-     LIMIT 1) AS orderDate
+		SELECT
+		r.review_id AS reviewId,
+		r.content,
+		r.image,
+		r.user_id AS userId,
+		r.product_id AS productId,
+		r.reg_date AS regDate,
+		r.rating,
+		p.name AS productName,
 
-  FROM review r
-  JOIN product p ON r.product_id = p.product_id
-  WHERE r.user_id = #{userId}
-  ORDER BY r.reg_date DESC
+		(SELECT oi.color
+		FROM orderitem oi
+		WHERE oi.product_id = r.product_id
+		LIMIT 1) AS color,
+
+		(SELECT oi.size
+		FROM orderitem oi
+		WHERE oi.product_id = r.product_id
+		LIMIT 1) AS size,
+
+		(SELECT ol.order_date
+		FROM orderlist ol
+		WHERE ol.order_id = (
+		SELECT oi.order_id
+		FROM orderitem oi
+		WHERE oi.product_id = r.product_id
+		LIMIT 1
+		)
+		LIMIT 1) AS orderDate
+
+		FROM review r
+		JOIN product p ON r.product_id = p.product_id
+		WHERE r.user_id = #{userId}
+		ORDER BY r.reg_date DESC
 	</select>
-	
+
 	<select id="selectReviewCount" resultType="Integer">
-		select count(*) from review;
+		select count(*) from
+		review;
 	</select>
 	
 	<select id="getReviewById" parameterType="int" resultType="review">
   SELECT 
-    r.review_id AS reviewId,
+    r.review_id      AS reviewId,
     r.content,
     r.image,
-    r.user_id AS userId,
-    r.product_id AS productId,
-    r.reg_date AS regDate,
+    r.user_id        AS userId,
+    r.product_id     AS productId,
+    r.reg_date       AS regDate,
     r.rating,
-    p.name AS productName,
-    p.main_image1 AS productImage, 
+    p.name           AS productName,
+    p.main_image1    AS productImage,
     oi.color,
     oi.size,
-    ol.order_date AS orderDate
+    ol.order_date    AS orderDate
   FROM review r
-  JOIN product p ON r.product_id = p.product_id
-  JOIN orderitem oi ON p.product_id = oi.product_id
-  JOIN orderlist ol ON oi.order_id = ol.order_id
+    JOIN orderitem     oi ON r.order_item_id = oi.order_item_id
+    JOIN product       p  ON r.product_id    = p.product_id
+    JOIN orderlist     ol ON oi.order_id      = ol.order_id
   WHERE r.review_id = #{reviewId}
 </select>
 
-<update id="updateReview" parameterType="review">
-    UPDATE review
-    SET
-        content = #{content},
-        image = #{image},
-        rating = #{rating}
-    WHERE review_id = #{reviewId}
-</update>
 
-<delete id="deleteReview" parameterType="int">
-	DELETE FROM review WHERE review_id = #{reviewId}
-</delete>
+	<update id="updateReview" parameterType="review">
+		UPDATE review
+		SET
+		content = #{content},
+		image = #{image},
+		rating = #{rating}
+		WHERE review_id = #{reviewId}
+	</update>
 
-<select id="getPointsByUserAndDate" parameterType="map" resultType="point">
-    SELECT 
-        point_id AS pointId,
-        date,
-        point,
-        order_id AS orderId,
-        user_id AS userId
-    FROM point
-    WHERE user_id = #{userId}
-    <if test="startDate != null and endDate != null">
-        AND date BETWEEN #{startDate} AND #{endDate}
-    </if>
-    ORDER BY date DESC
-</select>
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM review WHERE review_id = #{reviewId}
+	</delete>
 
+	<select id="getPointsByUserAndDate" parameterType="map"
+		resultType="point">
+		SELECT
+		point_id AS pointId,
+		date,
+		point,
+		order_id AS orderId,
+		user_id AS userId
+		FROM point
+		WHERE user_id = #{userId}
+		<if test="startDate != null and endDate != null">
+			AND date BETWEEN #{startDate} AND #{endDate}
+		</if>
+		ORDER BY date DESC
+	</select>
 
 </mapper>

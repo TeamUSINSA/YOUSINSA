@@ -5,11 +5,12 @@
 
 <configuration>
 	<settings>
-   		<setting name="mapUnderscoreToCamelCase" value="true"/>
-  	</settings>
-  
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+
 
 	<typeAliases>
+
 		<typeAlias type="dto.product.Category" alias="category"/>
 		<typeAlias type="dto.user.User" alias="user"/>
 		<typeAlias type="dto.product.Product" alias="product"/>
@@ -24,6 +25,7 @@
 		<typeAlias type="dto.user.UserCoupon" alias="userCoupon"/>
 		<typeAlias type="dto.order.OrderList" alias="orderList"/>
 		<typeAlias type="dto.product.ProductStock" alias="productStock"/>
+		<typeAlias type="dto.order.Return" alias="return"/>
 	</typeAliases>
 
 	<environments default="development">
@@ -40,19 +42,27 @@
 	</environments>
 
 	<mappers>
-		<mapper resource="mapper/product/category.xml"/>
-		<mapper resource="mapper/user/user.xml"/>
-		<mapper resource="mapper/product/product.xml"/>
-		<mapper resource="mapper/product/bannerproduct.xml"/>
-		<mapper resource="mapper/product/productdetail.xml"/>
-		<mapper resource="mapper/order/cart.xml"/>
-		<mapper resource="mapper/order/coupon.xml"/>
-		<mapper resource="mapper/order/orderproduct.xml"/>
-		<mapper resource="mapper/user/usercoupon.xml"/>
+		<mapper resource="mapper/product/category.xml" />
+		<mapper resource="mapper/user/user.xml" />
+		<mapper resource="mapper/product/product.xml" />
+		<mapper resource="mapper/product/bannerproduct.xml" />
+		<mapper resource="mapper/product/productdetail.xml" />
+		<mapper resource="mapper/order/cart.xml" />
+		<mapper resource="mapper/order/coupon.xml" />
+		<mapper resource="mapper/order/orderproduct.xml" />
+		<mapper resource="mapper/user/usercoupon.xml" />
 		<mapper resource="mapper/order/order.xml" />
 		<mapper resource="mapper/admin/adminProduct.xml" />
 		<mapper resource="mapper/order/orderlist.xml" />
 		<mapper resource="mapper/product/productstock.xml"/>
 		<mapper resource="mapper/order/orderitem.xml" />
+		<mapper resource="mapper/order/exchange.xml" />
+		<mapper resource="mapper/order/couponmapper.xml" />
+		<mapper resource="mapper/user/inquiry.xml" />  
+		<mapper resource="mapper/order/return.xml" />
+
+
+
+
 	</mappers>
 </configuration>

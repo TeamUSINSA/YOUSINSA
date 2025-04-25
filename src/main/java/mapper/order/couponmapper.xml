@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.coupon">
+	<insert id="insertCoupon" parameterType="dto.order.Coupon">
+		INSERT INTO coupon (
+		name, description, discount_amount, start_date, end_date, type, active
+		) VALUES (
+		#{name}, #{description}, #{discountAmount}, #{startDate},
+		#{endDate}, #{type},
+		#{active}
+		)
+	</insert>
+
+	<select id="selectAllCoupons" resultType="dto.order.Coupon">
+		SELECT * FROM coupon
+	</select>
+
+	<delete id="deleteCouponById" parameterType="int">
+		DELETE FROM coupon
+		WHERE coupon_id = #{value}
+	</delete>
+
+	<select id="selectCouponPage" resultType="dto.order.Coupon"
+		parameterType="map">
+		SELECT * FROM coupon
+		ORDER BY coupon_id DESC
+		LIMIT
+		#{offset}, #{pageSize}
+	</select>
+
+	<select id="getCouponCount" resultType="int">
+		SELECT COUNT(*) FROM coupon
+	</select>
+</mapper>

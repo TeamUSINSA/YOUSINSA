@@ -1,7 +1,10 @@
 package dao.admin;
 
 import java.util.List;
+import java.util.Map;
+
 import dto.product.Product;
+import dto.product.ProductStock;
 
 public interface ProductDAO {
 
@@ -22,4 +25,13 @@ public interface ProductDAO {
 
     // (옵션) 서브카테고리 ID로 상품 필터링
     List<Product> selectProductsBySubCategoryId(int subCategoryId) throws Exception;
+    
+    void insertProductStockList(List<ProductStock> productStockList) throws Exception;
+    
+    List<String> getAllMainCategories() throws Exception;
+    List<String> getAllSubCategories() throws Exception;
+    
+    int getTotalSales(String start, String end, String mainCategory, String subCategory) throws Exception;
+
+	Map<String, List<Integer>> getSalesChartData(String start, String end) throws Exception;
 }

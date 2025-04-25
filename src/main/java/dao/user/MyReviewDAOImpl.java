@@ -45,4 +45,14 @@ public class MyReviewDAOImpl implements MyReviewDAO{
 		sqlSession.commit();
 	}
 
+	@Override
+	public int countReviewByOrderItem(int orderItemId) throws Exception {
+		return sqlSession.selectOne("mapper.user.countReviewByOrderItem", orderItemId);
+	}
+
+	@Override
+	public int countReviewsByOrderItemId(int orderItemId) throws Exception {
+		return sqlSession.selectOne("mapper.user.countReviewByOrderItem", orderItemId);
+	}
+
 }

@@ -8,104 +8,101 @@ public class Exchange {
     private String reason;
     private String userId;
     private int orderItemId;
-    private boolean approved;
-    private boolean shippingFee;
+    private int approved;             // ✅ boolean → int (DB에서 0/1/2)
+    private int shippingFee;         // ✅ boolean → int
     private String rejectReason;
-    private boolean shippingFeePaid;
+    private String shippingFeePaid;  // ✅ boolean → String (M, N 등으로 들어올 수 있음)
     private String size;
     private String color;
 
     // 기본 생성자
     public Exchange() {}
 
-	public int getExchangeId() {
-		return exchangeId;
-	}
+    public int getExchangeId() {
+        return exchangeId;
+    }
 
-	public void setExchangeId(int exchangeId) {
-		this.exchangeId = exchangeId;
-	}
+    public void setExchangeId(int exchangeId) {
+        this.exchangeId = exchangeId;
+    }
 
-	public Date getExchangeDate() {
-		return exchangeDate;
-	}
+    public Date getExchangeDate() {
+        return exchangeDate;
+    }
 
-	public void setExchangeDate(Date exchangeDate) {
-		this.exchangeDate = exchangeDate;
-	}
+    public void setExchangeDate(Date exchangeDate) {
+        this.exchangeDate = exchangeDate;
+    }
 
-	public String getReason() {
-		return reason;
-	}
+    public String getReason() {
+        return reason;
+    }
 
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	public int getOrderItemId() {
-		return orderItemId;
-	}
+    public int getOrderItemId() {
+        return orderItemId;
+    }
 
-	public void setOrderItemId(int orderItemId) {
-		this.orderItemId = orderItemId;
-	}
+    public void setOrderItemId(int orderItemId) {
+        this.orderItemId = orderItemId;
+    }
 
-	public boolean isApproved() {
-		return approved;
-	}
+    public int getApproved() {
+        return approved;
+    }
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
-	}
+    public void setApproved(int approved) {
+        this.approved = approved;
+    }
 
-	public boolean isShippingFee() {
-		return shippingFee;
-	}
+    public int getShippingFee() {
+        return shippingFee;
+    }
 
-	public void setShippingFee(boolean shippingFee) {
-		this.shippingFee = shippingFee;
-	}
+    public void setShippingFee(int shippingFee) {
+        this.shippingFee = shippingFee;
+    }
 
-	public String getRejectReason() {
-		return rejectReason;
-	}
+    public String getRejectReason() {
+        return rejectReason;
+    }
 
-	public void setRejectReason(String rejectReason) {
-		this.rejectReason = rejectReason;
-	}
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
 
-	public boolean isShippingFeePaid() {
-		return shippingFeePaid;
-	}
+    public String getShippingFeePaid() {
+        return shippingFeePaid;
+    }
 
-	public void setShippingFeePaid(boolean shippingFeePaid) {
-		this.shippingFeePaid = shippingFeePaid;
-	}
+    public void setShippingFeePaid(String shippingFeePaid) {
+        this.shippingFeePaid = shippingFeePaid;
+    }
 
-	public String getSize() {
-		return size;
-	}
+    public String getSize() {
+        return size;
+    }
 
-	public void setSize(String size) {
-		this.size = size;
-	}
+    public void setSize(String size) {
+        this.size = size;
+    }
 
-	public String getColor() {
-		return color;
-	}
+    public String getColor() {
+        return color;
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
-    
-    
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
-

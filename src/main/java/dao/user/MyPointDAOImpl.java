@@ -13,34 +13,34 @@ public class MyPointDAOImpl implements MyPointDAO {
 
 	@Override
     public void insertPoint(Point point) throws Exception {
-        try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-            session.insert("mapper.user.PointMapper.insertPoint", point);
-            session.commit();
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            sqlSession.insert("mapper.user.PointMapper.insertPoint", point);
+            sqlSession.commit();
         }
     }
 
     @Override
     public void updateUserTotalPoint(String userId, int point) throws Exception {
-        try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
             Map<String, Object> param = new HashMap<>();
             param.put("userId", userId);
             param.put("point", point);
-            session.update("mapper.user.PointMapper.updateUserTotalPoint", param);
-            session.commit();
+            sqlSession.update("mapper.user.PointMapper.updateUserTotalPoint", param);
+            sqlSession.commit();
         }
     }
 
     @Override
     public List<Point> getPointsByDate(Map<String, Object> map) throws Exception {
-        try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-            return session.selectList("mapper.user.PointMapper.getPointsByDate", map);
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectList("mapper.user.PointMapper.getPointsByDate", map);
         }
     }
 
     @Override
     public int getTotalPoint(String userId) throws Exception {
-        try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-            return session.selectOne("mapper.user.PointMapper.getTotalPoint", userId);
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectOne("mapper.user.PointMapper.getTotalPoint", userId);
         }
     }
 

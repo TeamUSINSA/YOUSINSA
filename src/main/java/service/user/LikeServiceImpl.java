@@ -12,9 +12,8 @@ public class LikeServiceImpl implements LikeService {
 	private LikeDAO likeDAO = new LikeDAOImpl();
 
 	@Override
-	public List<LikeList> getLikedProductsByUserId(String userId, int page, int pageSize) throws Exception {
-		int offset = (page - 1) * pageSize;
-		return likeDAO.getLikedProductsByUserId(userId, offset, pageSize);
+	public List<LikeList> getLikedProductsByUserId(String userId, int offset, int limit) throws Exception {
+		return likeDAO.getLikedProductsByUserId(userId, offset, limit);
 	}
 
 	@Override

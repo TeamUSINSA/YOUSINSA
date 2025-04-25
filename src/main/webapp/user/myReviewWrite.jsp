@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
+<%@ include file="/common/header.jsp"%>
 <head>
   <meta charset="UTF-8">
   <title>후기 작성</title>
@@ -142,32 +143,29 @@
   </style>
 </head>
 <body>
-
 <div class="layout">
-  <!-- 사이드바 -->
   <div class="sidebar">
     <%@ include file="mysidebar.jsp" %>
   </div>
-
-  <!-- 본문 -->
   <div class="content">
     <div class="title">후기 작성</div>
 
     <div class="review-box">
-      <form action="myReviewWrite" method="post" enctype="multipart/form-data">
-        <!-- 상품 정보 -->
+      <form action="${pageContext.request.contextPath}/myReviewWrite" method="post" enctype="multipart/form-data">
+        <!-- 1) 주문아이템ID, 상품ID 숨김 -->
+        <input type="hidden" name="orderItemId" value="${item.orderItemId}" />
+        <input type="hidden" name="productId"   value="${item.productId}" />
+
+        <!-- 2) 상품 요약 -->
         <div class="product-summary">
-          <img src="/yousinsa/image/${product.image}" alt="상품 이미지">
+          <img src="/yousinsa/image/${item.mainImage1}" alt="상품 이미지">
           <div>
-            <div class="name">${product.name}</div>
-            <div class="option">${product.option}</div>
+            <div class="name">${item.name}</div>
+            <div class="option">색상: ${item.color}, 사이즈: ${item.size}</div>
           </div>
         </div>
 
-        <!-- 숨겨진 상품 ID 전달 -->
-        <input type="hidden" name="productId" value="${product.productId}">
-
-        <!-- 별점 -->
+        <!-- 3) 별점 -->
         <div class="stars" id="star-rating">
           <span data-value="1">★</span>
           <span data-value="2">★</span>
@@ -177,17 +175,17 @@
         </div>
         <input type="hidden" name="rating" id="rating">
 
-        <!-- 후기 내용 -->
+        <!-- 4) 내용 -->
         <textarea name="content" placeholder="상품에 대한 솔직한 리뷰를 남겨주세요."></textarea>
 
-        <!-- 사진 첨부 -->
+        <!-- 5) 사진 업로드 -->
         <div class="photo-upload">
           <label for="image">+</label>
           <input type="file" name="image" id="image" accept="image/*">
           <img id="preview" class="preview-img" src="#" alt="이미지 미리보기">
         </div>
 
-        <!-- 버튼 -->
+        <!-- 6) 액션 버튼 -->
         <div class="actions">
           <button type="button" class="cancel-btn" onclick="history.back()">취소</button>
           <button type="submit" class="submit-btn">등록</button>
@@ -196,6 +194,7 @@
     </div>
   </div>
 </div>
+
 
 <script>
   // 별점 선택

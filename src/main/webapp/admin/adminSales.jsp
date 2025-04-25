@@ -81,12 +81,14 @@
             text-align: center;
         }
     </style>
+    <jsp:include page="adminSideBarStyle.jsp" />
 </head>
 <body>
+<jsp:include page="adminSideBar.jsp" />
 <div class="container">
     <h2>매출조회 상세</h2>
 
-    <form method="get" action="SalesDetailServlet">
+    <form method="get" action="adminsales">
         <div class="filter-container">
             <input type="date" name="startDate" value="${param.startDate}">
             <input type="date" name="endDate" value="${param.endDate}">

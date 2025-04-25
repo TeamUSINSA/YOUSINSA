@@ -1,5 +1,7 @@
 package dao.order;
 
+
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,27 +15,21 @@ import utils.MybatisSqlSessionFactory;
 public class CouponDAOImpl implements CouponDAO {
 
 	private SqlSession sqlSession;
-
+	
 	public CouponDAOImpl() {
 		sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(true); // auto commit
 	}
 	
-	 @Override
-	    public List<Coupon> selectValidCoupons() throws Exception {
-	        // active=1, type='normal', 오늘 날짜 사이의 쿠폰 전체 조회
-	        return sqlSession.selectList(
-	            "mapper.coupon.selectValidCoupons"
-	        );
-	    }
+	@Override
+	public void insertCoupon(Coupon coupon) throws Exception {
+		sqlSession.insert("mapper.coupon.insertCoupon", coupon);
+		sqlSession.commit();
+	}
 
-	    @Override
-	    public List<Coupon> selectValidCouponsByUser(String userId) throws Exception {
-	        // 사용자가 아직 다운받지 않은 유효 쿠폰 조회
-	        return sqlSession.selectList(
-	            "mapper.coupon.selectValidCouponsByUser",
-	            userId
-	        );
-	    }
+	@Override
+	public List<Coupon> selectAllCoupons() throws Exception {
+		return sqlSession.selectList("mapper.coupon.selectAllCoupons");
+	}
 
 	    @Override
 	    public int insertUserCoupon(int couponId, String userId) throws Exception {
@@ -51,5 +47,44 @@ public class CouponDAOImpl implements CouponDAO {
 	        sqlSession.update("mapper.order.updateUserCouponUsed", uc);
 	    }
 
+	@Override
+	public void deleteCouponById(int couponId) throws Exception {
+		sqlSession.delete("mapper.coupon.deleteCouponById", couponId);
+		sqlSession.commit();
+	}
+
+
+	@Override
+	public List<Coupon> selectCouponPage(Map<String, Object> params) throws Exception {
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return session.selectList("mapper.coupon.selectCouponPage", params);
+		}
+	}
+
+	@Override
+	public int getCouponCount() throws Exception {
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return session.selectOne("mapper.coupon.getCouponCount");
+		}
+	}
+	
+	@Override
+    public List<Coupon> selectValidCoupons() throws Exception {
+        // active=1, type='normal', 오늘 날짜 사이의 쿠폰 전체 조회
+        return sqlSession.selectList(
+            "mapper.coupon.selectValidCoupons"
+        );
+    }
+
+    @Override
+    public List<Coupon> selectValidCouponsByUser(String userId) throws Exception {
+        // 사용자가 아직 다운받지 않은 유효 쿠폰 조회
+        return sqlSession.selectList(
+            "mapper.coupon.selectValidCouponsByUser",
+            userId
+        );
+    }
+
 
 }
+

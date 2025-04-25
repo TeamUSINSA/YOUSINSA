@@ -1,32 +1,252 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper  
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="mapper.order">
-<!--  주문 전체 조회  -->
-<select id="selectAllOrders" resultType="dto.order.OrderList"> SELECT order_id, user_id, order_date, total_price, delivery_status, delivery_request, delivery_method, payment_method, point_id, receiver_name, receiver_phone, receiver_address FROM orderlist ORDER BY order_date DESC </select>
-<!--  총 페이지 수 계산 (한 페이지에 10개씩 기준)  -->
-<select id="getTotalPages" resultType="int"> SELECT CEIL(COUNT(*) / 10.0) FROM orderlist </select>
-<select id="findOrdersByUserId" parameterType="String" resultType="dto.order.OrderList"> SELECT order_id, order_date, delivery_status AS status FROM orderlist WHERE user_id = #{userId} ORDER BY order_date DESC </select>
-<select id="findOrderById" parameterType="int" resultType="dto.order.OrderList"> SELECT order_id, user_id, order_date, total_price, delivery_status AS status, delivery_request, delivery_method, payment_method, point_id, receiver_name, receiver_phone, receiver_address FROM orderlist WHERE order_id = #{orderId} </select>
-<select id="selectExchangesByApproved" resultType="dto.order.Exchange" parameterType="int"> SELECT * FROM exchange WHERE approved = #{approved} ORDER BY exchange_date DESC </select>
-<select id="selectExchangeById" parameterType="int" resultType="dto.order.Exchange"> SELECT * FROM exchange WHERE exchange_id = #{exchangeId} </select>
-<select id="selectFilteredOrders" resultType="dto.order.OrderList" parameterType="map">
-SELECT * FROM orderlist WHERE 1=1
-<if test="userId != null and userId != ''"> AND user_id = #{userId} </if>
-<if test="status != null and status != ''"> AND delivery_status = #{status} </if>
-<if test="period != null and period != ''"> AND order_date >= DATE_SUB(NOW(), INTERVAL #{period} DAY) </if>
-ORDER BY order_date DESC
 
 
+	<!-- 주문 전체 조회 -->
+	<select id="selectAllOrders" resultType="dto.order.OrderList">
+		SELECT order_id, user_id, order_date, total_price, delivery_status,
+		delivery_request, delivery_method, payment_method,
+		point_id, receiver_name, receiver_phone, receiver_address
+		FROM orderlist
+		ORDER BY order_date DESC
+	</select>
 
+	<!-- 총 페이지 수 계산 (한 페이지에 10개씩 기준) -->
+	<select id="getTotalPages" resultType="int">
+		SELECT CEIL(COUNT(*) / 10.0) FROM orderlist
+	</select>
+
+
+<!-- 주문 + 주문 아이템 + 상품 정보 한번에 조회 -->
+  <resultMap id="orderWithItemsResultMap" type="dto.order.Order">
+    <id property="orderId" column="order_id" />
+    <result property="userId" column="user_id" />
+    <result property="orderDate" column="order_date" />
+    <result property="totalPrice" column="total_price" />
+    <result property="deliveryStatus" column="delivery_status" />
+    
+    <result property="totalDiscount" column="total_discount" />
+<result property="usedPoints" column="used_points" />
+<result property="finalPayment" column="final_payment" />
+    
+    <result property="paymentMethod" column="payment_method"/>
+    <result property="deliveryRequest" column="delivery_request"/>
+    <result property="receiverName" column="receiver_name"/>
+    <result property="receiverPhone" column="receiver_phone"/>
+    <result property="receiverAddress" column="receiver_address"/>
+    <result property="totalDiscount" column="total_discount"/>
+    <result property="usedPoints" column="used_points"/>
+    <result property="finalPayment" column="final_payment"/>
+    
+    <collection property="items" ofType="dto.order.OrderItem">
+      <id property="orderItemId" column="order_item_id" />
+      <result property="productId" column="product_id" />
+      <result property="quantity" column="quantity" />
+      <result property="status" column="item_status" />
+      <result property="color" column="color" />
+      <result property="size" column="size" />
+      <result property="name" column="product_name" />
+      <result property="price" column="price" />
+      <result property="mainImage1" column="main_image1" />
+    </collection>
+  </resultMap>
+
+<resultMap id="orderListWithItemsResultMap" type="dto.order.OrderList">
+  <!-- OrderList 필드 -->
+    <id     property="orderId"         column="order_id"/>
+    <result property="orderDate"       column="order_date"/>
+    <result property="totalPrice"      column="total_price"/>
+    <result property="deliveryStatus"  column="delivery_status"/>
+    <result property="deliveryRequest" column="delivery_request"/>
+    <result property="deliveryMethod"  column="delivery_method"/>
+    <result property="paymentMethod"   column="payment_method"/>
+    <result property="userId"          column="user_id"/>
+    <result property="pointId"         column="point_id"/>
+    <result property="receiverName"    column="receiver_name"/>
+    <result property="receiverPhone"   column="receiver_phone"/>
+    <result property="receiverAddress" column="receiver_address"/>
+    <result property="usedPoint"       column="used_point"/>
+    <result property="couponDiscount"  column="coupon_discount"/>
+    <!-- OrderItem 리스트 -->
+    <collection property="items" ofType="dto.order.OrderItem">
+      <id     property="orderItemId" column="order_item_id"/>
+      <result property="productId"   column="product_id"/>
+      <result property="quantity"    column="quantity"/>
+      <result property="status"      column="status"/>
+      <result property="couponId"    column="coupon_id"/>
+      <result property="color"       column="color"/>
+      <result property="size"        column="size"/>
+      <result property="name"        column="product_name"/>
+      <result property="price"       column="price"/>
+      <result property="mainImage1"  column="main_image1"/>
+    </collection>
+  </resultMap>
+  <!-- 주문 상세 조회 (order + order_item 조인) -->
+  <select id="selectOrderWithItemsByUserId"
+          parameterType="string"
+          resultMap="orderWithItemsResultMap">
+    SELECT
+  o.order_id,
+  o.user_id,
+  o.order_date,
+  o.total_price,
+  o.delivery_status,
+
+  i.order_item_id,
+  i.product_id,
+  i.quantity,
+  i.status AS item_status,
+  i.color,
+  i.size,
+
+  p.name AS product_name,
+  p.cost AS price, 
+  p.main_image1
+FROM orderlist o
+JOIN orderitem i ON o.order_id = i.order_id
+JOIN product p ON i.product_id = p.product_id
+WHERE o.user_id = #{userId}
+ORDER BY o.order_date DESC, i.order_item_id ASC
+  </select>
+  
+  <select id="selectOrdersByUserAndDate" parameterType="map" resultMap="orderWithItemsResultMap">
+    SELECT
+        o.order_id,
+        o.user_id,
+        o.order_date,
+        o.total_price,
+        o.delivery_status,
+
+        i.order_item_id,
+        i.product_id,
+        i.quantity,
+        i.status AS item_status,
+        i.color,
+        i.size,
+
+        p.name AS product_name,
+        p.cost AS price,
+        p.main_image1
+
+    FROM orderlist o
+    JOIN orderitem i ON o.order_id = i.order_id
+    JOIN product p ON i.product_id = p.product_id
+    WHERE o.user_id = #{userId}
+      AND o.order_date BETWEEN #{startDate} AND #{endDate}
+    ORDER BY o.order_date DESC, i.order_item_id ASC
 </select>
 
-<update id="updateUserCouponUsed" parameterType="dto.user.UserCoupon">
-    UPDATE user_coupon
-    SET used = #{used}
-    WHERE user_id = #{userId}
-      AND coupon_id = #{couponId}
-  </update>
+<select id="selectOrderByDateRange" parameterType="map" resultMap="orderWithItemsResultMap">
+  SELECT 
+    o.order_id,
+    o.user_id,
+    o.order_date,
+    o.total_price,
+    o.delivery_status,
+    
+    i.order_item_id,
+    i.product_id,
+    i.quantity,
+    i.status AS item_status,
+    i.color,
+    i.size,
+    
+    p.name AS product_name,
+    p.cost AS price,
+    p.main_image1
+  FROM orderlist o
+  JOIN orderitem i ON o.order_id = i.order_id
+  JOIN product p ON i.product_id = p.product_id
+  WHERE o.user_id = #{userId}
+    AND o.order_date BETWEEN #{startDate} AND #{endDate}
+  ORDER BY o.order_date DESC, i.order_item_id ASC
+</select>
+
+<select id="getOrderDetailById" parameterType="int"
+          resultMap="orderListWithItemsResultMap">
+    SELECT
+    o.order_id,
+    o.order_date,
+    o.total_price,
+    o.delivery_status,
+    o.delivery_request,
+    o.delivery_method,
+    o.payment_method,
+    o.user_id,
+    o.point_id,
+    o.receiver_name,
+    o.receiver_phone,
+    o.receiver_address,
+    o.used_point,
+    o.coupon_discount,
+    oi.order_item_id,
+    oi.product_id,
+    oi.quantity,
+    oi.status,
+    oi.color,
+    oi.size,
+    p.name        AS product_name,
+    p.cost       AS price,
+    p.main_image1 AS main_image1
+  FROM orderlist o
+  LEFT JOIN orderitem oi ON o.order_id = oi.order_id
+  LEFT JOIN product   p  ON oi.product_id = p.product_id
+  WHERE o.order_id = #{orderId}
+  </select>
+
+<select id="countReviewsByOrderItemId" parameterType="int" resultType="int">
+  SELECT COUNT(*) FROM review WHERE order_item_id = #{orderItemId}
+</select>
+
+
+	<select id="findOrdersByUserId" parameterType="String"
+		resultType="dto.order.OrderList">
+		SELECT order_id, order_date, delivery_status AS status
+		FROM orderlist
+		WHERE user_id = #{userId}
+		ORDER BY order_date DESC
+	</select>
+
+	<select id="findOrderById" parameterType="int"
+		resultType="dto.order.OrderList">
+		SELECT order_id, user_id, order_date, total_price, delivery_status AS
+		status,
+		delivery_request, delivery_method, payment_method,
+		point_id, receiver_name, receiver_phone, receiver_address
+		FROM orderlist
+		WHERE order_id = #{orderId}
+	</select>
+
+	<select id="selectExchangesByApproved"
+		resultType="dto.order.Exchange" parameterType="int">
+		SELECT * FROM exchange
+		WHERE approved = #{approved}
+		ORDER BY exchange_date DESC
+	</select>
+
+	<select id="selectExchangeById" parameterType="int"
+		resultType="dto.order.Exchange">
+		SELECT * FROM exchange WHERE exchange_id = #{exchangeId}
+	</select>
+
+	<select id="selectFilteredOrders"
+		resultType="dto.order.OrderList" parameterType="map">
+		SELECT * FROM orderlist
+		WHERE 1=1
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+		<if test="status != null and status != ''">
+			AND delivery_status = #{status}
+		</if>
+		<if test="period != null and period != ''">
+			AND order_date &gt;= DATE_SUB(NOW(), INTERVAL #{period} DAY)
+		</if>
+		ORDER BY order_date DESC
+	</select>
+
 </mapper>
+
