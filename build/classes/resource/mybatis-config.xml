@@ -10,7 +10,6 @@
 
 
 	<typeAliases>
-
 		<typeAlias type="dto.product.Category" alias="category"/>
 		<typeAlias type="dto.user.User" alias="user"/>
 		<typeAlias type="dto.product.Product" alias="product"/>
@@ -60,9 +59,6 @@
 		<mapper resource="mapper/order/couponmapper.xml" />
 		<mapper resource="mapper/user/inquiry.xml" />  
 		<mapper resource="mapper/order/return.xml" />
-
-
-
-
+		<mapper resource="mapper/user/point.xml" />
 	</mappers>
 </configuration>

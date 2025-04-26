@@ -11,8 +11,14 @@ public class Point {
 	
 	private int balance;        // 누적 포인트 화면용
 
-	public Point() {
-	}
+	 public Point() { }
+
+
+	    public Point(int orderId, String userId, int point) {
+	        this.orderId = orderId;
+	        this.userId  = userId;
+	        this.point   = point;
+	    }
 
 
 	public int getBalance() {

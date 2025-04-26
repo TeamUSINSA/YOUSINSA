@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.point">
+
+  <insert id="insertPointHistory"
+          parameterType="point"
+          useGeneratedKeys="true"
+          keyProperty="pointId">
+    INSERT INTO point
+      ( date,
+        point,
+        order_id,
+        user_id
+      )
+    VALUES
+      ( NOW(),
+        #{point},
+        #{orderId},
+        #{userId}
+      )
+  </insert>
+
+  <update id="updateUserTotalPoint" parameterType="map">
+    UPDATE user
+       SET total_point = total_point + #{delta}
+     WHERE user_id     = #{userId}
+  </update>
+
+</mapper>

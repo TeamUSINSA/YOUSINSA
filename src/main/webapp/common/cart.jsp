@@ -367,6 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = Array.from(
       document.querySelectorAll('.selected-item')
     ).map(div => ({
+      cartId:    div.dataset.cartId,
       productId: '<c:out value="${product.productId}"/>',
       color:     div.dataset.color,
       size:      div.dataset.size,
@@ -385,14 +386,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3) hidden inputs 추가
     items.forEach(it => {
-      ['productId','color','size','quantity'].forEach(name => {
-        const input = document.createElement('input');
-        input.type  = 'hidden';
-        input.name  = name;
-        input.value = it[name];
-        form.appendChild(input);
-      });
-    });
+  ['cartId','productId','color','size','quantity'].forEach(name => {
+    const input = document.createElement('input');
+    input.type  = 'hidden';
+    input.name  = name;
+    input.value = it[name];
+    form.appendChild(input);
+  });
+});
 
     // 4) 전송
     document.body.appendChild(form);

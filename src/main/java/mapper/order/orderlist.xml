@@ -14,7 +14,6 @@
       ( user_id,
         order_date,
         total_price,
-        delivery_status,
         delivery_request,
         payment_method,
         receiver_name,
@@ -28,7 +27,6 @@
       ( #{userId},
         NOW(),                 <!-- DB 현재 날짜 -->
         #{totalPrice},
-        #{deliveryStatus},
         #{deliveryRequest},
         #{paymentMethod},
         #{receiverName},
@@ -57,7 +55,6 @@
            payment_key      = #{paymentKey},
            approved_at      = #{approvedAt},
            total_price      = #{totalPrice},
-           delivery_status  = #{deliveryStatus},
            delivery_request = #{deliveryRequest},
            payment_method   = #{paymentMethod},
            user_id          = #{userId},

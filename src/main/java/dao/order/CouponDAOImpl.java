@@ -44,7 +44,7 @@ public class CouponDAOImpl implements CouponDAO {
 	    
 	    @Override
 	    public void updateUserCouponUsed(UserCoupon uc) throws Exception {
-	        sqlSession.update("mapper.order.updateUserCouponUsed", uc);
+	        sqlSession.update("mapper.userCoupon.updateUserCouponUsed", uc);
 	    }
 
 	@Override

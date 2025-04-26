@@ -247,6 +247,13 @@ ORDER BY o.order_date DESC, i.order_item_id ASC
 		</if>
 		ORDER BY order_date DESC
 	</select>
+	
+	 <update id="updateUserCouponUsed" parameterType="dto.user.UserCoupon">
+    UPDATE usercoupon
+      SET used = #{used}
+    WHERE user_id = #{userId}
+      AND coupon_id = #{couponId}
+  </update>
 
 </mapper>
 

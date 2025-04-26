@@ -22,7 +22,7 @@
 	</select>
 	
 	<update id="updateUserCouponUsed" parameterType="dto.user.UserCoupon">
-    UPDATE user_coupon
+    UPDATE usercoupon
     SET used = #{used}
     WHERE user_id = #{userId}
       AND coupon_id = #{couponId}

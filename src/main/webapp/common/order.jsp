@@ -147,6 +147,7 @@ input, textarea, button, select {
 	<jsp:include page="header.jsp" />
 
 	<div class="container">
+	
 
 			<h2>상품 주문</h2>
 			<table>
@@ -577,6 +578,26 @@ $('#sameAsUser').change(function(){
 </script>
 
 <script>
+
+function makeOrderItemsJson() {
+	  const items = $('tbody tr').toArray().map(tr => {
+	    const $r = $(tr);
+	    const pid = $r.find('input[name="productId"]').val();
+	    if (!pid) return null;                   // productId 없으면 null 반환
+	    return {
+	      product_id: Number(pid),
+	      quantity:   Number($r.find('input[name="quantity"]').val()),
+	      status:     'PENDING',
+	      coupon_id:  $r.find('select.coupon-select').val() || null,
+	      color:      $r.find('input[name="color"]').val(),
+	      size:       $r.find('input[name="size"]').val()
+	    };
+	  })
+	  .filter(item => item);                     // null인 항목 제거
+	  return JSON.stringify(items);
+	}
+
+  
   $(function(){
 	const userid     = '${user.userId}';   
     const PENDING_ORDER_ID      = '${pendingOrderId}';
@@ -624,9 +645,10 @@ $('#sameAsUser').change(function(){
     	  const receiverPhone   = [$('#phone1').val(),$('#phone2').val(),$('#phone3').val()].join('-');
     	  const receiverAddress = $('#address1').val() + ' ' + $('#address2').val();
     	  const deliveryRequest = $('#deliveryRequest').val();
-    	  const usedPoints      = Number($('#usedPoints').val()) || 0;
-    	  const couponDiscount  = $('select.coupon-select').toArray()
-    	    .reduce((sum, el) => sum + Number($(el).find('option:selected').data('discount')||0), 0);
+    	  const couponDiscount = Number($('#fsCoupon').text().replace(/[^0-9]/g, ''));
+    	  const usedPoints = Number($('#fsUsePoints').text().replace(/[^0-9]/g,'')) || 0;
+          const pay = Number($('#fsPay').text().replace(/[^0-9]/g,'')) || 0;
+          const earnedPoints = Math.floor(pay * 0.05);
 
     	  // 모든 주문정보를 하나로 묶음
     	  const orderInfo = JSON.stringify({
@@ -640,6 +662,18 @@ $('#sameAsUser').change(function(){
     	    used_point:       usedPoints,        // used_point
     	    coupon_discount:  couponDiscount     // coupon_discount
     	  });
+    	  
+    	  const pointPayload = JSON.stringify({
+    	        used:   -usedPoints,   // 사용한 포인트는 음수
+    	        earned:  earnedPoints  // 적립될 포인트는 양수
+    	      });
+    	  
+    	  const orderItemsJson = makeOrderItemsJson();
+    	  
+    	  
+    	  const urlParams       = new URLSearchParams(window.location.search);
+    	  const selectedCartIds = urlParams.getAll('cartId');
+    	  const cartIdsJson = JSON.stringify(selectedCartIds);
 
     	  try {
     	    await widgets.setAmount({ currency:'KRW', value:amt });
@@ -653,7 +687,10 @@ $('#sameAsUser').change(function(){
     	      customerMobilePhone,
     	      windowTarget:        'self',
     	      metadata: {
-    	        order_info: orderInfo   // 한 개 키에 JSON 문자열로 묶음
+    	        order_info: orderInfo,
+    	        point: pointPayload,
+    	        order_items: orderItemsJson,
+    	        cart_ids: cartIdsJson
     	      }
     	    });
     	  } catch(err) {
