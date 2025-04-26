@@ -26,6 +26,8 @@
 		<typeAlias type="dto.order.OrderList" alias="orderList"/>
 		<typeAlias type="dto.product.ProductStock" alias="productStock"/>
 		<typeAlias type="dto.order.Return" alias="return"/>
+		<typeAlias type="dto.user.CancelReturn" alias="cancelreturn"/>
+		<!-- <typeAlias type="dto.order.cancel" alias="cancel"/> -->
 	</typeAliases>
 
 	<environments default="development">
@@ -60,6 +62,8 @@
 		<mapper resource="mapper/order/couponmapper.xml" />
 		<mapper resource="mapper/user/inquiry.xml" />  
 		<mapper resource="mapper/order/return.xml" />
+		<mapper resource="mapper/order/cancelreturn.xml"/>
+		<!-- <mapper resource="mapper/order/mycancel.xml"/> -->
 
 
 

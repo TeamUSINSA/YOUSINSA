@@ -2,10 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% 
+  response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+  response.setHeader("Pragma","no-cache");
+  response.setDateHeader("Expires", 0);
+%>
 <%
 int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 request.setAttribute("currentYear", currentYear);
 %>
+
 <%@ include file="/common/header.jsp" %>
 
 <style>
@@ -343,5 +349,10 @@ request.setAttribute("currentYear", currentYear);
     document.getElementById("dateForm").submit();
   }
 </script>
-
+<script>
+// 뒤로 가기로 돌아올 때(bfcache) 페이지 새로고침
+window.addEventListener("pageshow", function(e) {
+  if (e.persisted) window.location.reload();
+});
+</script>
 <%@ include file="/common/footer.jsp" %>
