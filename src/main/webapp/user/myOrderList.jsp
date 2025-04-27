@@ -2,10 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% 
+  response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+  response.setHeader("Pragma","no-cache");
+  response.setDateHeader("Expires", 0);
+%>
 <%
 int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 request.setAttribute("currentYear", currentYear);
 %>
+
 <%@ include file="/common/header.jsp" %>
 
 <style>
@@ -275,14 +281,39 @@ request.setAttribute("currentYear", currentYear);
             <div class="status">
               ${order.deliveryStatus}<br>
               <c:choose>
-                <c:when test="${order.deliveryStatus eq '배송준비중'}">
-                  <button class="action-btn" onclick="location.href='cancel.jsp?itemId=${item.orderItemId}'">취소 신청</button>
-                </c:when>
-                <c:when test="${order.deliveryStatus eq '배송중'}">
-                  <button class="action-btn" onclick="location.href='tracking.jsp?itemId=${item.orderItemId}'">배송 조회</button>
-                  <button class="action-btn" onclick="location.href='cancel.jsp?itemId=${item.orderItemId}'">취소 신청</button>
-                </c:when>
-                <c:when test="${order.deliveryStatus eq '배송완료'}">
+ 
+  <c:when test="${order.deliveryStatus eq '배송준비중'}">
+    <button class="action-btn"
+            onclick="location.href='${pageContext.request.contextPath}/myCancelApply?orderId=${order.orderId}'">
+      취소 신청
+    </button>
+  </c:when>
+
+
+  <c:when test="${order.deliveryStatus eq '배송중'}">
+    <button class="action-btn"
+            onclick="location.href='${pageContext.request.contextPath}/tracking?itemId=${item.orderItemId}'">
+      배송 조회
+    </button>
+    <button class="action-btn"
+            onclick="location.href='${pageContext.request.contextPath}/myCancelApply?orderId=${order.orderId}'">
+      취소 신청
+    </button>
+  </c:when>
+
+
+  <c:when test="${order.deliveryStatus eq '배송완료'}">
+    <button class="action-btn"
+            onclick="location.href='${pageContext.request.contextPath}/myReturnApply?itemId=${item.orderItemId}'">
+      반품 신청
+    </button>
+  </c:when>
+
+ 
+  <c:otherwise>
+    <div class="status">${order.deliveryStatus}</div>
+  </c:otherwise>
+</c:choose>
                   <c:choose>
 				    <%-- 아직 리뷰가 없으면 → 리뷰 작성으로 --%>
 				    <c:when test="${!item.hasReview}">
@@ -299,8 +330,6 @@ request.setAttribute("currentYear", currentYear);
 				      </button>
 				    </c:otherwise>
 				  </c:choose>
-				</c:when>
-              </c:choose>
             </div>
           </div>
         </c:forEach>
@@ -343,5 +372,10 @@ request.setAttribute("currentYear", currentYear);
     document.getElementById("dateForm").submit();
   }
 </script>
-
+<script>
+// 뒤로 가기로 돌아올 때(bfcache) 페이지 새로고침
+window.addEventListener("pageshow", function(e) {
+  if (e.persisted) window.location.reload();
+});
+</script>
 <%@ include file="/common/footer.jsp" %>
