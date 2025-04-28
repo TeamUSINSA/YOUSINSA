@@ -25,6 +25,8 @@
 		<typeAlias type="dto.order.OrderList" alias="orderList"/>
 		<typeAlias type="dto.product.ProductStock" alias="productStock"/>
 		<typeAlias type="dto.order.Return" alias="return"/>
+		<typeAlias type="dto.user.Notice" alias="notice"/>
+		<typeAlias type="dto.user.Alert" alias="alert"/>
 	</typeAliases>
 
 	<environments default="development">
@@ -60,5 +62,7 @@
 		<mapper resource="mapper/user/inquiry.xml" />  
 		<mapper resource="mapper/order/return.xml" />
 		<mapper resource="mapper/user/point.xml" />
+		<mapper resource="mapper/user/notice.xml" />
+		<mapper resource="mapper/user/alert.xml" />
 	</mappers>
 </configuration>

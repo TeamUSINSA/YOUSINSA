@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.notice">
+
+  <!-- 1) 결과 매핑 -->
+  <resultMap id="noticeMap" type="notice">
+    <id     property="noticeId" column="notice_id"/>
+    <result property="title"    column="title"/>
+    <result property="content"  column="content"/>
+    <result property="image"    column="image"/>
+    <result property="regDate"  column="reg_date"/>
+  </resultMap>
+
+  <!-- 2) 전체 공지 조회 -->
+  <select id="selectAllNotices" resultMap="noticeMap">
+    SELECT notice_id, title, content, image, reg_date
+    FROM notice
+    ORDER BY notice_id DESC
+  </select>
+
+  <!-- 3) 단건 조회 -->
+  <select id="selectNoticeById" parameterType="int" resultMap="noticeMap">
+    SELECT notice_id, title, content, image, reg_date
+    FROM notice
+    WHERE notice_id = #{noticeId}
+  </select>
+
+  <!-- 4) 등록 -->
+  <insert id="insertNotice" parameterType="notice" useGeneratedKeys="true" keyProperty="noticeId">
+    INSERT INTO notice (title, content, image, reg_date)
+    VALUES (#{title}, #{content}, #{image}, NOW())
+  </insert>
+
+  <!-- 5) 수정 -->
+  <update id="updateNotice" parameterType="notice">
+    UPDATE notice
+      SET title   = #{title},
+          content = #{content},
+          image   = #{image}
+    WHERE notice_id = #{noticeId}
+  </update>
+
+  <!-- 6) 삭제 -->
+  <delete id="deleteNotice" parameterType="int">
+    DELETE FROM notice
+    WHERE notice_id = #{noticeId}
+  </delete>
+
+</mapper>

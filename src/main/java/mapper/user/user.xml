@@ -32,7 +32,7 @@
 
 	<select id="loginUser" parameterType="map"
 		resultType="dto.user.User">
-		SELECT user_id, name
+		SELECT user_id, name, is_seller, birth, deleted
 		FROM User
 		WHERE user_id = #{userId} AND
 		password = #{password}
