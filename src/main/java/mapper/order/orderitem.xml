@@ -15,7 +15,7 @@
     <result property="color"         column="color"/>
     <result property="size"          column="size"/>
     <!-- product 테이블에서 가져온 가격 -->
-    <result property="price"         column="price"/>
+    <result property="cost"         column="cost"/>
     <result property="name"          column="product_name"/>
     <result property="mainImage1"    column="main_image1"/>
   </resultMap>
@@ -32,7 +32,7 @@
       oi.coupon_id,
       oi.color,
       oi.size,
-      p.price              AS price,
+      p.cost              AS cost,
       p.name               AS product_name,
       p.main_image1
     FROM orderitem oi

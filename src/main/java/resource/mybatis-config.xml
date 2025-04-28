@@ -25,8 +25,9 @@
 		<typeAlias type="dto.order.OrderList" alias="orderList"/>
 		<typeAlias type="dto.product.ProductStock" alias="productStock"/>
 		<typeAlias type="dto.order.Return" alias="return"/>
-		<typeAlias type="dto.user.CancelReturn" alias="cancelreturn"/>
+
 		<typeAlias type="dto.order.Cancel" alias="cancel"/> 
+		<typeAlias type="dto.order.Return" alias="return"/>
 	</typeAliases>
 
 	<environments default="development">
@@ -38,6 +39,8 @@
 					value="jdbc:mariadb://localhost:3306/yousinsa" />
 				<property name="username" value="root" />
 				<property name="password" value="7564" />
+				<property name="poolMaximumActiveConnections" value="500"/>
+				<property name="poolMaximumIdleConnections" value="500"/>
 			</dataSource>
 		</environment>
 	</environments>
@@ -62,8 +65,8 @@
 		<mapper resource="mapper/user/inquiry.xml" />  
 		<mapper resource="mapper/order/return.xml" />
 		<mapper resource="mapper/user/point.xml" />
-		<mapper resource="mapper/order/cancelreturn.xml"/>
 		<mapper resource="mapper/order/mycancel.xml"/>
+		<mapper resource="mapper/order/myreturn.xml"/>
 
 	</mappers>
 </configuration>

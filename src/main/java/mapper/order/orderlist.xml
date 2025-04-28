@@ -44,7 +44,7 @@
           resultType="orderList">
     SELECT *
       FROM orderlist
-     WHERE order_id = #{orderId}
+     WHERE order_id = #{orderId}  AND delivery_status NOT IN ('취소완료','반품완료')
   </select>
 
   <!-- 3) 결제 성공 시 상태·키·승인일시 업데이트 -->

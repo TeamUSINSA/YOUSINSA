@@ -9,7 +9,7 @@
     <div class="menu-item"><a href="memberInfoEdit">정보</a></div>
     <div class="menu-item"><a href="myAddress">나의 주소지</a></div>
     <hr>
-    <div class="menu-item"><a href="mycart">장바구니</a></div>
+    <div class="menu-item"><a href="cart">장바구니</a></div>
     <div class="menu-item"><a href="myOrders">주문 / 배송조회</a></div>
     <div class="menu-item"><a href="myCancelList">취소 / 반품 내역</a></div>
     <div class="menu-item"><a href="myLikeList">좋아요 목록</a></div>

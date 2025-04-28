@@ -2,11 +2,13 @@
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn"  uri="http://java.sun.com/jsp/jstl/functions" %>
-<% 
+<%
+  // 캐시 방지
   response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
   response.setHeader("Pragma","no-cache");
   response.setDateHeader("Expires", 0);
 
+  // 현재 연도 계산
   int currentYear = java.util.Calendar.getInstance()
                       .get(java.util.Calendar.YEAR);
   request.setAttribute("currentYear", currentYear);
@@ -16,102 +18,62 @@
 
 <style>
   .filter-box {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-    background-color: #fafafa;
+    border:1px solid #ccc; border-radius:10px;
+    padding:20px; margin-bottom:30px; background:#fafafa;
   }
-  .month-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
+  .month-buttons { display:flex; gap:10px; margin-bottom:15px; }
   .month-buttons input[type="button"] {
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    background-color: white;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
+    padding:8px 16px; border:1px solid #ccc; background:#fff; border-radius:6px;
+    font-size:14px; cursor:pointer;
   }
   .month-buttons input[type="button"]:hover,
   .month-buttons input[type="button"].active {
-    background-color: #8cc63f;
-    color: white;
+    background:#8cc63f; color:#fff;
   }
-  .date-selects {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .date-selects { display:flex; align-items:center; gap:8px; }
   .date-selects select {
-    padding: 6px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    padding:6px; border:1px solid #ccc; border-radius:5px; font-size:14px;
   }
+
   .order-header {
-    display: flex;
-    font-weight: bold;
-    background-color: #f9f9f9;
-    border-top: 2px solid #444;
-    border-bottom: 1px solid #ccc;
-    font-size: 14px;
-    padding: 12px 0;
+    display:flex; font-weight:bold; background:#f9f9f9;
+    border-top:2px solid #444; border-bottom:1px solid #ccc;
+    font-size:14px; padding:12px 0;
   }
-  .order-header > div { text-align: center; }
-  .order-header .meta    { width: 160px; }
-  .order-header .product { flex: 4; text-align: left; padding-left:20px; }
-  .order-header .quantity,
-  .order-header .price,
-  .order-header .status  { flex: 1; }
-  .order-group {
-    display: flex;
-    border-bottom: 2px solid #ccc;
+  .order-header > div { text-align:center; }
+  .order-header .meta    { width:160px; }
+  .order-header .product { flex:4; text-align:left; padding-left:20px; }
+  .order-header .quantity, .order-header .price, .order-header .status {
+    flex:1;
   }
+
+  .order-group { display:flex; border-bottom:2px solid #ccc; }
   .order-meta {
-    width: 160px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 13px;
-    padding: 10px;
-    border-right: 1px solid #eee;
-    line-height: 1.8;
+    width:160px; display:flex; flex-direction:column;
+    justify-content:center; align-items:center; text-align:center;
+    font-size:13px; padding:10px; border-right:1px solid #eee; line-height:1.8;
   }
-  .order-items {
-    flex: 1;
-  }
+  .order-items { flex:1; }
   .order-item {
-    display: flex;
-    padding: 20px;
-    align-items: center;
-    border-top: 1px solid #eee;
+    display:flex; padding:20px; align-items:center;
+    border-top:1px solid #eee;
   }
-  .order-item:first-of-type { border-top: none; }
+  .order-item:first-of-type { border-top:none; }
   .product-info {
-    flex: 4;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    flex:4; display:flex; align-items:center; gap:10px;
+  }
+  .order-image {
+    width:60px; height:60px; object-fit:cover; border:1px solid #ccc;
   }
   .product-name {
-    font-weight: bold;
-    text-decoration: none;
-    color: #333;
+    font-weight:bold; text-decoration:none; color:#333;
   }
-  .product-name:hover { text-decoration: underline; }
-  .order-image {
-    width: 60px; height: 60px;
-    object-fit: cover;
-    border: 1px solid #ccc;
+  .product-name:hover { text-decoration:underline; }
+  .quantity, .price, .status {
+    flex:1; text-align:center;
   }
-  .quantity, .price, .status { flex: 1; text-align: center; }
   .detail-btn {
-    padding: 4px 10px; font-size:12px; margin-top:6px;
+    padding:4px 10px; font-size:12px; margin-top:6px;
     border:1px solid #8cc63f; background:#fff; color:#8cc63f;
     border-radius:4px; cursor:pointer; text-decoration:none;
     transition:0.2s;
@@ -134,8 +96,9 @@
       귀하께서 취소 또는 반품하신 내역의 상품들입니다.
     </p>
 
-    <!-- 필터 -->
-    <form method="get" action="${pageContext.request.contextPath}/myCancelList"
+    <!-- 필터 폼 -->
+    <form method="get"
+          action="${pageContext.request.contextPath}/myCancelList"
           id="dateForm">
       <div class="filter-box">
         <div class="month-buttons">
@@ -209,61 +172,79 @@
 
     <!-- 테이블 헤더 -->
     <div class="order-header">
-      <div class="meta">주문일자</div>
+      <div class="meta">
+        <span>주문일자</span><br>
+        <span>취소/반품일자</span>
+      </div>
       <div class="product">상품</div>
       <div class="quantity">수량</div>
       <div class="price">주문금액</div>
       <div class="status">상태</div>
     </div>
 
-    <!-- 리스트: cancelList 로 변경 -->
-    <c:forEach var="cr" items="${cancelList}">
-      <div class="order-group">
-        <!-- 메타 -->
-        <div class="order-meta">
-          <div><fmt:formatDate value="${cr.orderDate}" pattern="yyyy-MM-dd"/></div>
-          <div><strong>${cr.orderId}</strong></div>
-          <c:choose>
-            <c:when test="${cr.orderItemId == null}">
-              <a href="${pageContext.request.contextPath}/order/cancelDetail?orderId=${cr.orderId}"
-                 class="detail-btn">취소 상세</a>
-            </c:when>
-            <c:otherwise>
-              <a href="${pageContext.request.contextPath}/order/returnDetail?itemId=${cr.orderItemId}"
-                 class="detail-btn">반품 상세</a>
-            </c:otherwise>
-          </c:choose>
-        </div>
-        <!-- 아이템 -->
-        <div class="order-items">
-          <div class="order-item">
-            <div class="product-info">
-              <a href="${pageContext.request.contextPath}/productDetail?productId=${cr.productId}">
-                <img src="${pageContext.request.contextPath}/images/${cr.mainImage1}"
-                     class="order-image"/>
-              </a>
-              <div>
-                <a href="${pageContext.request.contextPath}/productDetail?productId=${cr.productId}"
-                   class="product-name">${cr.name}</a><br>
-                <span style="font-size:12px;color:#666;">
-                  색상: ${cr.color} / 사이즈: ${cr.size}
-                </span>
-              </div>
-            </div>
-            <div class="quantity">${cr.quantity}</div>
-            <div class="price">
-              <fmt:formatNumber value="${cr.price}" pattern="#,###"/>원
-            </div>
-            <div class="status">
-              ${cr.status}<br>
-              <small>
-                <fmt:formatDate value="${cr.actionDate}" pattern="yyyy-MM-dd"/>
-              </small>
+    <!-- mixedList를 담은 cancelList 속성 사용 -->
+<c:forEach var="rec" items="${cancelList}">
+  <!-- type에 따라 분기: C=취소, R=반품 -->
+  <c:choose>
+    <c:when test="${rec.type == 'C'}">
+      <!-- 취소인 경우 -->
+      <c:set var="orderDate"  value="${rec.orderDate}" />
+      <c:set var="actionDate" value="${rec.actionDate}" />
+      <c:set var="items"      value="${rec.items}" />
+      <c:set var="status"     value="${rec.status}" />
+    </c:when>
+    <c:otherwise>
+      <!-- 반품인 경우 -->
+      <c:set var="orderDate"  value="${rec.orderDate}" />
+      <c:set var="actionDate" value="${rec.actionDate}" />
+      <c:set var="items"      value="${rec.items}" />
+      <c:set var="status"     value="${rec.status}" />
+    </c:otherwise>
+  </c:choose>
+
+  <div class="order-group">
+    <div class="order-meta">
+      <div><fmt:formatDate value="${orderDate}"  pattern="yyyy-MM-dd"/></div>
+      <div><fmt:formatDate value="${actionDate}" pattern="yyyy-MM-dd"/></div>
+      <div><strong>${rec.orderId}</strong></div>
+      <c:choose>
+        <c:when test="${rec.type == 'C'}">
+          <a href="${pageContext.request.contextPath}/order/cancelDetail?orderId=${rec.orderId}"
+             class="detail-btn">취소 상세</a>
+        </c:when>
+        <c:otherwise>
+          <a href="${pageContext.request.contextPath}/order/returnDetail?orderId=${rec.orderId}"
+             class="detail-btn">반품 상세</a>
+        </c:otherwise>
+      </c:choose>
+    </div>
+
+    <div class="order-items">
+      <c:forEach var="item" items="${items}">
+        <div class="order-item">
+          <div class="product-info">
+            <a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}">
+              <img src="${pageContext.request.contextPath}/images/${item.mainImage1}"
+                   class="order-image"/>
+            </a>
+            <div>
+              <a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}"
+                 class="product-name">${item.name}</a><br>
+              <span style="font-size:12px;color:#666;">
+                색상: ${item.color} / 사이즈: ${item.size}
+              </span>
             </div>
           </div>
+          <div class="quantity">${item.quantity}</div>
+          <div class="price">
+            <fmt:formatNumber value="${item.price}" pattern="#,###"/>원
+          </div>
+          <div class="status">${status}</div>
         </div>
-      </div>
-    </c:forEach>
+      </c:forEach>
+    </div>
+  </div>
+</c:forEach>
 
   </div>
 </div>

@@ -2,14 +2,13 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.order.mycancel">
+<mapper namespace="mapper.order.myreturn">
 
-  
   <!-- 1. ResultMap 정의 -->
-  <resultMap id="CancelMap" type="dto.order.Cancel">
-    <id     column="cancel_id"    property="cancelId"/>
+  <resultMap id="ReturnMap" type="dto.order.Return">
+    <id     column="return_id"    property="returnId"/>
     <result column="order_id"     property="orderId"/>
-    <result column="cancel_date"  property="cancelDate"/>
+    <result column="return_date"  property="returnDate"/>
     <result column="reason"       property="reason"/>
     <result column="user_id"      property="userId"/>
 
@@ -31,16 +30,16 @@
     </collection>
   </resultMap>
 
-  <!-- 2. 취소 내역 조회 -->
-  <select id="selectCancelList"
+  <!-- 2. 반품 내역 조회 -->
+  <select id="selectReturnList"
           parameterType="map"
-          resultMap="CancelMap">
+          resultMap="ReturnMap">
     SELECT
-      c.cancel_id,
-      c.order_id,
-      c.cancel_date,
-      c.reason,
-      c.user_id,
+      r.return_id       AS return_id,
+      i.order_id		AS order_id,
+      r.return_date     AS return_date,
+      r.reason,
+      r.user_id,
       o.order_date,
       o.delivery_status,
       i.order_item_id,
@@ -50,29 +49,29 @@
       i.color,
       i.size,
       i.quantity,
-      i.status        AS item_status,
+      i.status         AS item_status,
       (p.cost * i.quantity) AS total_price
-    FROM cancel c
-    JOIN orderlist  o ON o.order_id = c.order_id
-    JOIN orderitem  i ON i.order_id = c.order_id
-    JOIN product    p ON p.product_id = i.product_id
-    WHERE c.user_id     = #{userId}
-      AND c.cancel_date BETWEEN #{startDate} AND #{endDate}
+    FROM `return` r
+    JOIN orderitem  i ON i.order_item_id = r.order_item_id
+    JOIN orderlist  o ON o.order_id      = i.order_id
+    JOIN product    p ON p.product_id    = i.product_id
+    WHERE r.user_id      = #{userId}
+      AND r.return_date  BETWEEN #{startDate} AND #{endDate}
   </select>
 
-  <!-- 3. 취소 등록 -->
-  <insert id="insertCancel" parameterType="dto.order.Cancel">
-    INSERT INTO cancel
-      (order_id, cancel_date, reason, user_id)
+  <!-- 3. 반품 등록 -->
+  <insert id="insertReturn" parameterType="dto.order.Return">
+    INSERT INTO `return`
+      (order_item_id, return_date, reason, user_id)
     VALUES
-      (#{orderId}, #{cancelDate}, #{reason}, #{userId})
+      (#{orderItemId}, #{returnDate}, #{reason}, #{userId})
   </insert>
 
-  <!-- 4. 주문 상태 변경 -->
-  <update id="updateOrderToCancelled" parameterType="int">
-    UPDATE orderlist
-      SET delivery_status = '취소완료'
-    WHERE order_id = #{orderId}
+  <!-- 4. 상품 상태 변경 -->
+  <update id="updateOrderItemToReturned" parameterType="int">
+    UPDATE orderitem
+      SET status = '반품완료'
+    WHERE order_item_id = #{orderItemId}
   </update>
 
 </mapper>

@@ -11,8 +11,8 @@
 
     <!-- 요약박스 -->
     <div class="summary-box">
-      <span>주문일자 : ${order.orderDate}</span>
-      <span>주문번호 : ${order.orderId}</span>
+      주문일자: <fmt:formatDate value="${order.orderDate}" pattern="yyyy-MM-dd"/>　
+      주문번호: ${order.orderId}
     </div>
 
     <!-- 주문 정보 -->
@@ -46,7 +46,7 @@
               </div>
             </td>
             <td>${item.quantity}</td>
-            <td>${item.quantity * item.price}원</td>
+            <td>${item.quantity * item.cost}원</td>
             <td>${order.deliveryStatus}</td>
           </tr>
         </c:forEach>
@@ -89,7 +89,7 @@
       <c:set var="orderAmt" value="0" />
       <c:forEach var="item" items="${order.items}">
         <c:set var="orderAmt"
-               value="${orderAmt + (item.quantity * item.price)}" />
+               value="${orderAmt + (item.quantity * item.cost)}" />
       </c:forEach>
 
       <%-- 환불액 계산 --%>
