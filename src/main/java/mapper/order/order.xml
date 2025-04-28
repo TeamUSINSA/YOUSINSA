@@ -160,8 +160,9 @@ ORDER BY o.order_date DESC, i.order_item_id ASC
   FROM orderlist o
   JOIN orderitem i ON o.order_id = i.order_id
   JOIN product p ON i.product_id = p.product_id
-  WHERE o.user_id = #{userId}
+  WHERE o.user_id = #{userId}  
     AND o.order_date BETWEEN #{startDate} AND #{endDate}
+    AND delivery_status NOT IN ('취소완료','반품완료')
   ORDER BY o.order_date DESC, i.order_item_id ASC
 </select>
 
@@ -206,7 +207,7 @@ ORDER BY o.order_date DESC, i.order_item_id ASC
 		resultType="dto.order.OrderList">
 		SELECT order_id, order_date, delivery_status AS status
 		FROM orderlist
-		WHERE user_id = #{userId}
+		WHERE user_id = #{userId} 
 		ORDER BY order_date DESC
 	</select>
 

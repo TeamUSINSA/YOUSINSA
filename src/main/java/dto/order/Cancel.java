@@ -1,6 +1,7 @@
 package dto.order;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Cancel {
     private int cancelId;
@@ -8,12 +9,41 @@ public class Cancel {
     private String reason;
     private String userId;
     private int orderId;
-
     
-    public Cancel() {}
+    private OrderList order;
+    private List<OrderItem> orderItems;
+    private int price;
+    
+    
+    
+    public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public Cancel() {}
 
 	public int getCancelId() {
 		return cancelId;
+	}
+
+	public List<OrderItem> getOrderItems() {
+		return orderItems;
+	}
+
+	public void setOrderItems(List<OrderItem> orderItems) {
+		this.orderItems = orderItems;
+	}
+
+	public OrderList getOrder() {
+		return order;
+	}
+
+	public void setOrder(OrderList order) {
+		this.order = order;
 	}
 
 	public void setCancelId(int cancelId) {
