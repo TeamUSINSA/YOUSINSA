@@ -13,6 +13,11 @@
         }
     }
 %>
+<c:if test="${not empty errMsg}">
+  <script>
+    alert('${errMsg}');
+  </script>
+</c:if>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

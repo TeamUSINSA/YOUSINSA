@@ -6,7 +6,7 @@ public class Alert {
     private boolean checked;
     private int senderId;
     private String senderName;
-    private int userId;
+    private String userId;
     private String title;
     private String type;
 
@@ -64,12 +64,12 @@ public class Alert {
 	}
 
 
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
 
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

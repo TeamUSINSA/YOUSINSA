@@ -144,7 +144,7 @@ input, textarea, button, select {
 <body>
 
 
-	<jsp:include page="header.jsp" />
+	<jsp:include page="/header" />
 
 	<div class="container">
 	
@@ -344,7 +344,7 @@ input, textarea, button, select {
     <script type="module" src="./index.js"></script>
 
 
-	<jsp:include page="footer.jsp" />
+<jsp:include page="/footer" />
 
 	<script>
 	$(function(){

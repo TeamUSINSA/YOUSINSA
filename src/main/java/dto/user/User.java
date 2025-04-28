@@ -94,7 +94,7 @@ public class User {
 		this.birth = birth;
 	}
 
-	public boolean isDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 
@@ -126,7 +126,7 @@ public class User {
 		this.withdrawalDetail = withdrawalDetail;
 	}
 
-	public boolean isSeller() {
+	public boolean getIsSeller() {
 		return isSeller;
 	}
 
