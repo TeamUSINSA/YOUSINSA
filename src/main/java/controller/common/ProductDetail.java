@@ -3,18 +3,24 @@ package controller.common;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+// OrderItem DTO: productId, color, size, quantity 필드가 있다고 가정
+import dto.order.OrderItem;
 import dto.product.Product;
 import dto.product.ProductStock;
 import dto.user.Inquiry;
 import dto.user.Review;
-// OrderItem DTO: productId, color, size, quantity 필드가 있다고 가정
-import dto.order.OrderItem;
 import service.product.ProductDetailService;
 import service.product.ProductDetailServiceImpl;
+import service.user.InquiryService;
+import service.user.InquiryServiceImpl;
 import service.user.LikeService;
 import service.user.LikeServiceImpl;
 
@@ -24,6 +30,7 @@ public class ProductDetail extends HttpServlet {
 
     private ProductDetailService productService = new ProductDetailServiceImpl();
     private LikeService likeService = new LikeServiceImpl();
+    private InquiryService inquiryService     = new InquiryServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,12 +38,14 @@ public class ProductDetail extends HttpServlet {
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
 
-            Product product = productService.getProduct(productId);
-            List<ProductStock> stockList = productService.getProductStockList(productId);
-            int likeCount = productService.getLikeCount(productId);
-            double avgRating = productService.getAvgRating(productId);
-            List<Review> reviewList = productService.getReviews(productId);
-            List<Inquiry> inquiryList = productService.getInquiries(productId);
+            Product product                = productService.getProduct(productId);
+            List<ProductStock> stockList   = productService.getProductStockList(productId);
+            int likeCount                  = productService.getLikeCount(productId);
+            double avgRating               = productService.getAvgRating(productId);
+            List<Review> reviewList        = productService.getReviews(productId);
+
+            // ↓ 기존 productService.getInquiries → inquiryService.getByProductId 로 변경
+            List<Inquiry> inquiryList      = inquiryService.getByProductId(productId);
 
             HttpSession session = request.getSession(false);
             String userId = (session != null) ? (String) session.getAttribute("userId") : null;
@@ -46,13 +55,13 @@ public class ProductDetail extends HttpServlet {
                 likedByUser = likeService.existsLike(userId, productId);
             }
 
-            request.setAttribute("product", product);
-            request.setAttribute("stockList", stockList);
-            request.setAttribute("likeCount", likeCount);
-            request.setAttribute("avgRating", avgRating);
-            request.setAttribute("reviewList", reviewList);
-            request.setAttribute("inquiryList", inquiryList);
-            request.setAttribute("likedByUser", likedByUser);
+            request.setAttribute("product",       product);
+            request.setAttribute("stockList",     stockList);
+            request.setAttribute("likeCount",     likeCount);
+            request.setAttribute("avgRating",     avgRating);
+            request.setAttribute("reviewList",    reviewList);
+            request.setAttribute("inquiryList",   inquiryList);
+            request.setAttribute("likedByUser",   likedByUser);
 
             request.getRequestDispatcher("/common/productDetail.jsp")
                    .forward(request, response);
@@ -64,7 +73,6 @@ public class ProductDetail extends HttpServlet {
                    .forward(request, response);
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

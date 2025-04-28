@@ -40,24 +40,24 @@
       AND size = #{size}
   </select>
   
-  <select id="selectCartListByUserId" parameterType="string" resultType="cart">
+<select id="selectCartListByUserId" parameterType="string" resultType="cart">
   SELECT 
-    c.cart_id AS cartId,
-    c.user_id AS userId,
-    c.product_id AS productId,
+    c.cart_id      AS cartId,
+    c.user_id      AS userId,
+    c.product_id   AS productId,
     c.quantity,
     c.color,
     c.size,
     p.name,
-    p.main_image1 AS mainImage1,
-    p.price
+    p.main_image1  AS mainImage1,
+    (p.price - p.discount) AS price   <!-- 원가-할인 -->
   FROM cart c
   JOIN product p ON c.product_id = p.product_id
   WHERE c.user_id = #{userId}
 </select>
 
  
- <select id="selectOrderItemsByCartIds" parameterType="list" resultType="order">
+<select id="selectOrderItemsByCartIds" parameterType="list" resultType="order">
   SELECT 
     c.cart_id,
     c.product_id,
@@ -66,8 +66,8 @@
     c.color,
     c.size,
     p.name,
-    p.main_image1 AS image,
-    p.price AS unit_price
+    p.main_image1   AS image,
+    (p.price - p.discount) AS unit_price  <!-- 단가도 할인 적용 -->
   FROM cart c
   JOIN product p ON c.product_id = p.product_id
   WHERE c.cart_id IN 
