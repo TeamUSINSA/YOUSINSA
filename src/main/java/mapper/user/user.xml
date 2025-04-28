@@ -37,7 +37,7 @@
 
 	<select id="loginUser" parameterType="map"
 		resultType="dto.user.User">
-		SELECT user_id, name
+		SELECT user_id, name, is_seller, birth, deleted
 		FROM User
 		WHERE user_id = #{userId} AND
 		password = #{password}
@@ -143,11 +143,17 @@
 
 	<insert id="insertReview" parameterType="review">
 		INSERT INTO review
-		(content, image, user_id, product_id, reg_date, rating)
-		VALUES
-		(#{content}, #{image}, #{userId}, #{productId}, NOW(),
-		#{rating})
+      (content, image, user_id, product_id, reg_date, rating, order_item_id)
+    VALUES
+      (#{content}, #{image}, #{userId}, #{productId}, NOW(), #{rating}, #{orderItemId})
 	</insert>
+	
+	<!-- 특정 주문 아이템에 이미 후기가 있는지 체크 -->
+  <select id="countReviewByOrderItem" parameterType="int" resultType="int">
+    SELECT COUNT(*) 
+      FROM review 
+     WHERE order_item_id = #{orderItemId}
+  </select>
 
 	<select id="getReviewsByUserId" resultType="review">
 		SELECT
@@ -195,32 +201,28 @@
 		select count(*) from
 		review;
 	</select>
+	
+	<select id="getReviewById" parameterType="int" resultType="review">
+  SELECT 
+    r.review_id      AS reviewId,
+    r.content,
+    r.image,
+    r.user_id        AS userId,
+    r.product_id     AS productId,
+    r.reg_date       AS regDate,
+    r.rating,
+    p.name           AS productName,
+    p.main_image1    AS productImage,
+    oi.color,
+    oi.size,
+    ol.order_date    AS orderDate
+  FROM review r
+    JOIN orderitem     oi ON r.order_item_id = oi.order_item_id
+    JOIN product       p  ON r.product_id    = p.product_id
+    JOIN orderlist     ol ON oi.order_id      = ol.order_id
+  WHERE r.review_id = #{reviewId}
+</select>
 
-	<select id="getReviewById" parameterType="int"
-		resultType="review">
-		SELECT
-		r.review_id AS reviewId,
-		r.content,
-		r.image,
-		r.user_id
-		AS userId,
-		r.product_id AS productId,
-		r.reg_date AS regDate,
-		r.rating,
-		p.name AS productName,
-		p.main_image1 AS productImage,
-		oi.color,
-		oi.size,
-		ol.order_date AS orderDate
-		FROM review r
-		JOIN product p ON r.product_id
-		= p.product_id
-		JOIN orderitem oi ON p.product_id = oi.product_id
-		JOIN
-		orderlist ol ON oi.order_id = ol.order_id
-		WHERE r.review_id =
-		#{reviewId}
-	</select>
 
 	<update id="updateReview" parameterType="review">
 		UPDATE review
@@ -254,7 +256,6 @@
 		</if>
 		ORDER BY date DESC
 	</select>
-
 
 	<select id="findByName" parameterType="java.lang.String"
 		resultType="dto.user.User">

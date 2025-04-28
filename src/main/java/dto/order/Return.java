@@ -3,6 +3,7 @@ package dto.order;
 import java.util.Date;
 
 public class Return {
+
 	private int returnId;
 	private Date returnDate;
 	private String reason;
@@ -54,8 +55,7 @@ public class Return {
 		this.orderItemId = orderItemId;
 	}
 
-	public int getApproved() {
-
+	public int isApproved() {
 		return approved;
 	}
 

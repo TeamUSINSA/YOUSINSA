@@ -34,6 +34,7 @@ public class Product {
 	private String sizeType;
 	// Product.java 안에 아래 추가
 
+
 	private String category1;
 	private String category2;
 	private String code;

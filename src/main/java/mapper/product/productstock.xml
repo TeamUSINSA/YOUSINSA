@@ -13,4 +13,14 @@
           AND size = #{size}
     </update>
 
+
+  <update id="decrementStock" parameterType="map">
+    UPDATE productstock
+      SET quantity = quantity - #{quantity}
+    WHERE product_id = #{productId}
+      AND color      = #{color}
+      AND size       = #{size}
+      AND quantity  >= #{quantity}
+  </update>
 </mapper>
+

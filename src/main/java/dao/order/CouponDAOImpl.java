@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.order.Coupon;
+import dto.user.UserCoupon;
 import utils.MybatisSqlSessionFactory;
 
 public class CouponDAOImpl implements CouponDAO {
@@ -30,11 +31,28 @@ public class CouponDAOImpl implements CouponDAO {
 		return sqlSession.selectList("mapper.coupon.selectAllCoupons");
 	}
 
+	    @Override
+	    public int insertUserCoupon(int couponId, String userId) throws Exception {
+	        Map<String,Object> params = new HashMap<>();
+	        params.put("couponId", couponId);
+	        params.put("userId",   userId);
+	        return sqlSession.insert(
+	            "mapper.coupon.insertUserCoupon",
+	            params
+	        );
+	    }
+	    
+	    @Override
+	    public void updateUserCouponUsed(UserCoupon uc) throws Exception {
+	        sqlSession.update("mapper.userCoupon.updateUserCouponUsed", uc);
+	    }
+
 	@Override
 	public void deleteCouponById(int couponId) throws Exception {
 		sqlSession.delete("mapper.coupon.deleteCouponById", couponId);
 		sqlSession.commit();
 	}
+
 
 	@Override
 	public List<Coupon> selectCouponPage(Map<String, Object> params) throws Exception {
@@ -67,15 +85,6 @@ public class CouponDAOImpl implements CouponDAO {
         );
     }
 
-    @Override
-    public int insertUserCoupon(int couponId, String userId) throws Exception {
-        Map<String,Object> params = new HashMap<>();
-        params.put("couponId", couponId);
-        params.put("userId",   userId);
-        return sqlSession.insert(
-            "mapper.coupon.insertUserCoupon",
-            params
-        );
-    }
+
 }
 

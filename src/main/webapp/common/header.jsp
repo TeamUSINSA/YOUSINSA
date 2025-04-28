@@ -245,8 +245,21 @@ body {
 .side-menu {
 	z-index: 999; /* 기존 설정 유지 */
 }
+
 .header {
 	width: 100%;
+
+
+.badge {
+  display: inline-block;
+  min-width: 18px;
+  padding: 2px 6px;
+  font-size: 12px;
+  color: #fff;
+  background-color: crimson;
+  border-radius: 12px;
+  margin-left: 4px;
+  vertical-align: top;
 }
 </style>
 <div class="header">
@@ -256,12 +269,32 @@ body {
 			<a href="main">YOUSINSA</a>
 		</div>
 		<div class="top-menu">
-			<a href="coupon">쿠폰</a> <a href="#">공지사항</a> <a href="#">알림</a> <a
-				href="cart">장바구니</a>
+			<a href="coupon">쿠폰</a> <a href="notice">공지사항</a> 
+			 <c:choose>
+    <c:when test="${not empty sessionScope.userId}">
+      <a href="${pageContext.request.contextPath}/myAlarm">
+        알림
+        <c:if test="${alertCount > 0}">
+          <span class="badge">${alertCount}</span>
+        </c:if>
+      </a>
+    </c:when>
+    <c:otherwise>
+      <a href="${pageContext.request.contextPath}/login">알림</a>
+    </c:otherwise>
+  </c:choose>
+			 <a href="cart">장바구니</a>
 
 			<c:choose>
 				<c:when test="${not empty sessionScope.userId}">
-					<a href="myLikeList">마이페이지</a>
+					<c:choose>
+						<c:when test="${sessionScope.isSeller}">
+							<a href="adminOrderSearch">마이페이지</a>
+						</c:when>
+						<c:otherwise>
+							<a href="myLikeList">마이페이지</a>
+						</c:otherwise>
+					</c:choose>
 					<a href="logout">로그아웃</a>
 				</c:when>
 				<c:otherwise>

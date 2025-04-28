@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import dto.order.Coupon;
+import dto.user.UserCoupon;
 
 public interface CouponDAO {
     void insertCoupon(Coupon coupon) throws Exception;
@@ -16,6 +17,10 @@ public interface CouponDAO {
 	List<Coupon> selectValidCouponsByUser(String userId) throws Exception;
 
 	List<Coupon> selectValidCoupons() throws Exception;
+	
+	void updateUserCouponUsed(UserCoupon uc) throws Exception;
+
+
 }
 
 

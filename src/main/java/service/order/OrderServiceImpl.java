@@ -1,5 +1,6 @@
 package service.order;
 
+import java.sql.Date;
 import java.util.List;
 
 import dao.order.CartDAO;
@@ -31,6 +32,26 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderList> getFilteredOrders(String userId, String status, String period) throws Exception {
 		return orderDAO.selectFilteredOrders(userId, status, period);
+	}
+
+    @Override
+    public List<OrderList> selectOrderListByUser(String userId) throws Exception {
+        return orderDAO.selectOrderListByUser(userId);
+    }
+
+	@Override
+	public List<Order> getOrdersWithItemsByUserId(String userId) throws Exception {
+		return orderDAO.getOrderWithItemsByUserId(userId);
+	}
+
+	@Override
+	public List<Order> getOrdersByDateRange(String userId, Date startDate, Date endDate) throws Exception {
+		return orderDAO.getOrdersByDateRange(userId, startDate, endDate);
+	}
+
+	@Override
+	public OrderList getOrderDetail(int orderId) throws Exception {
+		return orderDAO.getOrderDetailById(orderId);
 	}
 
 	@Override

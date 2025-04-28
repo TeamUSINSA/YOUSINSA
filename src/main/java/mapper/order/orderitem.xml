@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.orderitem">
+
+	<!-- 1) 주문별 조회 -->
+	<select id="selectByOrderId" parameterType="int"
+		resultType="dto.order.OrderItem">
+		SELECT *
+		FROM orderitem
+		WHERE order_id = #{orderId}
+	</select>
+
+	<!-- 2) 삽입 -->
+	<insert id="insert" parameterType="dto.order.OrderItem"
+		useGeneratedKeys="true" keyProperty="orderItemId">
+		INSERT INTO orderitem
+		( order_id
+		, product_id
+		, quantity
+		, coupon_id
+		, color
+		, size
+		)
+		VALUES
+		( #{orderId}
+		, #{productId}
+		, #{quantity}
+		, #{couponId}
+		, #{color}
+		, #{size}
+		)
+	</insert>
+
+</mapper>

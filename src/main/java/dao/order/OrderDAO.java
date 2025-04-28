@@ -1,5 +1,6 @@
 package dao.order;
 
+import java.sql.Date;
 import java.util.List;
 import dto.order.Coupon;
 import dto.order.Order;
@@ -17,7 +18,7 @@ public interface OrderDAO {
 
     List<OrderList> findOrdersByUserId(String userId) throws Exception;
 
-    OrderList findOrderListById(int orderId) throws Exception; // ✔ 핵심: OrderList로 조회
+    OrderList findOrderListById(int orderId) throws Exception;
 
     void insertOrderList(Order order) throws Exception;
 
@@ -34,4 +35,14 @@ public interface OrderDAO {
     List<Coupon> selectUnusedCouponsByUserId(String userId) throws Exception;
 
     void markCouponUsed(UserCoupon uc) throws Exception;
+
+    List<Order> getOrderWithItemsByUserId(String userId) throws Exception;
+
+    List<Order> findOrdersByUserAndDate(String userId, Date startDate, Date endDate) throws Exception;
+
+    List<Order> getOrdersByDateRange(String userId, Date startDate, Date endDate) throws Exception;
+
+    OrderList getOrderDetailById(int orderId) throws Exception;
+
+    List<OrderList> selectOrderListByUser(String userId) throws Exception;
 }

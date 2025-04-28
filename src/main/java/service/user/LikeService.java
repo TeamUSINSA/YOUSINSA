@@ -6,7 +6,7 @@ import dto.user.LikeList;
 
 public interface LikeService {
 	// 페이징된 좋아요 상품 조회
-	List<LikeList> getLikedProductsByUserId(String userId, int page, int pageSize) throws Exception;
+	List<LikeList> getLikedProductsByUserId(String userId, int offset, int limit) throws Exception;
 
 	// 특정 유저 총 좋아요 개수
 	int countLikedProducts(String userId) throws Exception;

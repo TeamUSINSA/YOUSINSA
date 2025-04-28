@@ -12,8 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.order.Order;
+import dto.order.OrderList;
 import dto.user.User;
 import dto.user.UserCoupon;
+import service.order.CartService;
+import service.order.CartServiceImpl;
+import service.order.OrderListService;
+import service.order.OrderListServiceImpl;
 import service.order.OrderService;
 import service.order.OrderServiceImpl;
 import service.product.ProductService;
@@ -28,6 +33,8 @@ public class OrderServlet extends HttpServlet {
 	private ProductService productService = new ProductServiceImpl();
 	private OrderService orderService = new OrderServiceImpl();
 	private UserService userService = new UserServiceImpl();
+	private OrderListService orderListService = new OrderListServiceImpl();
+	private CartService cartService = new CartServiceImpl(); // CartService 객체 추가
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,7 +52,11 @@ public class OrderServlet extends HttpServlet {
 			String[] colors = req.getParameterValues("color");
 			String[] sizes = req.getParameterValues("size");
 			String[] qtys = req.getParameterValues("quantity");
-
+			String[] cartIds = req.getParameterValues("cartId");
+			if (cartIds != null) {
+			    req.setAttribute("cartIds", cartIds);
+			}
+			
 			// 없으면 장바구니로
 			if (productIds == null || productIds.length == 0) {
 				resp.sendRedirect(req.getContextPath() + "/cart");
@@ -76,10 +87,19 @@ public class OrderServlet extends HttpServlet {
 			// — 3) 사용 가능한 쿠폰 목록
 			List<UserCoupon> couponList = userService.getUnusedCoupons(userId);
 
-			// — 뷰에 전달
+			int totalPrice = orderList.stream().mapToInt(o -> o.getUnitPrice() * o.getQuantity()).sum();
+
+			OrderList pending = new OrderList();
+			pending.setUserId(userId);
+			pending.setTotalPrice(totalPrice);
+			pending.setPaymentStatus("PENDING");
+			orderListService.createPendingOrder(pending);
+
+
 			req.setAttribute("productList", orderList);
 			req.setAttribute("user", user);
 			req.setAttribute("couponList", couponList);
+			req.setAttribute("pendingOrderId", pending.getOrderId());
 
 			req.getRequestDispatcher("/common/order.jsp").forward(req, resp);
 

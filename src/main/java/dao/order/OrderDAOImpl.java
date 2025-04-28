@@ -1,5 +1,6 @@
 package dao.order;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +91,37 @@ public class OrderDAOImpl implements OrderDAO {
     public void markCouponUsed(UserCoupon uc) throws Exception {
         sqlSession.update("mapper.userCoupon.markCouponUsed", uc);
     }
-    
-    
+
+    @Override
+    public List<Order> getOrderWithItemsByUserId(String userId) throws Exception {
+        return sqlSession.selectList("mapper.order.selectOrderWithItemsByUserId", userId);
+    }
+
+    @Override
+    public List<Order> findOrdersByUserAndDate(String userId, Date startDate, Date endDate) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        return sqlSession.selectList("mapper.order.selectOrdersByUserAndDate", params);
+    }
+
+    @Override
+    public List<Order> getOrdersByDateRange(String userId, Date startDate, Date endDate) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        params.put("startDate", startDate);
+        params.put("endDate", endDate);
+        return sqlSession.selectList("mapper.order.selectOrderByDateRange", params);
+    }
+
+    @Override
+    public OrderList getOrderDetailById(int orderId) throws Exception {
+        return sqlSession.selectOne("mapper.order.getOrderDetailById", orderId);
+    }
+
+    @Override
+    public List<OrderList> selectOrderListByUser(String userId) throws Exception {
+        return sqlSession.selectList("mapper.order.selectOrderListByUser", userId);
+    }
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.orderlist">
+
+  <!-- 1) PENDING 상태로 주문 헤더 삽입 -->
+  <insert id="insertPendingOrder"
+          parameterType="orderList"
+          useGeneratedKeys="true"
+          keyProperty="orderId">
+    INSERT INTO orderlist
+      ( user_id,
+        order_date,
+        total_price,
+        delivery_request,
+        payment_method,
+        receiver_name,
+        receiver_phone,
+        receiver_address,
+        used_point,
+        coupon_discount,
+        payment_status
+      )
+    VALUES
+      ( #{userId},
+        NOW(),                 <!-- DB 현재 날짜 -->
+        #{totalPrice},
+        #{deliveryRequest},
+        #{paymentMethod},
+        #{receiverName},
+        #{receiverPhone},
+        #{receiverAddress},
+        #{usedPoint},
+        #{couponDiscount},
+        #{paymentStatus}
+      )
+  </insert>
+
+  <!-- 2) PK(order_id)로 주문 헤더 조회 -->
+  <select id="selectByOrderId"
+          parameterType="int"
+          resultType="orderList">
+    SELECT *
+      FROM orderlist
+     WHERE order_id = #{orderId}
+  </select>
+
+  <!-- 3) 결제 성공 시 상태·키·승인일시 업데이트 -->
+   <update id="updateToPaid"
+          parameterType="orderList">
+    UPDATE orderlist
+       SET payment_status   = #{paymentStatus},
+           payment_key      = #{paymentKey},
+           approved_at      = #{approvedAt},
+           total_price      = #{totalPrice},
+           delivery_request = #{deliveryRequest},
+           payment_method   = #{paymentMethod},
+           user_id          = #{userId},
+           receiver_name    = #{receiverName},
+           receiver_phone   = #{receiverPhone},
+           receiver_address = #{receiverAddress},
+           used_point       = #{usedPoint},
+           coupon_discount  = #{couponDiscount}
+     WHERE order_id = #{orderId}
+  </update>
+
+  <!-- 4) 결제 실패(취소) 시 상태만 업데이트 -->
+  <update id="updateToCanceled"
+          parameterType="int">
+    UPDATE orderlist
+       SET payment_status = 'CANCELLED'
+     WHERE order_id = #{orderId}
+  </update>
+
+</mapper>

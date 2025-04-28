@@ -20,6 +20,7 @@ body {
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 40px 20px;
+	position: relative;
 }
 
 h2, h3 {
@@ -83,16 +84,62 @@ input, textarea, button, select {
 	margin-top: 6px;
 }
 
-#addressListBox {
-	border: 1px solid #ccc;
-	margin-top: 10px;
-	padding: 10px;
-	display: none;
+/* overlay 기본 숨김 */
+#modalOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;                       /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+
+  /* 중앙 배치 */
+  align-items: center;
+  justify-content: center;
 }
+/* show 클래스가 붙으면 flex로 보임 */
+#modalOverlay.show {
+  display: flex;
+}
+
+#addressModal {
+  background: #fff;
+  width: 80%;
+  max-width: 500px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+#addressModal h4 {
+  margin-top: 0;
+  font-size: 1.2em;
+}
+#addressListUl {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+}
+#addressListUl li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+#addressListUl li:hover {
+  background: #f0f0f0;
+}
+#closeAddressBox {
+  display: block;
+  margin: 10px auto 0;
+}
+
+  
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script
 	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	 <script src="https://js.tosspayments.com/v2/standard"></script>
 </head>
 <body>
 
@@ -100,7 +147,7 @@ input, textarea, button, select {
 	<jsp:include page="/header" />
 
 	<div class="container">
-		<form action="${pageContext.request.contextPath}/order" method="post">
+	
 
 			<h2>상품 주문</h2>
 			<table>
@@ -209,29 +256,16 @@ input, textarea, button, select {
 							id="address2" name="detailAddress" required style="width: 100%;">
 						</td>
 					</tr>
+					<tr>
+  <th>배송 요청사항</th>
+  <td>
+    <textarea id="deliveryRequest" name="deliveryRequest"
+      rows="3" style="width:100%;"
+      placeholder="배송 시 요청사항을 입력하세요."></textarea>
+  </td>
+</tr>
 				</table>
-				<!-- 배송지 입력 부분 바로 아래에 -->
-<div id="addressListBox" style="display:none; position:absolute; top:120px; right:20px; background:#fff; border:1px solid #ccc; padding:10px; z-index:100;">
-  <h4>저장된 배송지</h4>
-  <ul id="addressListUl" style="list-style:none; margin:0; padding:0;">
-    <c:if test="${not empty user.address1}">
-      <li data-base="${user.address1}" data-detail="${user.address1Detail}" style="padding:5px; cursor:pointer;">
-        ${user.address1} ${user.address1Detail}
-      </li>
-    </c:if>
-    <c:if test="${not empty user.address2}">
-      <li data-base="${user.address2}" data-detail="${user.address2Detail}" style="padding:5px; cursor:pointer;">
-        ${user.address2} ${user.address2Detail}
-      </li>
-    </c:if>
-    <c:if test="${not empty user.address3}">
-      <li data-base="${user.address3}" data-detail="${user.address3Detail}" style="padding:5px; cursor:pointer;">
-        ${user.address3} ${user.address3Detail}
-      </li>
-    </c:if>
-  </ul>
-  <button type="button" id="closeAddressBox" class="btn" style="margin-top:8px;">닫기</button>
-</div>
+
 
 			</section>
 
@@ -251,10 +285,7 @@ input, textarea, button, select {
 			<!-- 결제 수단 -->
 			<section class="section">
 				<h3>결제 수단</h3>
-				<label><input type="radio" name="paymentMethod" value="TOSS"
-					checked> Toss</label> <label><input type="radio"
-					name="paymentMethod" value="CARD"> 카드결제</label> <label><input
-					type="radio" name="paymentMethod" value="BANK"> 무통장입금</label>
+				<label><input type="radio" name="paymentMethod" value="TOSS" checked> Toss</label> 
 			</section>
 
 			<div id="finalSummary"
@@ -276,13 +307,44 @@ input, textarea, button, select {
 				</p>
 			</div>
 
-			<div style="text-align: center;">
-				<button type="submit" class="btn">결제하기</button>
+			
+			<div id="payment-method"></div>
+<div id="agreement"></div>
+
+<div style="text-align: center;">
+				 <button type="button" id="payBtn" class="btn">결제하기</button>
 			</div>
-		</form>
+			
 	</div>
 
-	<jsp:include page="/footer" />
+<div id="modalOverlay">
+  <div id="addressModal">
+    <h4>저장된 배송지</h4>
+    <ul id="addressListUl">
+      <c:if test="${not empty user.address1}">
+        <li data-base="${user.address1}" data-detail="${user.address1Detail}">
+          ${user.address1} ${user.address1Detail}
+        </li>
+      </c:if>
+      <c:if test="${not empty user.address2}">
+        <li data-base="${user.address2}" data-detail="${user.address2Detail}">
+          ${user.address2} ${user.address2Detail}
+        </li>
+      </c:if>
+      <c:if test="${not empty user.address3}">
+        <li data-base="${user.address3}" data-detail="${user.address3Detail}">
+          ${user.address3} ${user.address3Detail}
+        </li>
+      </c:if>
+    </ul>
+    <button type="button" id="closeAddressBox" class="btn">닫기</button>
+  </div>
+</div>
+
+    <script type="module" src="./index.js"></script>
+
+
+<jsp:include page="/footer" />
 
 	<script>
 	$(function(){
@@ -454,23 +516,192 @@ $('#sameAsUser').change(function(){
 	});
 
 	$(function(){
-		  // 1) “배송지 변경” 팝업 토글
-		  $('#changeAddressBtn').on('click', function(){
-		    $('#addressListBox').show();
+		  const box = $('#addressListBox');
+
+		  // 1) “배송지 변경” 클릭 → 팝업 토글 & 위치 계산
+		  $('#changeAddressBtn').on('click', function(e){
+		    e.preventDefault();
+		    const btn    = $(this);
+		    const ofs    = btn.position();        // container 기준 버튼 위치
+		    const height = btn.outerHeight();     // 버튼 높이
+		    box.css({
+		      position: 'absolute',
+		      top:    ofs.top + height + 5 + 'px',
+		      left:   ofs.left + 'px'
+		    }).toggle();
 		  });
-		  // 2) 주소 선택
+
+		  // 2) 팝업 내 주소 선택
 		  $('#addressListUl').on('click', 'li', function(){
-		    const base   = $(this).data('base'),
-		          detail = $(this).data('detail');
-		    $('#address1').val(base);
-		    $('#address2').val(detail);
-		    $('#addressListBox').hide();
+		    $('#address1').val($(this).data('base'));
+		    $('#address2').val($(this).data('detail'));
+		    box.hide();
 		  });
-		  // 3) 닫기 버튼
+
+		  // 3) 팝업 닫기
 		  $('#closeAddressBox').on('click', function(){
-		    $('#addressListBox').hide();
+		    box.hide();
+		  });
+
+		  // 4) “주소 찾기” 버튼(다음 우편번호 API)
+		  $('#searchZipBtn').on('click', function(e){
+		    e.preventDefault();
+		    new daum.Postcode({
+		      oncomplete: function(data) {
+		        const baseAddr = data.roadAddress || data.jibunAddress;
+		        $('#address1').val(baseAddr);
+		        $('#address2').val('').focus();
+		      }
+		    }).open();
 		  });
 		});
+		$(function(){
+			  // 모달 열기
+			  $('#changeAddressBtn').on('click', function(e){
+			    e.preventDefault();
+			    $('#modalOverlay').addClass('show');
+			  });
+
+			  // 주소 선택하면 폼에 채우고 모달 닫기
+			  $('#addressListUl').on('click', 'li', function(){
+			    $('#address1').val($(this).data('base'));
+			    $('#address2').val($(this).data('detail'));
+			    $('#modalOverlay').removeClass('show');
+			  });
+
+			  // 닫기 버튼
+			  $('#closeAddressBox').on('click', function(){
+			    $('#modalOverlay').removeClass('show');
+			  });
+			});
+
 </script>
+
+<script>
+
+function makeOrderItemsJson() {
+	  const items = $('tbody tr').toArray().map(tr => {
+	    const $r = $(tr);
+	    const pid = $r.find('input[name="productId"]').val();
+	    if (!pid) return null;                   // productId 없으면 null 반환
+	    return {
+	      product_id: Number(pid),
+	      quantity:   Number($r.find('input[name="quantity"]').val()),
+	      status:     'PENDING',
+	      coupon_id:  $r.find('select.coupon-select').val() || null,
+	      color:      $r.find('input[name="color"]').val(),
+	      size:       $r.find('input[name="size"]').val()
+	    };
+	  })
+	  .filter(item => item);                     // null인 항목 제거
+	  return JSON.stringify(items);
+	}
+
+  
+  $(function(){
+	const userid     = '${user.userId}';   
+    const PENDING_ORDER_ID      = '${pendingOrderId}';
+    const basePath              = '${pageContext.request.contextPath}';
+    const customerName          = '${user.name}';
+    const customerEmail         = '${user.email}';
+    const customerMobilePhone   = '${user.phone}'.replace(/\D/g,'');
+    const EXTERNAL_ORDER_ID = 'ORDER_' + PENDING_ORDER_ID;
+
+    function getAmount(){
+      return parseInt($('#fsPay').text().replace(/[^0-9]/g,''), 10) || 0;
+    }
+
+    const GATEWAY_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
+    const tossPayments = TossPayments(GATEWAY_KEY);
+    const widgets = tossPayments.widgets({ customerKey: TossPayments.ANONYMOUS });
+
+    (async () => {
+      const amt = getAmount();
+      if (amt <= 0) return;
+      try {
+        await widgets.setAmount({ currency:'KRW', value:amt });
+        await widgets.renderPaymentMethods({ selector:'#payment-method', variantKey:'DEFAULT' });
+        await widgets.renderAgreement({ selector:'#agreement', variantKey:'AGREEMENT' });
+      } catch(e) {
+        console.error('위젯 초기화 실패', e);
+        alert('결제 위젯 로딩에 실패했습니다.');
+      }
+    })();
+
+    $('#coupon-box').on('change', async function(){
+      const discount = this.checked ? parseInt($(this).data('discount'),10)||0 : 0;
+      const newAmt = Math.max(0, getAmount() - discount);
+      try { await widgets.setAmount({ currency:'KRW', value:newAmt }); }
+      catch(e) { console.error('금액 업데이트 실패', e); }
+    });
+
+    $('#payBtn').on('click', async e => {
+    	  e.preventDefault();
+    	  const amt = getAmount();
+    	  if (amt <= 0) return alert('유효한 결제 금액이 아닙니다.');
+
+    	  // 폼 데이터
+    	  const receiverName    = $('#receiverName').val();
+    	  const receiverPhone   = [$('#phone1').val(),$('#phone2').val(),$('#phone3').val()].join('-');
+    	  const receiverAddress = $('#address1').val() + ' ' + $('#address2').val();
+    	  const deliveryRequest = $('#deliveryRequest').val();
+    	  const couponDiscount = Number($('#fsCoupon').text().replace(/[^0-9]/g, ''));
+    	  const usedPoints = Number($('#fsUsePoints').text().replace(/[^0-9]/g,'')) || 0;
+          const pay = Number($('#fsPay').text().replace(/[^0-9]/g,'')) || 0;
+          const earnedPoints = Math.floor(pay * 0.05);
+
+    	  // 모든 주문정보를 하나로 묶음
+    	  const orderInfo = JSON.stringify({
+    	    total_price:      amt,               // total_price
+    	    delivery_request: deliveryRequest,   // delivery_request
+    	    payment_method:   'TOSS',            // payment_method
+    	    user_id:          userid,            // user_id
+    	    receiver_name:    receiverName,      // receiver_name
+    	    receiver_phone:   receiverPhone,     // receiver_phone
+    	    receiver_address: receiverAddress,   // receiver_address
+    	    used_point:       usedPoints,        // used_point
+    	    coupon_discount:  couponDiscount     // coupon_discount
+    	  });
+    	  
+    	  const pointPayload = JSON.stringify({
+    	        used:   -usedPoints,   // 사용한 포인트는 음수
+    	        earned:  earnedPoints  // 적립될 포인트는 양수
+    	      });
+    	  
+    	  const orderItemsJson = makeOrderItemsJson();
+    	  
+    	  
+    	  const urlParams       = new URLSearchParams(window.location.search);
+    	  const selectedCartIds = urlParams.getAll('cartId');
+    	  const cartIdsJson = JSON.stringify(selectedCartIds);
+
+    	  try {
+    	    await widgets.setAmount({ currency:'KRW', value:amt });
+    	    await widgets.requestPayment({
+    	      orderId:             EXTERNAL_ORDER_ID,
+    	      orderName:           '주문 ' + PENDING_ORDER_ID,
+    	      successUrl:          window.location.origin + basePath + '/paymentSuccess',
+    	      failUrl:             window.location.origin + basePath + '/paymentFail',
+    	      customerName,
+    	      customerEmail,
+    	      customerMobilePhone,
+    	      windowTarget:        'self',
+    	      metadata: {
+    	        order_info: orderInfo,
+    	        point: pointPayload,
+    	        order_items: orderItemsJson,
+    	        cart_ids: cartIdsJson
+    	      }
+    	    });
+    	  } catch(err) {
+    	    console.error('결제 요청 실패', err);
+    	    alert('결제 요청 중 오류가 발생했습니다.');
+    	  }
+    	});
+
+  });
+</script>
+
+
 </body>
 </html>

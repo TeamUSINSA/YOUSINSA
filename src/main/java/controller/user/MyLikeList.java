@@ -58,7 +58,8 @@ public class MyLikeList extends HttpServlet {
 			pageInfo.setStartPage(startPage);
 			pageInfo.setEndPage(endPage);
 
-			List<LikeList> likeList = likeService.getLikedProductsByUserId(userId, page, pageSize);
+			int offset = (page - 1) * pageSize;             
+			List<LikeList> likeList = likeService.getLikedProductsByUserId(userId, offset, pageSize);
 
 			request.setAttribute("likeList", likeList);
 			request.setAttribute("pageInfo", pageInfo);
