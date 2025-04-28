@@ -11,18 +11,12 @@ public class OrderItem {
     private String size;
     private int price;
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
+ 
     
 
     private String name;
     private String mainImage1;
-    private int price;
+   
     private boolean hasReview;
 
 
