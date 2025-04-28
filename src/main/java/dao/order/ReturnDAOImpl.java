@@ -1,7 +1,11 @@
 package dao.order;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
+
 import dto.order.Return;
 import utils.MybatisSqlSessionFactory;
 
@@ -22,5 +26,31 @@ public class ReturnDAOImpl implements ReturnDAO {
     @Override
     public int getTotalPages() throws Exception {
         return sqlSession.selectOne("mapper.return.getTotalPages");
+    }
+
+    @Override
+    public void updateApprovedStatus(int returnId, int approved) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("returnId", returnId);
+        param.put("approved", approved);
+
+        sqlSession.update("mapper.return.updateApprovedStatus", param);
+        sqlSession.commit();
+    }
+
+    @Override
+    public void updateRejectedStatus(int returnId, int approved, String rejectReason) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("returnId", returnId);
+        param.put("approved", approved);
+        param.put("rejectReason", rejectReason);
+
+        sqlSession.update("mapper.return.updateRejectedStatus", param);
+        sqlSession.commit();
+    }
+    
+    @Override
+    public Return selectReturnById(int returnId) throws Exception {
+        return sqlSession.selectOne("mapper.return.selectReturnById", returnId);
     }
 }

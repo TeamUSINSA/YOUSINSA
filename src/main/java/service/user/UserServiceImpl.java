@@ -92,4 +92,14 @@ public class UserServiceImpl implements UserService{
 	    public List<UserCoupon> getUnusedCoupons(String userId) throws Exception {
 	        return couponDAO.selectUnusedCouponsByUserId(userId);
 	    }
+	 
+	 @Override
+	    public User findUserById(String userId) throws Exception{
+	        return userDao.selectUserByUserId(userId);
+	    }
+
+	 @Override
+	 public List<User> findUsersByName(String name) throws Exception {
+	     return userDao.findUsersByName(name);
+	 }
 }

@@ -6,7 +6,7 @@
 <mapper namespace="mapper.bannerproduct">
 
 	<!-- 메인 배너 리스트 조회 -->
-	<select id="selectMainBannerList" resultType="banner">
+	<select id="selectMainBannerList" resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
 		WHERE position = 'main'
@@ -14,7 +14,7 @@
 	</select>
 
 	<!-- 서브 배너 리스트 조회 -->
-	<select id="selectSubBannerList" resultType="banner">
+	<select id="selectSubBannerList" resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
 		WHERE position = 'sub'
@@ -22,15 +22,13 @@
 	</select>
 
 	<!-- 전체 배너 리스트 조회 -->
-	<select id="selectAllBannerList" resultType="banner">
+	<select id="selectAllBannerList" resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
 		ORDER BY id ASC
 	</select>
 
-
-
-	<select id="selectAll" resultType="banner">
+	<select id="selectAll" resultType="dto.product.BannerProduct">
 		SELECT * FROM bannerproduct ORDER BY id ASC
 	</select>
 
@@ -40,13 +38,13 @@
 
 	<!-- ID로 배너 찾기 -->
 	<select id="findBannerById" parameterType="int"
-		resultType="banner">
+		resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
 		WHERE id = #{id}
 	</select>
 
-	<insert id="insertBanner" parameterType="banner">
+	<insert id="insertBanner" parameterType="dto.product.BannerProduct">
 		INSERT INTO bannerproduct (name, product_id, img, position)
 		VALUES (#{name}, #{productId}, #{img}, #{position})
 	</insert>

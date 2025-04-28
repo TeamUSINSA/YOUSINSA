@@ -26,6 +26,7 @@
 		<typeAlias type="dto.order.Order" alias="order" />
 		<typeAlias type="dto.order.OrderItem" alias="orderItem" />
 		<typeAlias type="dto.user.UserCoupon" alias="userCoupon" />
+		 <typeAlias alias="productQuantity" type="dto.product.ProductQuantity"/>
 
 
 	</typeAliases>
@@ -59,6 +60,7 @@
 		<mapper resource="mapper/order/couponmapper.xml" />
 		<mapper resource="mapper/user/inquiry.xml" />  <!-- ✅ 이거 꼭 있어야 함 -->
 		<mapper resource="mapper/order/return.xml" />
+		 <mapper resource="mapper/user/qna.xml" />
 
 
 

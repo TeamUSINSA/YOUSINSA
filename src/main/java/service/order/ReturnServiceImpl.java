@@ -1,16 +1,24 @@
 package service.order;
 
 import java.util.List;
+
+import dao.order.OrderDAO;
+import dao.order.OrderDAOImpl;
 import dao.order.ReturnDAO;
 import dao.order.ReturnDAOImpl;
+import dao.product.ProductStockDAO;
+import dao.product.ProductStockDAOImpl;
+import dto.order.OrderItem;
 import dto.order.Return;
 
 public class ReturnServiceImpl implements ReturnService {
 
     private ReturnDAO returnDAO;
+    private ProductStockDAO productStockDAO = new ProductStockDAOImpl();
+    private OrderDAO orderDAO = new OrderDAOImpl(); // ⬅ 추가해줘야 해
 
     public ReturnServiceImpl() {
-        this.returnDAO = new ReturnDAOImpl(); // DAO 연결
+        this.returnDAO = new ReturnDAOImpl();
     }
 
     @Override
@@ -26,5 +34,26 @@ public class ReturnServiceImpl implements ReturnService {
     @Override
     public int getTotalPages() throws Exception {
         return returnDAO.getTotalPages();
+    }
+
+
+    @Override
+    public void approveReturn(int returnId) throws Exception {
+        returnDAO.updateApprovedStatus(returnId, 1); // 승인
+
+        Return refund = returnDAO.selectReturnById(returnId); // 환불 정보
+        OrderItem item = orderDAO.selectOrderItemById(refund.getOrderItemId());
+
+        productStockDAO.increaseQuantity(
+            item.getProductId(),
+            item.getColor(),
+            item.getSize(),
+            item.getQuantity()
+        );
+    }
+
+    @Override
+    public void rejectReturn(int returnId, String rejectReason) throws Exception {
+        returnDAO.updateRejectedStatus(returnId, 2, rejectReason); // 2 = 반려
     }
 }

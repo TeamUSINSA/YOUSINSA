@@ -15,14 +15,15 @@
 	</select>
 
 	<update id="updateInquiryAnswer" parameterType="map">
-    UPDATE inquiry
-    SET answer = #{answer}, status = #{status}  <!-- ✅ 함께 갱신 -->
-    WHERE inquiry_id = #{inquiryId}
-</update>
+		UPDATE inquiry
+		SET answer = #{answer}, status = #{status}
+		WHERE inquiry_id = #{inquiryId}
+	</update>
 
-<select id="selectByStatus" parameterType="String" resultType="dto.user.Inquiry">
-    SELECT * FROM inquiry
-    WHERE status LIKE CONCAT('%', #{status}, '%')
-</select>
+	<select id="selectByStatus" parameterType="String"
+		resultType="dto.user.Inquiry">
+		SELECT * FROM inquiry
+		WHERE status LIKE CONCAT('%', #{status}, '%')
+	</select>
 </mapper>
 

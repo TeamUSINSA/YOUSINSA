@@ -1,10 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<title>카테고리</title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -250,10 +245,11 @@ body {
 .side-menu {
 	z-index: 999; /* 기존 설정 유지 */
 }
+.header {
+	width: 100%;
+}
 </style>
-</head>
-<body>
-
+<div class="header">
 	<!-- ✅ 상단 바 -->
 	<div class="top-bar">
 		<div class="logo">
@@ -336,6 +332,4 @@ body {
 			</button>
 		</div>
 	</div>
-
-</body>
-</html>
+</div>

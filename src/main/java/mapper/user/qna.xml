@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.qna">
+
+	<!-- QNA 전체 조회 -->
+	<select id="selectAllQnA" resultType="dto.user.QnA">
+		SELECT
+		qna_id AS qnaId,
+		title,
+		content,
+		answer,
+		image,
+		user_id AS userId,
+		type,
+		status,
+		question_date AS questionDate
+		FROM qna
+		ORDER BY question_date DESC
+	</select>
+
+	<!-- QNA 단건 조회 -->
+	<select id="selectQnAById" parameterType="int"
+		resultType="dto.user.QnA">
+		SELECT
+		qna_id AS qnaId,
+		title,
+		content,
+		answer,
+		image,
+		user_id AS userId,
+		type,
+		status,
+		question_date AS questionDate
+		FROM qna
+		WHERE qna_id = #{qnaId}
+	</select>
+
+	<!-- QNA 질문 등록 -->
+	<insert id="insertQnA" parameterType="dto.user.QnA">
+		INSERT INTO qna
+		(title, content, image, user_id, type, status, question_date)
+		VALUES
+		(#{title}, #{content}, #{image}, #{userId}, #{type}, '답변대기', NOW())
+	</insert>
+
+	<!-- QNA 답변 등록/수정 -->
+	<update id="updateAnswer" parameterType="dto.user.QnA">
+		UPDATE qna
+		SET answer = #{answer},
+		status = #{status}
+		WHERE qna_id = #{qnaId}
+	</update>
+
+	<!-- QNA 삭제 -->
+	<delete id="deleteQnA" parameterType="int">
+		DELETE FROM qna
+		WHERE qna_id = #{qnaId}
+	</delete>
+
+</mapper>
+

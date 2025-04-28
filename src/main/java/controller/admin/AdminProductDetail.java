@@ -15,7 +15,7 @@ import service.admin.ProductServiceImpl;
 /**
  * Servlet implementation class AdminProductDetail
  */
-@WebServlet("/adminproductdetail")
+@WebServlet("/adminProductDetail")
 public class AdminProductDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

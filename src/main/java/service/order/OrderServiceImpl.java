@@ -2,15 +2,17 @@ package service.order;
 
 import java.util.List;
 
-import dao.order.OrderDAO;
-import dao.order.OrderDAOImpl;
-import dto.order.OrderList;
 import dao.order.CartDAO;
 import dao.order.CartDAOImpl;
 import dao.order.OrderDAO;
 import dao.order.OrderDAOImpl;
+import dao.product.ProductDAO;
+import dao.product.ProductDAOImpl;
 import dto.order.Coupon;
 import dto.order.Order;
+import dto.order.OrderItem;
+import dto.order.OrderList;
+import dto.product.Product;
 
 public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO = new OrderDAOImpl();
@@ -62,5 +64,31 @@ public class OrderServiceImpl implements OrderService {
 	public List<Coupon> getUnusedCoupons(String userId) throws Exception {
 		return orderDAO.selectUnusedCouponsByUserId(userId);
 	}
+	
+    @Override
+    public OrderItem findOrderItemById(int orderItemId) throws Exception{
+        return orderDAO.selectOrderItemById(orderItemId);
+    }
 
+    @Override
+    public Order findOrderById(int orderId) throws Exception{
+        return orderDAO.selectOrderById(orderId);
+    }
+
+    @Override
+    public OrderList findOrderListById(int orderId) throws Exception {
+        return orderDAO.findOrderListById(orderId); // 이게 이제 제대로 동작해!
+    }
+    private ProductDAO productDAO = new ProductDAOImpl();
+
+    @Override
+    public Product findProductById(int productId) throws Exception {
+        return productDAO.selectProductById(productId);
+    }
+
+
+    @Override
+    public List<OrderList> findOrdersByUserId(String userId) throws Exception {
+        return orderDAO.findOrdersByUserId(userId);
+    }
 }

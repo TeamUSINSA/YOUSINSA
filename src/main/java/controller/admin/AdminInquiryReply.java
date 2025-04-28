@@ -14,7 +14,7 @@ import dao.inquiry.InquiryDAOImpl;
 /**
  * Servlet implementation class AdminInquiryReply
  */
-@WebServlet("/admininquiryreply")
+@WebServlet("/adminInquiryReply")
 public class AdminInquiryReply extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -25,7 +25,7 @@ public class AdminInquiryReply extends HttpServlet {
 
         InquiryDAO dao = new InquiryDAOImpl();
         try {
-            dao.updateAnswer(inquiryId, answer);  // DB에 답변 저장
+        	dao.updateAnswer(inquiryId, answer, "답변완료");  // DB에 답변 저장
             response.getWriter().write("success");
         } catch (Exception e) {
             e.printStackTrace();

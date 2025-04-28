@@ -1,6 +1,7 @@
 package dao.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -20,7 +21,7 @@ public class UserDAOImpl implements UserDAO {
 
 
 	public void updateUser(User user) throws Exception {
-		sqlSession.update("mapper.member.updateUser", user);
+		sqlSession.update("mapper.user.updateUser", user);
 		sqlSession.commit();
 		}
 
@@ -103,5 +104,22 @@ public class UserDAOImpl implements UserDAO {
 	    public User findByMemberNo(int memberNo) throws Exception {
 	        return sqlSession.selectOne("mapper.user.findByMemberNo", memberNo);
 	    }
+
+
+		@Override
+		public User selectUserByUserId(String userId) throws Exception {
+			// TODO Auto-generated method stub
+			 return sqlSession.selectOne("mapper.user.selectUserByUserId", userId);
+		}
+		
+		@Override
+		public User findUserById(String userId) throws Exception {
+		    return sqlSession.selectOne("mapper.user.findById", userId);
+		}
+
+		@Override
+		public List<User> findUsersByName(String name) throws Exception {
+		    return sqlSession.selectList("mapper.user.findByName", name);
+		}
 	
 }

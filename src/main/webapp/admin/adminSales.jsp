@@ -4,180 +4,215 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>매출조회 상세</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 30px;
-            display: flex;
-            justify-content: center;
-        }
+  <meta charset="UTF-8">
+  <title>매출조회 상세</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <jsp:include page="../common/header.jsp" />
+  <jsp:include page="adminSideBarStyle.jsp" />
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
 
-        .container {
-            width: 800px;
-            background-color: #fff;
-            padding: 40px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+    .layout {
+      flex: 1;
+      display: flex;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    .main-wrapper {
+      flex-grow: 1;
+      padding: 40px 60px;
+      background-color: #f8f8f8;
+    }
 
-        .filter-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      max-width: 1000px;
+      margin: auto;
+    }
 
-        .filter-container input,
-        .filter-container select,
-        .filter-container button {
-            padding: 8px;
-            min-width: 120px;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 26px;
+    }
 
-        .total-sales {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 18px;
-            font-weight: bold;
-        }
+    .filter-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-        canvas {
-            max-width: 100%;
-            margin: 0 auto 40px auto;
-            display: block;
-        }
+    .filter-container input,
+    .filter-container select,
+    .filter-container button {
+      padding: 8px;
+      min-width: 120px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+    .filter-container button {
+      background-color: #111;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
 
-        table, th, td {
-            border: 1px solid #ccc;
-        }
+    .filter-container button:hover {
+      background-color: #333;
+    }
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
+    .total-sales {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
 
-        th {
-            background-color: #f0f0f0;
-        }
+    canvas {
+      max-width: 100%;
+      margin-bottom: 40px;
+    }
 
-        h3 {
-            margin-top: 40px;
-            text-align: center;
-        }
-    </style>
-    <jsp:include page="adminSideBarStyle.jsp" />
+    h3 {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 22px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+  </style>
 </head>
 <body>
-<jsp:include page="adminSideBar.jsp" />
-<div class="container">
-    <h2>매출조회 상세</h2>
+<div class="layout">
+  <jsp:include page="adminSideBar.jsp" />
+  <div class="main-wrapper">
+    <div class="container">
+      <h2>매출조회 상세</h2>
 
-    <form method="get" action="adminsales">
+      <form method="get" action="adminSales">
         <div class="filter-container">
-            <input type="date" name="startDate" value="${param.startDate}">
-            <input type="date" name="endDate" value="${param.endDate}">
+          <input type="date" name="startDate" value="${param.startDate}">
+          <input type="date" name="endDate" value="${param.endDate}">
 
-            <select name="mainCategory">
-                <option value="">대분류</option>
-                <c:forEach var="mainCat" items="${mainCategoryList}">
-                    <option value="${mainCat}" ${param.mainCategory == mainCat ? 'selected' : ''}>${mainCat}</option>
-                </c:forEach>
-            </select>
+          <select name="mainCategory">
+            <option value="">대분류</option>
+            <c:forEach var="mainCat" items="${mainCategoryList}">
+              <option value="${mainCat}" ${param.mainCategory == mainCat ? 'selected' : ''}>${mainCat}</option>
+            </c:forEach>
+          </select>
 
-            <select name="subCategory">
-                <option value="">소분류</option>
-                <c:forEach var="subCat" items="${subCategoryList}">
-                    <option value="${subCat}" ${param.subCategory == subCat ? 'selected' : ''}>${subCat}</option>
-                </c:forEach>
-            </select>
+          <select name="subCategory">
+            <option value="">소분류</option>
+            <c:forEach var="subCat" items="${subCategoryList}">
+              <option value="${subCat}" ${param.subCategory == subCat ? 'selected' : ''}>${subCat}</option>
+            </c:forEach>
+          </select>
 
-            <button type="submit">조회</button>
+          <button type="submit">조회</button>
         </div>
-    </form>
+      </form>
 
-    <div class="total-sales">총 매출: ${totalSales} 원</div>
+      <div class="total-sales">총 매출: ${totalSales} 원</div>
 
-    <canvas id="salesChart"></canvas>
+      <canvas id="salesChart"></canvas>
 
-    <h3>상위 10개 품목</h3>
-    <table>
+      <h3>상위 10개 품목</h3>
+      <table>
         <thead>
         <tr>
-            <th>상품명</th>
-            <th>제품번호</th>
-            <th>판매량</th>
-            <th>매출</th>
+          <th>상품명</th>
+          <th>제품번호</th>
+          <th>판매량</th>
+          <th>매출</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="product" items="${topProducts}">
-            <tr>
-                <td>${product.name}</td>
-                <td>${product.code}</td>
-                <td>${product.quantity}</td>
-                <td>${product.sales}</td>
-            </tr>
+          <tr>
+            <td>${product.name}</td>
+            <td>${product.code}</td>
+            <td>${product.quantity}</td>
+            <td>${product.sales}</td>
+          </tr>
         </c:forEach>
         </tbody>
-    </table>
+      </table>
+    </div>
+  </div>
 </div>
+<jsp:include page="../common/footer.jsp" />
 
 <script>
-    const ctx = document.getElementById('salesChart').getContext('2d');
-
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                <c:forEach var="label" items="${chartLabels}" varStatus="loop">
-                    "${label}"<c:if test="${!loop.last}">,</c:if>
+const ctx = document.getElementById('salesChart').getContext('2d');
+const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            <c:forEach var="label" items="${chartLabels}" varStatus="loop">
+                "${label}"<c:if test="${!loop.last}">,</c:if>
+            </c:forEach>
+        ],
+        datasets: [{
+            label: '총 매출',
+            data: [
+                <c:forEach var="value" items="${chartData}" varStatus="loop">
+                    ${value}<c:if test="${!loop.last}">,</c:if>
                 </c:forEach>
             ],
-            datasets: [
-                <c:forEach var="entry" items="${chartData}" varStatus="loop">
-                {
-                    label: "${entry.key}",
-                    data: [<c:forEach var="val" items="${entry.value}" varStatus="i">${val}<c:if test="${!i.last}">,</c:if></c:forEach>],
-                    backgroundColor: 'rgba(${100 + loop.index * 30}, 100, 255, 0.6)'
-                }<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: '판매량'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: '기간'
-                    }
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: '매출 (원)'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: '날짜'
                 }
             }
         }
-    });
+    }
+});
 </script>
 </body>
 </html>

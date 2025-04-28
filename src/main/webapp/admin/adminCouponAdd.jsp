@@ -1,33 +1,45 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>쿠폰 등록</title>
-  <jsp:include page="adminSideBarStyle.jsp" />
+  <jsp:include page="../common/header.jsp"/>
+  <jsp:include page="adminSideBarStyle.jsp"/>
   <style>
     body {
-      font-family: 'Pretendard', sans-serif;
       margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom right, #f2f4f8, #dce1e7);
-      min-height: 100vh;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .content-wrapper {
+      display: flex;
+      gap: 20px;
+      margin: 20px;
+    }
+
+    .sidebar {
+      width: 300px;
     }
 
     .container {
       background-color: white;
-      padding: 40px 50px;
+      padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      width: 500px;
-      margin: 50px auto;
-    }
-
-    h2 {
-      margin-bottom: 30px;
-      font-size: 22px;
-      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px;
+      flex-grow: 1;
     }
 
     .form-group {
@@ -40,9 +52,11 @@
       font-weight: 500;
     }
 
-    input[type="text"], input[type="date"], select {
+    input[type="text"],
+    input[type="date"],
+    select {
       width: 100%;
-      padding: 8px 10px;
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
       box-sizing: border-box;
@@ -97,72 +111,74 @@
     }
   </style>
 </head>
-
 <body>
-  <jsp:include page="adminSideBar.jsp" />
+  <div class="content-wrapper">
+    <jsp:include page="adminSideBar.jsp" />
+    <div class="container">
+      <h2>쿠폰 등록</h2>
+      <form id="couponForm" method="post" action="${pageContext.request.contextPath}/adminCouponAdd">
+        <input type="hidden" name="active" value="1">
 
-  <div class="container">
-    <h2>쿠폰 등록</h2>
-    <form id="couponForm" method="post" action="${pageContext.request.contextPath}/admincouponadd">
-      <input type="hidden" name="active" value="1">
-
-      <div class="form-group">
-        <label for="name">쿠폰명</label>
-        <input type="text" id="name" name="name" required>
-      </div>
-
-      <div class="form-group">
-        <label>쿠폰 형식</label>
-        <div class="radio-group">
-          <label class="radio-inline">
-            <input type="radio" name="type" id="auto" value="auto" checked> 자동쿠폰
-            <select id="autoCouponSelect">
-              <option value="">선택</option>
-              <option>가입쿠폰</option>
-              <option>생일쿠폰</option>
-              <option>5만원 이상</option>
-              <option>10만원 이상</option>
-              <option>50만원 이상</option>
-              <option>100만원 이상</option>
-            </select>
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="type" id="download" value="download"> 고객 다운로드
-          </label>
+        <div class="form-group">
+          <label for="name">쿠폰명</label>
+          <input type="text" id="name" name="name" required>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>사용기한</label>
-        <div class="date-range">
-          <input type="date" name="startDate" id="startDate" required>
-          <span>~</span>
-          <input type="date" name="endDate" id="endDate" required>
+        <div class="form-group">
+          <label>쿠폰 형식</label>
+          <div class="radio-group">
+            <label class="radio-inline">
+              <input type="radio" name="type" id="auto" value="auto" checked> 자동쿠폰
+              <select id="autoCouponSelect">
+                <option value="">선택</option>
+                <option>가입쿠폰</option>
+                <option>생일쿠폰</option>
+                <option>5만원 이상</option>
+                <option>10만원 이상</option>
+                <option>50만원 이상</option>
+                <option>100만원 이상</option>
+              </select>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="type" id="download" value="download"> 고객 다운로드
+            </label>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label>할인</label>
-        <div class="discount-inline">
-          <label class="radio-inline">
-            <input type="radio" name="discount" id="amount" checked> 금액
-            <input type="text" id="amountValue" name="discount_amount"> 원
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="discount" id="rate"> 비율
-            <input type="text" id="rateValue"> %
-          </label>
+        <div class="form-group">
+          <label>사용기한</label>
+          <div class="date-range">
+            <input type="date" name="startDate" id="startDate" required>
+            <span>~</span>
+            <input type="date" name="endDate" id="endDate" required>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="description">쿠폰 설명</label>
-        <input type="text" id="description" name="description" required>
-      </div>
+        <div class="form-group">
+          <label>할인</label>
+          <div class="discount-inline">
+            <label class="radio-inline">
+              <input type="radio" name="discount" id="amount" checked> 금액
+              <input type="text" id="amountValue" name="discount_amount"> 원
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="discount" id="rate"> 비율
+              <input type="text" id="rateValue"> %
+            </label>
+          </div>
+        </div>
 
-      <button type="submit">쿠폰 생성</button>
-    </form>
+        <div class="form-group">
+          <label for="description">쿠폰 설명</label>
+          <input type="text" id="description" name="description" required>
+        </div>
+
+        <button type="submit">쿠폰 생성</button>
+      </form>
+    </div>
   </div>
+
+  <jsp:include page="../common/footer.jsp"/>
 
   <script>
     const amountRadio = document.getElementById('amount');

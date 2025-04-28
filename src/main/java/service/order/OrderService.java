@@ -1,9 +1,12 @@
 package service.order;
 
 import java.util.List;
-import dto.order.OrderList;
+
 import dto.order.Coupon;
 import dto.order.Order;
+import dto.order.OrderItem;
+import dto.order.OrderList;
+import dto.product.Product;
 
 public interface OrderService {
 	List<OrderList> getAllOrders() throws Exception;
@@ -23,4 +26,14 @@ public interface OrderService {
 	List<Order> selectOrderItemsByCartIds(List<Integer> cartIds) throws Exception;
 
 	List<Coupon> getUnusedCoupons(String userId) throws Exception;
+
+	OrderItem findOrderItemById(int orderItemId) throws Exception;
+
+	Order findOrderById(int orderId) throws Exception;
+
+	OrderList findOrderListById(int orderId) throws Exception;
+	
+	Product findProductById(int productId) throws Exception;
+	
+	List<OrderList> findOrdersByUserId(String userId) throws Exception;
 }

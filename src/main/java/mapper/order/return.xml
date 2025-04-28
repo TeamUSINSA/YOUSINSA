@@ -16,4 +16,22 @@
         SELECT CEIL(COUNT(*) / 10) FROM `return`
     </select>
 
+    <!-- ✅ 반품 승인 -->
+    <update id="updateApprovedStatus" parameterType="map">
+        UPDATE `return`
+        SET approved = #{approved}, reject_reason = NULL
+        WHERE return_id = #{returnId}
+    </update>
+
+    <!-- ✅ 반품 반려 -->
+    <update id="updateRejectedStatus" parameterType="map">
+        UPDATE `return`
+        SET approved = #{approved}, reject_reason = #{rejectReason}
+        WHERE return_id = #{returnId}
+    </update>
+    
+    <select id="selectReturnById" parameterType="int" resultType="return">
+    SELECT * FROM `return` WHERE return_id = #{returnId}
+</select>
+
 </mapper>

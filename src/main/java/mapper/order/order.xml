@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -7,32 +7,40 @@
 
 	<!-- 주문 전체 조회 -->
 	<select id="selectAllOrders" resultType="dto.order.OrderList">
-		SELECT order_id, user_id, order_date, total_price, delivery_status,
-		delivery_request, delivery_method, payment_method,
-		point_id, receiver_name, receiver_phone, receiver_address
+		SELECT order_id,
+		user_id, order_date, total_price, delivery_status,
+		delivery_request,
+		delivery_method, payment_method,
+		point_id, receiver_name,
+		receiver_phone, receiver_address
 		FROM orderlist
 		ORDER BY order_date DESC
 	</select>
 
 	<!-- 총 페이지 수 계산 (한 페이지에 10개씩 기준) -->
 	<select id="getTotalPages" resultType="int">
-		SELECT CEIL(COUNT(*) / 10.0) FROM orderlist
+		SELECT CEIL(COUNT(*) /
+		10.0) FROM orderlist
 	</select>
 
 	<select id="findOrdersByUserId" parameterType="String"
 		resultType="dto.order.OrderList">
-		SELECT order_id, order_date, delivery_status AS status
-		FROM orderlist
+		SELECT order_id, order_date, delivery_status AS deliveryStatus
+		FROM
+		orderlist
 		WHERE user_id = #{userId}
 		ORDER BY order_date DESC
 	</select>
 
 	<select id="findOrderById" parameterType="int"
 		resultType="dto.order.OrderList">
-		SELECT order_id, user_id, order_date, total_price, delivery_status AS
-		status,
-		delivery_request, delivery_method, payment_method,
-		point_id, receiver_name, receiver_phone, receiver_address
+		SELECT order_id, user_id, order_date, total_price,
+		delivery_status AS
+		deliveryStatus,
+		delivery_request, delivery_method,
+		payment_method,
+		point_id, receiver_name, receiver_phone,
+		receiver_address
 		FROM orderlist
 		WHERE order_id = #{orderId}
 	</select>
@@ -60,9 +68,91 @@
 			AND delivery_status = #{status}
 		</if>
 		<if test="period != null and period != ''">
-			AND order_date &gt;= DATE_SUB(NOW(), INTERVAL #{period} DAY)
+			AND order_date &gt;= DATE_SUB(NOW(), INTERVAL #{period}
+			DAY)
 		</if>
 		ORDER BY order_date DESC
 	</select>
+
+	<select id="selectOrderItemById"
+		resultType="dto.order.OrderItem" parameterType="int">
+		SELECT
+		i.*,
+		p.price
+		FROM
+		orderitem i
+		JOIN product p ON i.product_id = p.product_id
+		WHERE
+		i.order_item_id = #{orderItemId}
+	</select>
+
+	<!-- 주문 정보 단건 조회 -->
+	<select id="selectOrderById" parameterType="int"
+		resultType="dto.order.Order">
+		SELECT
+		oi.order_id AS orderId,
+		ol.user_id AS userId,
+		ol.receiver_name AS receiverName,
+		ol.receiver_phone AS receiverPhone,
+		ol.receiver_address AS baseAddress,
+		ol.used_point AS usedPoints,
+		ol.payment_method AS paymentMethod,
+		oi.product_id AS productId,
+		p.name
+		AS name,
+		p.main_image1 AS image,
+		oi.color AS color,
+		oi.size AS size,
+		oi.quantity AS quantity,
+		p.price AS unitPrice,
+		oi.coupon_id AS couponId
+		FROM orderitem oi
+		JOIN orderlist ol ON oi.order_id = ol.order_id
+		JOIN
+		product p ON oi.product_id = p.product_id
+		WHERE oi.order_id =
+		#{orderId}
+	</select>
+
+<select id="findOrderListById" parameterType="int"
+		resultType="dto.order.OrderList">
+	SELECT
+		order_id AS orderId,
+		order_date AS orderDate,
+		total_price AS totalPrice,
+		delivery_status AS deliveryStatus,
+		delivery_request AS deliveryRequest,
+		payment_method AS paymentMethod,
+		user_id AS userId,
+		point_id AS pointId,
+		receiver_name AS receiverName,
+		receiver_phone AS receiverPhone,
+		receiver_address AS receiverAddress,
+		used_point AS usedPoint,
+		coupon_discount AS couponDiscount
+	FROM orderlist
+	WHERE order_id = #{orderId}
+</select>
+
+	<select id="selectOrdersByUser" parameterType="string"
+        resultType="dto.order.OrderList">
+    SELECT 
+        order_id AS orderId,
+        order_date AS orderDate,
+        total_price AS totalPrice,
+        delivery_status AS deliveryStatus,
+        delivery_request AS deliveryRequest,
+        delivery_method AS deliveryMethod,
+        payment_method AS paymentMethod,
+        user_id AS userId,
+        point_id AS pointId,
+        receiver_name AS receiverName,
+        receiver_phone AS receiverPhone,
+        receiver_address AS receiverAddress,
+        used_point AS usedPoint,
+        coupon_discount AS couponDiscount
+    FROM orderlist
+    WHERE user_id = #{userId}
+</select>
 
 </mapper>

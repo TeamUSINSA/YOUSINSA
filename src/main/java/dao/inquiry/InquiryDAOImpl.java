@@ -29,12 +29,13 @@ public class InquiryDAOImpl implements InquiryDAO {
     }
 
     @Override
-    public void updateAnswer(int inquiryId, String answer) throws Exception {
-        Map<String, Object> param = new HashMap<>();
-        param.put("inquiryId", inquiryId);
-        param.put("answer", answer);
-        param.put("status", "답변 완료"); // ✅ 추가
-        sqlSession.update("mapper.user.inquiry.updateInquiryAnswer", param);
+    public void updateAnswer(int inquiryId, String answer, String status) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        map.put("inquiryId", inquiryId);
+        map.put("answer", answer);
+        map.put("status", status);
+        sqlSession.update("mapper.user.inquiry.updateInquiryAnswer", map);
+        // ✅ 반드시 커밋!
         sqlSession.commit();
     }
 

@@ -16,4 +16,6 @@ public interface ProductService {
 	
 	Product selectById(int productId) throws Exception;
 
+	Product findProductById(int productId) throws Exception;
+
 }

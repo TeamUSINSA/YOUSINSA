@@ -9,6 +9,15 @@ public class OrderItem {
     private int couponId;
     private String color;
     private String size;
+    private int price;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
     
 
     public OrderItem() {}

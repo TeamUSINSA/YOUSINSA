@@ -25,7 +25,7 @@ public class Header extends HttpServlet {
 			CategoryService service = new CategoryServiceImpl();
 			List<Category> categoryList = service.selectCategoryWithSubList(); // 대분류 + 소분류 포함
 			request.setAttribute("categoryList", categoryList);
-			request.getRequestDispatcher("/common/header.jsp").include(request, response); 
+			request.getRequestDispatcher("common/header.jsp").include(request, response); 
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ServletException("헤더 로딩 중 오류 발생", e);

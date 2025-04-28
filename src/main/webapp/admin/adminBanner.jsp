@@ -1,55 +1,143 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>배너 관리</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <jsp:include page="adminSideBarStyle.jsp" />
+    <meta charset="UTF-8">
+    <title>배너 관리</title>
+    <jsp:include page="../common/header.jsp" />
+    <jsp:include page="adminSideBarStyle.jsp" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            margin: 20px;
+        }
+
+        .sidebar {
+            width: 250px;
+            margin-right: 20px;
+        }
+
+        .content {
+            flex-grow: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        thead {
+            background-color: #f0f0f0;
+        }
+
+        .btn-delete {
+            background-color: #ef4444;
+            color: #fff;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-register {
+            background-color: #000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-register:hover {
+            background-color: #333;
+        }
+
+        footer {
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-6">
-<jsp:include page="adminSideBar.jsp" />
-  <div class="max-w-5xl mx-auto bg-white shadow-md p-6 rounded-md">
-    <h1 class="text-xl font-bold mb-6">배너 관리</h1>
-
-    <table class="w-full text-sm text-center border border-gray-300">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="p-2 border">ID</th>
-          <th class="p-2 border">이름</th>
-          <th class="p-2 border">이미지</th>
-          <th class="p-2 border">product_id</th>
-          <th class="p-2 border">position</th>
-          <th class="p-2 border">삭제</th>
-        </tr>
-      </thead>
-      <tbody>
-        <c:forEach var="banner" items="${bannerList}">
-          <tr>
-            <td class="p-2 border">${banner.id}</td>
-            <td class="p-2 border">${banner.name}</td>
-            <td class="p-2 border">
-              <img src="${pageContext.request.contextPath}/upload/banner/${banner.img}" class="h-12 mx-auto" />
-            </td>
-            <td class="p-2 border">${banner.productId}</td>
-            <td class="p-2 border">${banner.position}</td>
-            <td class="p-2 border">
-              <form action="${pageContext.request.contextPath}/adminBannerDelete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
-                <input type="hidden" name="bannerId" value="${banner.id}" />
-                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">삭제</button>
-              </form>
-            </td>
-          </tr>
-        </c:forEach>
-      </tbody>
-    </table>
-
-    <div class="mt-6 text-right">
-      <form action="${pageContext.request.contextPath}/adminbanneradd" method="get">
-        <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">배너 등록</button>
-      </form>
+<body>
+    <div class="main-container">
+        <div class="sidebar">
+            <jsp:include page="adminSideBar.jsp" />
+        </div>
+        <div class="content">
+            <h1>배너 관리</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>이름</th>
+                        <th>이미지</th>
+                        <th>product_id</th>
+                        <th>position</th>
+                        <th>삭제</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="banner" items="${bannerList}">
+                        <tr>
+                            <td>${banner.id}</td>
+                            <td>${banner.name}</td>
+                            <td><img src="${pageContext.request.contextPath}/upload/banner/${banner.img}" class="h-12 mx-auto" /></td>
+                            <td>${banner.productId}</td>
+                            <td>${banner.position}</td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/adminBannerDelete" method="post" onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                                    <input type="hidden" name="bannerId" value="${banner.id}" />
+                                    <button class="btn-delete">삭제</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+            <div style="margin-top: 30px; text-align: right;">
+                <form action="${pageContext.request.contextPath}/adminBannerAdd" method="get">
+                    <button class="btn-register">배너 등록</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
+    <jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

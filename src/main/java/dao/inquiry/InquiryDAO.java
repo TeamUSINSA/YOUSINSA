@@ -10,7 +10,7 @@ public interface InquiryDAO {
 
     void insertInquiry(Inquiry inquiry) throws Exception;
 
-    void updateAnswer(int inquiryId, String answer) throws Exception;
+    void updateAnswer(int inquiryId, String answer, String status) throws Exception;
     
     List<Inquiry> selectByStatus(String status) throws Exception; // 👈 이거 추가
  

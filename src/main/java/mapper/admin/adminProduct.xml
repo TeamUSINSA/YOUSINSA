@@ -5,79 +5,106 @@
 
 <mapper namespace="mapper.admin.product">
 
-  <!-- ✅ 상품 수정 -->
-  <update id="updateProduct" parameterType="dto.product.Product">
-    UPDATE product
-    SET
-      name = #{name},
-      cost = #{cost},
-      price = #{price},
-      discount = #{discount},
-      sub_category_id = #{subCategoryId},
-      type = #{type},
-      description1 = #{description1},
-      description2 = #{description2},
-      main_image1 = #{mainImage1},
-      main_image2 = #{mainImage2},
-      main_image3 = #{mainImage3},
-      main_image4 = #{mainImage4},
-      image1 = #{image1},
-      image2 = #{image2},
-      image3 = #{image3},
-      image4 = #{image4},
-      image5 = #{image5},
-      image6 = #{image6},
-      image7 = #{image7},
-      image8 = #{image8},
-      image9 = #{image9},
-      image10 = #{image10},
-      size_chart = #{sizeChart}
-    WHERE product_id = #{productId}
-  </update>
+	<!-- ✅ 상품 수정 : 클리어 -->
+	<update id="updateProduct" parameterType="dto.product.Product">
+		UPDATE product
+		SET
+		name = #{name},
+		cost = #{cost},
+		price = #{price},
+		discount = #{discount},
+		category_id = #{categoryId},
+		sub_category_id = #{subCategoryId},
+		description1 = #{description1},
+		description2 = #{description2},
+		main_image1 = #{mainImage1},
+		main_image2 = #{mainImage2},
+		main_image3 = #{mainImage3},
+		main_image4 = #{mainImage4},
+		image1 = #{image1},
+		image2 = #{image2},
+		image3 = #{image3},
+		image4 = #{image4},
+		image5 = #{image5},
+		image6 = #{image6},
+		image7 = #{image7},
+		image8 = #{image8},
+		image9 = #{image9},
+		image10 = #{image10},
+		size_chart = #{sizeChart}
+		WHERE product_id = #{productId}
+	</update>
 
- 
-  <!-- ✅ 상품 등록 -->
-  <insert id="insertProduct" parameterType="dto.product.Product">
-    INSERT INTO product (
-      product_id,
-      name, cost, price, discount, sub_category_id, type,
-      reg_date, description1, description2,
-      main_image1, main_image2, main_image3, main_image4,
-      image1, image2, image3, image4, image5, image6, image7, image8, image9, image10,
-      size_chart
-    )
-    VALUES (
-      #{productId},
-      #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, #{type},
-      NOW(), #{description1}, #{description2},
-      #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4},
-      #{image1}, #{image2}, #{image3}, #{image4}, #{image5},
-      #{image6}, #{image7}, #{image8}, #{image9}, #{image10},
-      #{sizeChart}
-    )
-  </insert>
 
-  <!-- ✅ 상품 삭제 -->
-  <delete id="deleteProductById" parameterType="int">
-    DELETE FROM product
-    WHERE product_id = #{productId}
-  </delete>
+	<!-- ✅ 상품 등록 : 클리어 -->
+<insert id="insertProduct" parameterType="dto.product.Product">
+  INSERT INTO product (
+    product_id, name, cost, price, discount, sub_category_id, 
+    size_type, reg_date, description1, description2, 
+    main_image1, main_image2, main_image3, main_image4, 
+    image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, 
+    size_chart
+  ) VALUES (
+    #{productId}, #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, 
+    #{sizeType}, NOW(), #{description1}, #{description2}, 
+    #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4}, 
+    #{image1}, #{image2}, #{image3}, #{image4}, #{image5}, #{image6}, #{image7}, #{image8}, #{image9}, #{image10}, 
+    #{sizeChart}
+  )
+</insert>
 
-	<insert id="insertStock" parameterType="List" useGeneratedKeys="true" keyProperty="stock_id">
-	 INSERT INTO productstock(
-          product_id
-        , color
-        , size
-        , quantity
-    ) VALUES 
-    <foreach collection="list" item="item" separator=",">
-    (
-          #{item.productId}
-        , #{item.color}
-        , #{item.size}
-        , #{item.quantity}
-    )
-    </foreach>
+
+
+
+	<!-- ✅ 상품 삭제 : 클리어 -->
+	<delete id="deleteProductById" parameterType="int">
+		DELETE FROM product
+		WHERE product_id = #{productId}
+	</delete>
+
+	<!-- ✅ 재고 인서트 : 클리어 -->
+	<insert id="insertStock" parameterType="List"
+		useGeneratedKeys="true" keyProperty="stock_id">
+		INSERT INTO productstock(
+		product_id
+		, color
+		, size
+		, quantity
+		) VALUES
+		<foreach collection="list" item="item" separator=",">
+			(
+			#{item.productId}
+			, #{item.color}
+			, #{item.size}
+			, #{item.quantity}
+			)
+		</foreach>
 	</insert>
+
+	<!-- ✅ 프로덕트 아이디로 삭제 : 클리어 -->
+	<delete id="deleteStockByProductId" parameterType="Integer">
+		delete from
+		productstock where product_id=#{productId}
+	</delete>
+
+	<!-- ✅ 프로덕트 아이디로 스톡 조회 : 클리어 -->
+	<select id="selectStockByProductId" parameterType="Integer"
+		resultType="stock">
+		select * from productstock where product_id=#{productId}
+	</select>
+
+	<!-- ✅ 프로덕트 아이디로 스톡의 고유색 조회 : 클리어 -->
+	<select id="selectStockColorByProductId" parameterType="Integer"
+		resultType="String">
+		SELECT distinct(color) FROM productstock WHERE
+		product_id=#{productId}
+	</select>
+
+	<!-- ✅ 프로덕트 아이디와 색깔로 스톡의 사이즈, 수량 조회 : 클리어 -->
+	<select id="selectStockByColor" parameterType="Map"
+		resultType="productQuantity">
+		SELECT size, quantity FROM productstock WHERE
+		product_id=#{productId} AND color=#{color}
+	</select>
 
 </mapper>

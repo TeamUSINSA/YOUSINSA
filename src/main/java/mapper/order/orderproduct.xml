@@ -14,7 +14,7 @@
 
   <!-- 주문 기본 정보 저장 -->
   <insert id="insertOrderList" parameterType="order" useGeneratedKeys="true" keyProperty="orderId">
-    INSERT INTO order_list (
+    INSERT INTO orderlist (
       user_id,
       receiver_name,
       receiver_phone,
@@ -35,7 +35,7 @@
 
   <!-- 주문 상품 항목 저장 -->
   <insert id="insertOrderItem" parameterType="order">
-    INSERT INTO order_item (
+    INSERT INTO orderitem (
       order_id,
       product_id,
       name,
@@ -76,8 +76,8 @@
       i.quantity,
       i.unit_price,
       i.coupon_id
-    FROM order_list o
-    JOIN order_item i ON o.order_id = i.order_id
+    FROM orderlist o
+    JOIN orderitem i ON o.order_id = i.order_id
     WHERE o.user_id = #{userId}
     ORDER BY o.order_id DESC
   </select>
