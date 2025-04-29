@@ -13,7 +13,7 @@
     <div class="menu-item"><a href="myOrders">주문 / 배송조회</a></div>
     <div class="menu-item"><a href="myCancelList">취소 / 반품 내역</a></div>
     <div class="menu-item"><a href="myLikeList">좋아요 목록</a></div>
-    <div class="menu-item"><a href="myRestockList">재입고 확인</a></div>
+    <div class="menu-item"><a href="myRestockRequest">재입고 확인</a></div>
     <hr>
     <div class="menu-item"><a href="myCouponList">나의 쿠폰</a></div>
     <div class="menu-item"><a href="myPoint">포인트</a></div>
