@@ -30,6 +30,7 @@
 		<typeAlias type="dto.user.Notice" alias="notice"/>
 		<typeAlias type="dto.user.Alert" alias="alert"/>
 		<typeAlias type="dto.user.RestockRequest" alias="restockrequest"/>
+		<typeAlias type="dto.user.UserCoupon" alias="mycoupon"/>
 
 	</typeAliases>
 
@@ -73,6 +74,7 @@
 		<mapper resource="mapper/user/notice.xml" />
 		<mapper resource="mapper/user/alert.xml" />
 		<mapper resource="mapper/user/myrestockrequest.xml"/>
+		<mapper resource="mapper/user/mycoupon.xml"/>
 
 	</mappers>
 </configuration>
