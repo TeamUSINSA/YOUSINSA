@@ -224,7 +224,7 @@
         <div class="order-item">
           <div class="product-info">
             <a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}">
-              <img src="${pageContext.request.contextPath}/images/${item.mainImage1}"
+              <img src="${pageContext.request.contextPath}/image/${item.mainImage1}"
                    class="order-image"/>
             </a>
             <div>

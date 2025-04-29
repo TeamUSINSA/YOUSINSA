@@ -37,4 +37,10 @@ public class ProductServiceImpl implements ProductService{
     public Product selectById(int productId) throws Exception {
         return productDAO.selectById(productId);
     }
+
+	@Override
+	public Product findProductById(int productId) throws Exception {
+		// TODO Auto-generated method stub
+		return selectById(productId);
+	}
 }

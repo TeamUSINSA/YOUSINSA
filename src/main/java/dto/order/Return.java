@@ -89,9 +89,11 @@ public class Return {
 		this.orderItemId = orderItemId;
 	}
 
+
 	public void setApproved(int approved) {
 		this.approved = approved;
 	}
+
 
 	public String getRejectReason() {
 		return rejectReason;
@@ -100,5 +102,7 @@ public class Return {
 	public void setRejectReason(String rejectReason) {
 		this.rejectReason = rejectReason;
 	}
+
+
 
 }

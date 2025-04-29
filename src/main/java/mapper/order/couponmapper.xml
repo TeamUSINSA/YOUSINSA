@@ -6,11 +6,11 @@
 <mapper namespace="mapper.coupon">
 	<insert id="insertCoupon" parameterType="dto.order.Coupon">
 		INSERT INTO coupon (
-		name, description, discount_amount, start_date, end_date, type, active
+		name, description, discount_amount, start_date, end_date, type, active, period
 		) VALUES (
 		#{name}, #{description}, #{discountAmount}, #{startDate},
 		#{endDate}, #{type},
-		#{active}
+		#{active}, 30
 		)
 	</insert>
 

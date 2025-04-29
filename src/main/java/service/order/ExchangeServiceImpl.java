@@ -1,6 +1,7 @@
 package service.order;
 
 import java.util.List;
+import java.util.Map;
 
 import dao.order.ExchangeDAO;
 import dao.order.ExchangeDAOImpl;
@@ -25,8 +26,8 @@ public class ExchangeServiceImpl implements ExchangeService {
 	}
 
 	@Override
-	public List<Exchange> getExchangesByApproved(int approved) throws Exception {
-	    return exchangeDAO.selectExchangesByApproved(approved); // ✅ 객체 이름 통일!
+	public List<Exchange> getExchangesByApproved(Map<String, Object> param) throws Exception {
+	    return exchangeDAO.selectExchangesByApproved(param);
 	}
 	
 	@Override

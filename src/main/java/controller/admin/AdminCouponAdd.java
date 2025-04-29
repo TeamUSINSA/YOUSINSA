@@ -14,7 +14,7 @@ import dao.order.CouponDAO;
 import dao.order.CouponDAOImpl;
 import dto.order.Coupon;
 
-@WebServlet("/admincouponadd")
+@WebServlet("/adminCouponAdd")
 public class AdminCouponAdd extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

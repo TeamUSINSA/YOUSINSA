@@ -71,13 +71,12 @@ public class ProductDAOImpl implements ProductDAO {
 		return sqlSession.selectOne("mapper.product.getTotalSales", param);
 	}
 
-	@Override
-	public Map<String, List<Integer>> getSalesChartData(String start, String end) throws Exception {
-		// 차트용 쿼리가 만들어졌다는 가정
-		// label(기간명 등)을 key로, 판매량 리스트를 value로 매핑한다고 가정
-		return sqlSession.selectMap("mapper.product.getSalesChartData", null, "label");
+	public List<Map<String, Object>> getSalesChartData(String start, String end) throws Exception {
+	    Map<String, String> param = new HashMap<>();
+	    param.put("start", start);
+	    param.put("end", end);
+	    return sqlSession.selectList("mapper.product.getSalesChartData", param);
 	}
-	
 	@Override
 	public List<String> getAllMainCategories() throws Exception {
 	    return sqlSession.selectList("mapper.product.getAllMainCategories");

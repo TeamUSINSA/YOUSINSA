@@ -14,7 +14,7 @@ import dao.order.CouponDAO;
 import dao.order.CouponDAOImpl;
 import dto.order.Coupon;
 
-@WebServlet("/admincouponlist")
+@WebServlet("/adminCouponList")
 public class AdminCouponList extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final int PAGE_SIZE = 10;
