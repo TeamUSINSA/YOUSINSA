@@ -1,6 +1,8 @@
 package service.order;
 
 import java.util.List;
+import java.util.Map;
+
 import dto.order.Exchange;
 
 public interface ExchangeService {
@@ -8,7 +10,7 @@ public interface ExchangeService {
 
 	int getTotalPages() throws Exception;
 	
-	List<Exchange> getExchangesByApproved(int approved) throws Exception;
+	List<Exchange> getExchangesByApproved(Map<String, Object> param) throws Exception;
 	
 	Exchange getExchangeDetailById(int exchangeId) throws Exception;
 	

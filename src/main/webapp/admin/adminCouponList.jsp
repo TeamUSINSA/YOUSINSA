@@ -1,22 +1,17 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>쿠폰 보기</title>
+  <meta charset="UTF-8" />
+  <title>쿠폰 목록</title>
+  <jsp:include page="../common/header.jsp"/>
   <jsp:include page="adminSideBarStyle.jsp" />
   <style>
     body {
-      font-family: 'Pretendard', sans-serif;
       margin: 0;
+      font-family: 'Pretendard', sans-serif;
       background-color: #f8f8f8;
-      display: flex;
-    }
-
-    .main-wrapper {
-      flex-grow: 1;
-      padding: 40px 60px;
     }
 
     h2 {
@@ -25,26 +20,42 @@
       margin-bottom: 30px;
     }
 
+    .content-wrapper {
+      display: flex;
+      gap: 20px;
+      margin: 20px;
+    }
+
+    .sidebar {
+      width: 300px;
+      flex-shrink: 0;
+    }
+
     .container {
       background-color: white;
-      border-radius: 12px;
       padding: 30px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 1200px;
+      margin: 20px;
+      flex-grow: 1;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 10px;
     }
 
     th, td {
-      padding: 12px 10px;
+      padding: 12px;
       text-align: center;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #ddd;
     }
 
     thead {
-      background-color: #e0e0e0;
+      background-color: #f0f0f0;
     }
 
     .delete-icon {
@@ -56,6 +67,23 @@
 
     .delete-icon:hover {
       color: red;
+    }
+
+    .pagination {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .pagination a {
+      margin: 0 5px;
+      font-weight: normal;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .pagination a.current {
+      font-weight: bold;
+      color: #000;
     }
 
     .back-btn {
@@ -76,33 +104,17 @@
       background-color: #555;
     }
 
-    .pagination {
-      margin-top: 30px;
-      text-align: center;
-    }
-
-    .pagination a {
-      margin: 0 5px;
-      font-weight: normal;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .pagination a.current {
-      font-weight: bold;
-      color: #000;
-    }
-
     tbody tr:hover {
       background-color: #f4f4f4;
     }
   </style>
 </head>
 <body>
-  <jsp:include page="adminSideBar.jsp" />
-  <div class="main-wrapper">
-    <h2>쿠폰 보기</h2>
+  <div class="content-wrapper">
+    <jsp:include page="adminSideBar.jsp" />
     <div class="container">
+      <h2>쿠폰 목록</h2>
+
       <table>
         <thead>
           <tr>
@@ -133,7 +145,7 @@
                 </c:choose>
               </td>
               <td>
-                <form method="post" action="${pageContext.request.contextPath}/admincoupondelete"
+                <form method="post" action="${pageContext.request.contextPath}/adminCouponDelete"
                       onsubmit="return confirm('정말 삭제하시겠습니까?');" style="display: inline;">
                   <input type="hidden" name="couponId" value="${coupon.couponId}" />
                   <button type="submit" class="delete-icon">🗑️</button>
@@ -143,20 +155,21 @@
           </c:forEach>
         </tbody>
       </table>
-    </div>
 
-    <div class="back-btn">
-      <a href="${pageContext.request.contextPath}/admin/adminCategory.jsp">
-        <button>관리자 메인으로 돌아가기</button>
-      </a>
-    </div>
+      <div class="pagination">
+        <c:forEach var="i" begin="1" end="${totalPages}">
+          <a href="${pageContext.request.contextPath}/adminCouponList?page=${i}"
+             class="${i == currentPage ? 'current' : ''}">[${i}]</a>
+        </c:forEach>
+      </div>
 
-    <div class="pagination">
-      <c:forEach var="i" begin="1" end="${totalPages}">
-        <a href="${pageContext.request.contextPath}/admincouponlist?page=${i}"
-           class="${i == currentPage ? 'current' : ''}">[${i}]</a>
-      </c:forEach>
+      <div class="back-btn">
+        <a href="${pageContext.request.contextPath}/admin/adminCategory.jsp">
+          <button>관리자 메인으로 돌아가기</button>
+        </a>
+      </div>
     </div>
   </div>
+  <jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

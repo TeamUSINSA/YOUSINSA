@@ -9,11 +9,14 @@ public class OrderItem {
     private int couponId;
     private String color;
     private String size;
+    private int price;
+
+ 
     
 
     private String name;
     private String mainImage1;
-    private int price;
+   
     private boolean hasReview;
     private int cost;
     public int getCost() { return cost; }

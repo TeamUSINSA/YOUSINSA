@@ -16,7 +16,7 @@ import service.order.ReturnServiceImpl;
 /**
  * Servlet implementation class AdminReturn
  */
-@WebServlet("/adminreturn")
+@WebServlet("/adminReturn")
 public class AdminReturn extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

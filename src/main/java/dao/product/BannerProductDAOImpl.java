@@ -26,8 +26,8 @@ public class BannerProductDAOImpl implements BannerProductDAO {
     }
 
     @Override
-    public List<BannerProduct> selectAllBannerList() throws Exception {
-        return sqlSession.selectList("mapper.bannerproduct.selectAllBannerList");
+    public List<BannerProduct> selectAllBanners() throws Exception {
+        return sqlSession.selectList("mapper.bannerproduct.selectAllBannerList");  // 쿼리 추가
     }
 
     @Override
@@ -40,11 +40,6 @@ public class BannerProductDAOImpl implements BannerProductDAO {
     public void deleteBanner(int id) throws Exception {
         sqlSession.delete("mapper.bannerproduct.deleteBanner", id);
         sqlSession.commit(); // 꼭 커밋!
-    }
-
-    @Override
-    public List<BannerProduct> selectAll() throws Exception {
-        return sqlSession.selectList("mapper.bannerproduct.selectAll");
     }
 
     @Override

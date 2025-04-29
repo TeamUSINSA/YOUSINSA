@@ -11,6 +11,7 @@ public class Product {
 	private int price;
 	private int discount;
 	private int subCategoryId;
+	//private int CategoryId;
 	private String type;
 	private Date regDate;
 	private String description1;
@@ -342,6 +343,22 @@ public class Product {
 		return list;
 	}
 
+//	public int getCategoryId() {
+//		return CategoryId;
+//	}
+//
+//	public void setCategoryId(int categoryId) {
+//		CategoryId = categoryId;
+//	}
+
+	public String getSizeType() {
+		return sizeType;
+	}
+
+	public void setSizeType(String sizeType) {
+		this.sizeType = sizeType;
+	}
+
 	public String getDescription() {
 		StringBuilder sb = new StringBuilder();
 		if (description1 != null)
@@ -349,5 +366,10 @@ public class Product {
 		if (description2 != null)
 			sb.append("\n").append(description2);
 		return sb.toString();
+	}
+
+	public void setCategoryId(Integer category) {
+		// TODO Auto-generated method stub
+		
 	}
 }

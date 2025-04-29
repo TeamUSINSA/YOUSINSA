@@ -13,7 +13,7 @@ import dao.inquiry.InquiryDAO;
 import dao.inquiry.InquiryDAOImpl;
 import dto.user.Inquiry;
 
-@WebServlet("/admininquiry")
+@WebServlet("/adminInquiry")
 public class AdminInquiry extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -29,9 +29,9 @@ public class AdminInquiry extends HttpServlet {
             } else {
                 String status = "";
                 if (filter.equals("done")) {
-                    status = "답변 완료";
+                    status = "답변완료"; // ❗띄어쓰기 없이
                 } else if (filter.equals("waiting")) {
-                    status = "답변 대기";
+                    status = "답변대기"; // ❗띄어쓰기 없이 수정
                 }
                 inquiryList = dao.selectByStatus(status);
             }

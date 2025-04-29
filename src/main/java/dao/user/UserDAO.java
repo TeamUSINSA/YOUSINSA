@@ -1,5 +1,7 @@
 package dao.user;
 
+import java.util.List;
+
 import dto.user.User;
 
 public interface UserDAO {
@@ -17,4 +19,8 @@ public interface UserDAO {
 	void updateUserPassword(String userId, String newPassword) throws Exception;
 	User findById(String userId) throws Exception;
 	User findByMemberNo(int memberNo) throws Exception;
+	User selectUserByUserId(String userId) throws Exception;
+	User findUserById(String userId) throws Exception;
+	List<User> findUsersByName(String name) throws Exception;
+	void insertKakaoUser(User user) throws Exception;
 }

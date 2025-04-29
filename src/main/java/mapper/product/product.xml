@@ -4,148 +4,187 @@
 
 <mapper namespace="mapper.product">
 
-  <!-- 상품 타입으로 전체 조회 (예: type = 'main') -->
-  <select id="selectProductsByType" resultType="dto.product.Product">
-    SELECT *
-    FROM product
-    WHERE type = #{type}
-    ORDER BY reg_date DESC
-  </select>
+	<!-- 상품 타입으로 전체 조회 (예: type = 'main') -->
+	<select id="selectProductsByType"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE type = #{type}
+		ORDER BY reg_date
+		DESC
+	</select>
 
-  <!-- 상품 타입으로 랜덤 4개 조회 (예: type = 'popular' or 'recommend') -->
-  <select id="selectRandomProductsByType" resultType="dto.product.Product">
-    SELECT *
-    FROM product
-    WHERE type = #{type}
-    ORDER BY RAND()
-    LIMIT 4
-  </select>
+	<!-- 상품 타입으로 랜덤 4개 조회 (예: type = 'popular' or 'recommend') -->
+	<select id="selectRandomProductsByType"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE type = #{type}
+		ORDER BY RAND()
+		LIMIT 4
+	</select>
 
-  <!-- 대분류 카테고리별 상품 목록 -->
-  <select id="selectProductsByCategory" resultType="dto.product.Product">
-    SELECT p.*
-    FROM product p
-    JOIN subcategory s ON p.sub_category_id = s.sub_category_id
-    WHERE s.category_id = #{categoryId}
-  </select>
+	<!-- 대분류 카테고리별 상품 목록 -->
+	<select id="selectProductsByCategory"
+		resultType="dto.product.Product">
+		SELECT p.*
+		FROM product p
+		JOIN subcategory s ON
+		p.sub_category_id = s.sub_category_id
+		WHERE s.category_id =
+		#{categoryId}
+	</select>
 
-  <!-- 서브카테고리별 상품 목록 -->
-  <select id="selectProductsBySubCategory" resultType="dto.product.Product">
-    SELECT *
-    FROM product
-    WHERE sub_category_id = #{subCategoryId}
-  </select>
+	<!-- 서브카테고리별 상품 목록 -->
+	<select id="selectProductsBySubCategory"
+		resultType="dto.product.Product">
+		SELECT *
+		FROM product
+		WHERE sub_category_id =
+		#{subCategoryId}
+	</select>
 
-  <!-- 찜한 상품 리스트 (예시: 사용자가 찜한 상품) -->
-  <select id="selectLikeProduct" parameterType="Integer" resultType="product">
-    SELECT *
-    FROM likelist
-    WHERE user_id = #{userId}
-  </select>
+	<!-- 찜한 상품 리스트 (예시: 사용자가 찜한 상품) -->
+	<select id="selectLikeProduct" parameterType="Integer"
+		resultType="product">
+		SELECT *
+		FROM likelist
+		WHERE user_id = #{userId}
+	</select>
 
-  <!-- 찜 목록 페이징 -->
-  <select id="selectLikeListByPage" parameterType="Integer" resultType="product">
-    SELECT *
-    FROM article
-    ORDER BY num DESC
-    LIMIT #{row}, 10
-  </select>
-  
-  <select id="selectProductList" parameterType="Map" resultType="product">
-  	select product_id as c, name as name, main_image1 as mainImage1 from product where ${type} like '%${keyword}%'
-  </select>
+	<!-- 찜 목록 페이징 -->
+	<select id="selectLikeListByPage" parameterType="Integer"
+		resultType="product">
+		SELECT *
+		FROM article
+		ORDER BY num DESC
+		LIMIT #{row}, 10
+	</select>
 
-<select id="selectProductById" parameterType="int" resultType="dto.product.Product">
-  SELECT
-    product_id,
-    name,
-    cost,
-    price,
-    discount,
-    sub_category_id,
-    type,
-    reg_date,
-    description1,
-    description2,
-    main_image1,
-    main_image2,
-    main_image3,
-    main_image4,
-    image1,
-    image2,
-    image3,
-    image4,
-    image5,
-    image6,
-    image7,
-    image8,
-    image9,
-    image10,
-    size_chart
-  FROM product
-  WHERE product_id = #{productId}
+	<select id="selectProductList" parameterType="Map" resultType="dto.product.Product">
+	select product_id as productId, 
+	       name as name, 
+	       main_image1 as mainImage1
+	from product
+	where ${type} like '%${keyword}%'
 </select>
+
+	<select id="selectProductById" parameterType="int"
+		resultType="dto.product.Product">
+		SELECT
+		product_id,
+		name,
+		cost,
+		price,
+		discount,
+		sub_category_id,
+		type,
+		reg_date,
+		description1,
+		description2,
+		main_image1,
+		main_image2,
+		main_image3,
+		main_image4,
+		image1,
+		image2,
+		image3,
+		image4,
+		image5,
+		image6,
+		image7,
+		image8,
+		image9,
+		image10,
+		size_chart
+		FROM product
+		WHERE product_id =
+		#{productId}
+	</select>
 
 <insert id="insertProduct" parameterType="dto.product.Product">
   INSERT INTO product (
-    name, cost, price, discount, sub_category_id, type,
-    reg_date, description1, description2,
-    main_image1, main_image2, main_image3, main_image4,
-    image1, image2, image3, image4, image5, image6, image7, image8, image9, image10,
+    product_id, name, cost, price, discount, sub_category_id, 
+    size_type, reg_date, description1, description2, 
+    main_image1, main_image2, main_image3, main_image4, 
+    image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, 
     size_chart
-  )
-  VALUES (
-    #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, #{type},
-    NOW(), #{description1}, #{description2},
-    #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4},
-    #{image1}, #{image2}, #{image3}, #{image4}, #{image5},
-    #{image6}, #{image7}, #{image8}, #{image9}, #{image10},
+  ) VALUES (
+    #{productId}, #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, 
+    #{sizeType}, NOW(), #{description1}, #{description2}, 
+    #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4}, 
+    #{image1}, #{image2}, #{image3}, #{image4}, #{image5}, #{image6}, #{image7}, #{image8}, #{image9}, #{image10}, 
     #{sizeChart}
   )
 </insert>
-<select id="getTop10Products" resultType="map">
-    SELECT 
-        p.name AS name,
-        p.product_id AS code,
-        SUM(i.quantity) AS quantity,
-        SUM(i.quantity * p.price) AS sales
+
+
+
+	<select id="getTop10Products" resultType="map">
+		SELECT
+		p.name AS name,
+		p.product_id AS code,
+		SUM(i.quantity) AS quantity,
+		SUM(i.quantity *
+		p.price) AS sales
+		FROM orderitem i
+		JOIN product p ON i.product_id =
+		p.product_id
+		JOIN orderlist o ON i.order_id = o.order_id
+		WHERE
+		o.order_date BETWEEN #{start} AND #{end}
+		GROUP BY p.name, p.product_id
+		ORDER BY sales DESC
+		LIMIT 10
+	</select>
+
+<select id="getTotalSales" resultType="int" parameterType="map">
+    SELECT COALESCE(SUM(i.quantity * p.price), 0)
     FROM orderitem i
     JOIN product p ON i.product_id = p.product_id
     JOIN orderlist o ON i.order_id = o.order_id
-    WHERE o.order_date BETWEEN #{start} AND #{end}
-    GROUP BY p.name, p.product_id
-    ORDER BY sales DESC
-    LIMIT 10
+    JOIN subcategory s ON p.sub_category_id = s.sub_category_id
+    JOIN category c ON s.category_id = c.category_id
+    WHERE o.order_date BETWEEN #{startDate} AND #{endDate}
+    <if test="mainCategory != null and mainCategory != ''">
+        AND TRIM(c.category_name) = #{mainCategory}
+    </if>
+    <if test="subCategory != null and subCategory != ''">
+        AND TRIM(s.sub_category_name) = #{subCategory}
+    </if>
 </select>
 
-<select id="getTotalSales" resultType="int" parameterType="map">
-   SELECT 
-    COALESCE(SUM(i.quantity * p.price), 0)
-FROM 
-    orderitem i
-JOIN 
-    product p ON i.product_id = p.product_id
-JOIN 
-    orderlist o ON i.order_id = o.order_id
-JOIN 
-    subcategory s ON p.sub_category_id = s.sub_category_id
-JOIN 
-    category c ON s.category_id = c.category_id
-WHERE 
-    o.order_date BETWEEN #{startDate} AND #{endDate}
-</select>
+	<!-- 대분류 카테고리명 목록 -->
+	<select id="getAllMainCategories" resultType="string">
+		SELECT DISTINCT
+		c.category_name
+		FROM category c
+		ORDER BY c.category_name
+	</select>
 
-<!-- 대분류 카테고리명 목록 -->
-<select id="getAllMainCategories" resultType="string">
-    SELECT DISTINCT c.category_name
-    FROM category c
-    ORDER BY c.category_name
-</select>
+	<!-- 소분류 카테고리명 목록 -->
+	<select id="getAllSubCategories" resultType="string">
+		SELECT DISTINCT
+		s.sub_category_name
+		FROM subcategory s
+		ORDER BY s.sub_category_name
+	</select>
 
-<!-- 소분류 카테고리명 목록 -->
-<select id="getAllSubCategories" resultType="string">
-    SELECT DISTINCT s.sub_category_name
-    FROM subcategory s
-    ORDER BY s.sub_category_name
+	<select id="selectById" parameterType="int"
+		resultType="dto.product.Product">
+		SELECT * FROM product WHERE product_id = #{productId}
+	</select>
+
+	<select id="getSalesChartData" parameterType="map" resultType="map">
+	SELECT 
+		c.category_name AS label,
+		SUM(p.price * i.quantity) AS value
+	FROM orderitem i
+	JOIN product p ON i.product_id = p.product_id
+	JOIN subcategory s ON p.sub_category_id = s.sub_category_id
+	JOIN category c ON s.category_id = c.category_id
+	JOIN orderlist o ON i.order_id = o.order_id
+	WHERE o.order_date BETWEEN #{start} AND #{end}
+	GROUP BY c.category_name
 </select>
 </mapper>

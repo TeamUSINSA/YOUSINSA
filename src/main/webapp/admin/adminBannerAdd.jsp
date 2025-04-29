@@ -1,80 +1,137 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>배너 등록</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <jsp:include page="../common/header.jsp"/>
+  <jsp:include page="adminSideBarStyle.jsp" />
   <style>
-    .wrapper {
+    body {
+      margin: 0;
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      width: 80%;
+      margin: 20px auto;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="file"],
+    .form-group input[type="number"],
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    .btn-submit {
+      background-color: #2563eb;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+    .btn-submit:hover {
+      background-color: #1e40af;
+    }
+    .btn-back {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+    .btn-back:hover {
+      background-color: #111;
+    }
+    .msg {
+      color: green;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .content-wrapper {
       display: flex;
-      min-height: 100vh;
+      gap: 20px;
     }
-
-    .sidebar {
-      width: 220px;
-      background-color: #fff;
-      border-right: 1px solid #ddd;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .content {
+    .content-main {
       flex: 1;
-      padding: 40px;
-      background-color: #f9f9f9;
-      box-sizing: border-box;
     }
   </style>
 </head>
 <body>
-<div class="wrapper">
-  <%@ include file="adminSideBar.jsp" %>
+  <div class="content-wrapper">
+    <jsp:include page="adminSideBar.jsp" />
+    <div class="content-main">
+      <div class="container">
+        <h1>배너 등록</h1>
 
-  <div class="content">
-    <div class="max-w-3xl mx-auto bg-white p-8 rounded shadow">
-      <h1 class="text-2xl font-bold mb-6">배너 등록</h1>
+        <c:if test="${not empty msg}">
+          <p class="msg">${msg}</p>
+        </c:if>
 
-      <c:if test="${not empty msg}">
-        <p class="text-green-600 font-semibold mb-4">${msg}</p>
-      </c:if>
+        <form action="${pageContext.request.contextPath}/adminBannerAdd" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>배너 이미지</label>
+            <input type="file" name="img" required />
+          </div>
 
-      <form action="${pageContext.request.contextPath}/adminbanneradd" method="post" enctype="multipart/form-data" class="space-y-4">
+          <div class="form-group">
+            <label>배너 이름</label>
+            <input type="text" name="name" required />
+          </div>
 
-        <div>
-          <label class="block mb-1 font-medium">배너 이미지</label>
-          <input type="file" name="img" class="border p-2 w-full" required>
+          <div class="form-group">
+            <label>상품 ID</label>
+            <input type="number" name="productId" required />
+          </div>
+
+          <div class="form-group">
+            <label>배너 위치</label>
+            <select name="position" required>
+              <option value="top">상단</option>
+              <option value="middle">중단</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-submit">등록</button>
+        </form>
+
+        <div style="margin-top: 30px;">
+          <a href="${pageContext.request.contextPath}/adminBanner" class="btn-back">배너 목록으로 돌아가기</a>
         </div>
-
-        <div>
-          <label class="block mb-1 font-medium">배너 이름</label>
-          <input type="text" name="name" class="border p-2 w-full" required>
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium">상품 ID</label>
-          <input type="number" name="productId" class="border p-2 w-full" required>
-        </div>
-
-        <div>
-          <label class="block mb-1 font-medium">배너 위치</label>
-          <input type="text" name="position" class="border p-2 w-full" placeholder="예: 상단, 중단, 하단 등">
-        </div>
-
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          등록
-        </button>
-      </form>
-
-      <div class="mt-6 text-right">
-        <a href="${pageContext.request.contextPath}/admin/adminCategory.jsp"
-           class="inline-block bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
-          관리자 메인으로 돌아가기
-        </a>
       </div>
     </div>
   </div>
-</div>
+
+  <jsp:include page="../common/footer.jsp"/>
 </body>
 </html>

@@ -20,6 +20,9 @@ public interface UserService {
 	User findUserForPasswordReset(String name, String userId, String email);
 	void updateUserPassword(String userId, String newPassword) throws Exception;
 	List<UserCoupon> getUnusedCoupons(String userId) throws Exception;
+	
+	 User findUserById(String userId) throws Exception;
+	 List<User> findUsersByName(String name) throws Exception;
 
 }
 

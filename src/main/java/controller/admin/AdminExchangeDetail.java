@@ -1,15 +1,29 @@
 package controller.admin;
 
-import dto.order.Exchange;
-import service.order.ExchangeService;
-import service.order.ExchangeServiceImpl;
+import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
-import java.io.IOException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/adminexchangedetail")
+import dto.order.Exchange;
+import dto.order.OrderItem;
+import dto.order.OrderList;
+import dto.product.Product;
+import dto.user.User;
+import service.order.ExchangeService;
+import service.order.ExchangeServiceImpl;
+import service.order.OrderService;
+import service.order.OrderServiceImpl;
+import service.product.ProductService;
+import service.product.ProductServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
+
+@WebServlet("/adminExchangeDetail")
 public class AdminExchangeDetail extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -21,22 +35,40 @@ public class AdminExchangeDetail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // 1. 파라미터에서 exchangeId 받아오기
             int exchangeId = Integer.parseInt(request.getParameter("exchangeId"));
 
-            // 2. 서비스 호출
-            ExchangeService service = new ExchangeServiceImpl();
-            Exchange exchange = service.getExchangeDetailById(exchangeId); // ← 이 메서드 너가 구현해야 해!
+            // 교환 정보
+            ExchangeService exchangeService = new ExchangeServiceImpl();
+            Exchange exchange = exchangeService.getExchangeDetailById(exchangeId);
 
-            // 3. JSP로 넘기기
+            // 주문 아이템
+            OrderService orderService = new OrderServiceImpl();
+            OrderItem orderItem = orderService.findOrderItemById(exchange.getOrderItemId());
+
+            // 주문 정보
+            OrderList order = orderService.findOrderListById(orderItem.getOrderId());
+
+            // 상품 정보
+            ProductService productService = new ProductServiceImpl();
+            Product product = productService.findProductById(orderItem.getProductId());
+
+            // 회원 정보
+            UserService userService = new UserServiceImpl();
+            User user = userService.findUserById(exchange.getUserId());
+
+            // JSP로 넘기기
             request.setAttribute("exchange", exchange);
+            request.setAttribute("orderItem", orderItem);
+            request.setAttribute("order", order);
+            request.setAttribute("product", product);
+            request.setAttribute("user", user);
+
             request.getRequestDispatcher("/admin/adminExchangeDetail.jsp").forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("adminExchange.jsp?error=상세조회실패");
+        	e.printStackTrace();
+            String msg = URLEncoder.encode("상세조회실패", "UTF-8");
+            response.sendRedirect("adminExchange.jsp?error=" + msg);
         }
     }
 }
-
-

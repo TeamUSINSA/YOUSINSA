@@ -20,11 +20,16 @@
         height: auto;
         opacity: 0.6;
     }
+    
+    .footer {
+    	clear:both;
+    	width: 100%;
+    }
 </style>
-
-<footer class="footer-wrapper">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="flex flex-col md:flex-row justify-between mb-4">
+<div class="footer" style="width:900px;margin:0 auto">
+<footer class="footer-wrapper" >
+    <div class="max-w-7xl mx-auto px-4" >
+        <div class="flex flex-col md:flex-row justify-between mb-4" >
             <div>
                 <h3 class="font-bold text-gray-900 mb-1">고객센터 1234-1234</h3>
                 <p class="text-xs text-gray-500 mb-2">
@@ -56,3 +61,4 @@
         </div>
     </div>
 </footer>
+</div>

@@ -14,7 +14,7 @@ import dao.product.BannerProductDAO;
 import dao.product.BannerProductDAOImpl;
 import dto.product.BannerProduct;
 
-@WebServlet("/adminbanneradd")
+@WebServlet("/adminBannerAdd")
 public class AdminBannerAdd extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String SAVE_DIR = "/upload/banner";
@@ -55,12 +55,17 @@ public class AdminBannerAdd extends HttpServlet {
         try {
             BannerProductDAO dao = new BannerProductDAOImpl();
             dao.insertBanner(banner);
-            request.setAttribute("msg", "배너가 성공적으로 등록되었습니다!");
+
+            // 성공 메시지를 session에 저장
+            request.getSession().setAttribute("msg", "배너가 성공적으로 등록되었습니다!");
+            // 배너 목록 페이지로 리다이렉트
+            response.sendRedirect(request.getContextPath() + "/adminBanner");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("msg", "배너 등록 중 오류 발생");
+            // 오류 메시지를 session에 저장
+            request.getSession().setAttribute("msg", "배너 등록 중 오류 발생");
+            // 배너 등록 페이지로 리다이렉트
+            response.sendRedirect(request.getContextPath() + "/adminBannerAdd");
         }
-
-        request.getRequestDispatcher("/admin/adminBannerAdd.jsp").forward(request, response);
     }
 }

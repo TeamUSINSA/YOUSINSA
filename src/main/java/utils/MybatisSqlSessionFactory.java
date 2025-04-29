@@ -1,7 +1,6 @@
 package utils;
 
 import java.io.InputStream;
-
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -11,13 +10,11 @@ public class MybatisSqlSessionFactory {
 
 	static {
 		try {
-			String resource = "resource/mybatis-config.xml";
+			String resource = "resource/mybatis-config.xml"; // 🔥 여기 수정!
 			InputStream inputStream = Resources.getResourceAsStream(resource);
 
-			// SqlSessionFactoryBuilder 생성
-			SqlSessionFactoryBuilder bulider = new SqlSessionFactoryBuilder();
-			// SqlSessionFactory 생성
-			sqlSessionFactory = bulider.build(inputStream);
+			SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+			sqlSessionFactory = builder.build(inputStream);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -26,5 +23,4 @@ public class MybatisSqlSessionFactory {
 	public static SqlSessionFactory getSqlSessionFactory() {
 		return sqlSessionFactory;
 	}
-
 }

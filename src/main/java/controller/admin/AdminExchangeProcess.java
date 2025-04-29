@@ -8,7 +8,7 @@ import javax.servlet.http.*;
 import service.order.ExchangeService;
 import service.order.ExchangeServiceImpl;
 
-@WebServlet("/adminexchangeprocess")
+@WebServlet("/adminExchangeProcess")
 public class AdminExchangeProcess extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class AdminExchangeProcess extends HttpServlet {
                 service.approveExchange(Integer.parseInt(exchangeId));
             }
 
-            response.sendRedirect(request.getContextPath() + "/admin/adminExchange.jsp");
+            response.sendRedirect(request.getContextPath() + "/adminexchangedetail?exchangeId=" + exchangeId);
 
         } catch (Exception e) {
             e.printStackTrace();

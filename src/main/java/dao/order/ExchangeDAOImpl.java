@@ -3,6 +3,7 @@ package dao.order;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -25,10 +26,9 @@ public class ExchangeDAOImpl implements ExchangeDAO {
     }
     
     @Override
-    public List<Exchange> selectExchangesByApproved(int approved) throws Exception {
-        return sqlSession.selectList("mapper.order.selectExchangesByApproved", approved);
+    public List<Exchange> selectExchangesByApproved(Map<String, Object> param) {
+        return sqlSession.selectList("mapper.order.selectExchangesByApproved", param);
     }
-    
     @Override
     public Exchange selectExchangeById(int exchangeId) throws Exception {
         return sqlSession.selectOne("mapper.order.selectExchangeById", exchangeId);

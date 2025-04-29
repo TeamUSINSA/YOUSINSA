@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import dao.order.CouponDAO;
 import dao.order.CouponDAOImpl;
 
-@WebServlet("/admincoupondelete")
+@WebServlet("/adminCouponDelete")
 public class AdminCouponDelete extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
