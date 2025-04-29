@@ -268,6 +268,61 @@
   VALUES
   (#{userId}, NULL, #{name}, NULL, #{email}, NULL, 0, NOW(), 0, 0)
 </insert>
-	
+<!--  배송지 관리 쿼리 -->
+
+<select id="selectAddressesByUserId" parameterType="string" resultType="user">
+    SELECT address1,
+           address1_detail,
+           address2,
+           address2_detail,
+           address3,
+           address3_detail
+      FROM `user`
+     WHERE user_id = #{userId}
+  </select>
+	  
+	  <!-- 2) 배송지 추가/수정: 주소 칸 별로 사용 -->
+  <update id="updateAddress1" parameterType="dto.user.User">
+    UPDATE `user`
+       SET address1        = #{address1},
+           address1_detail = #{address1Detail}
+     WHERE user_id = #{userId}
+  </update>
+  
+  <update id="updateAddress2" parameterType="dto.user.User">
+    UPDATE `user`
+       SET address2        = #{address2},
+           address2_detail = #{address2Detail}
+     WHERE user_id = #{userId}
+  </update>
+
+  <update id="updateAddress3" parameterType="dto.user.User">
+    UPDATE `user`
+       SET address3        = #{address3},
+           address3_detail = #{address3Detail}
+     WHERE user_id = #{userId}
+  </update>
+
+  <!-- 3) 배송지 삭제: NULL 처리 -->
+  <update id="deleteAddress1" parameterType="string">
+    UPDATE `user`
+       SET address1 = NULL,
+           address1_detail = NULL
+     WHERE user_id = #{userId}
+  </update>
+
+  <update id="deleteAddress2" parameterType="string">
+    UPDATE `user`
+       SET address2 = NULL,
+           address2_detail = NULL
+     WHERE user_id = #{userId}
+  </update>
+
+  <update id="deleteAddress3" parameterType="string">
+    UPDATE `user`
+       SET address3 = NULL,
+           address3_detail = NULL
+     WHERE user_id = #{userId}
+  </update>
 
 </mapper>
