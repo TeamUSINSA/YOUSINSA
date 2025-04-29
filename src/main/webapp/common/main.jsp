@@ -50,6 +50,7 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 <body>
 <jsp:include page="/header" />
 	<!-- ✅ 슬라이드 배너 영역 -->
+	<div style="max-width: 900px; margin: 0 auto;">
 <div class="slider-container" data-slider="main"
 	style="position: relative; overflow: hidden; width: 100%; height: 800px;">
 	<c:forEach var="banner" items="${mainBannerList}" varStatus="status">
@@ -182,7 +183,8 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 			</div>
 		</a>
 	</div>
-   <jsp:include page="/footer" />
+	</div>
+   <%@ include file="../common/footer.jsp" %>
 </body>
 
 <script>

@@ -22,7 +22,7 @@
 <main class="flex flex-col items-center justify-center py-24 px-4">
   <div class="border rounded-lg px-6 py-10 w-full max-w-lg shadow-sm text-center">
     <h2 class="text-2xl font-semibold mb-6">환영합니다</h2>
-    <p class="text-lg font-bold text-green-600">${sessionScope.userId}님, 환영합니다!</p>
+    <p class="text-lg font-bold text-green-600">${sessionScope.name}님, 환영합니다!</p>
     <p class="text-sm mt-4">유신사에 오신 것을 환영합니다.</p>
 
     <div class="mt-6 flex justify-center gap-4">
