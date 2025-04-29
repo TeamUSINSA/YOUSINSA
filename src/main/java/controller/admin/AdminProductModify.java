@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dto.product.Category;
 import dto.product.ProductAndOption;
+import dto.product.SubCategory;
 import service.admin.ProductService;
 import service.admin.ProductServiceImpl;
 import service.product.CategoryService;
@@ -34,23 +35,41 @@ public class AdminProductModify extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		Integer productId = Integer.parseInt(request.getParameter("productId"));
-		CategoryService categoryService = new CategoryServiceImpl();
-		ProductService productService = new ProductServiceImpl();
-		try {
-			ProductAndOption pao = productService.getProductAndOption(productId);
-			List<Category> categoryList = categoryService.selectCategoryList();			
-			request.setAttribute("categoryList", categoryList);
-			request.setAttribute("subCategoryList", categoryService.selectSubCategoriesByCategoryId(pao.getProduct().getSubCategoryId()));
-			request.setAttribute("pao", pao);
-			request.getRequestDispatcher("admin/adminProductModify.jsp").forward(request, response);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+
+        try {
+            Integer productId = Integer.parseInt(request.getParameter("productId"));
+            CategoryService categoryService = new CategoryServiceImpl();
+            ProductService productService = new ProductServiceImpl();
+
+            ProductAndOption pao = productService.getProductAndOption(productId);
+
+            if (pao == null || pao.getProduct() == null) {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "상품을 찾을 수 없습니다.");
+                return;
+            }
+
+            Integer subCategoryId = pao.getProduct().getSubCategoryId();
+            List<Category> categoryList = categoryService.selectCategoryList();
+            List<SubCategory> subCategoryList = (subCategoryId != null)
+                    ? categoryService.selectSubCategoriesByCategoryId(subCategoryId)
+                    : null;
+
+            request.setAttribute("categoryList", categoryList);
+            request.setAttribute("subCategoryList", subCategoryList);
+            request.setAttribute("pao", pao);
+            request.getRequestDispatcher("admin/adminProductModify.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "상품 ID가 잘못되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException(e);
+        }
+    }
+
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

@@ -13,7 +13,6 @@
 		cost = #{cost},
 		price = #{price},
 		discount = #{discount},
-		category_id = #{categoryId},
 		sub_category_id = #{subCategoryId},
 		description1 = #{description1},
 		description2 = #{description2},
