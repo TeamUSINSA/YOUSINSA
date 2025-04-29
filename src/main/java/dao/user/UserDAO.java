@@ -22,4 +22,5 @@ public interface UserDAO {
 	User selectUserByUserId(String userId) throws Exception;
 	User findUserById(String userId) throws Exception;
 	List<User> findUsersByName(String name) throws Exception;
+	void insertKakaoUser(User user) throws Exception;
 }

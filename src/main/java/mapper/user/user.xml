@@ -261,5 +261,13 @@
 		resultType="dto.user.User">
 		SELECT * FROM `user` WHERE name = #{name}
 	</select>
+	
+	<insert id="insertKakaoUser" parameterType="dto.user.User">
+  INSERT INTO user
+  (user_id, password, name, phone, email, birth, deleted, join_date, is_seller, total_point)
+  VALUES
+  (#{userId}, NULL, #{name}, NULL, #{email}, NULL, 0, NOW(), 0, 0)
+</insert>
+	
 
 </mapper>
