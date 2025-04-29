@@ -1,485 +1,380 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>상품 등록</title>
+
+<jsp:include page="../common/header.jsp" />
+<jsp:include page="adminSideBarStyle.jsp" />
+
 <style>
 body {
-	font-family: sans-serif;
-	padding: 40px;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    min-height: 100vh;
 }
 
-.layout {
-	display: flex;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 40px 20px;
-	gap: 30px;
+.content-wrapper {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
 }
 
-.sidebar {
-	width: 200px;
-	background: #f7f7f7;
-	padding: 10px;
-	border-radius: 8px;
+.content-wrapper > div:first-child {
+    width: 280px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex-shrink: 0;
+    min-height: 600px;
+}
+
+.main-content {
+    flex-grow: 1;
+    background: white;
+    padding: 40px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    min-height: 600px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
 }
 
 .container {
-	display: flex;
-	gap: 40px;
-	align-items: flex-start;
-	max-width: 1200px;
-	margin: auto;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
 }
 
-.content {
-	flex: 1;
-}
-
-.left {
-	flex: 1;
+.left, .right {
+    flex: 1;
 }
 
 .main-image {
-	display: block;
-	width: 100%;
-	aspect-ratio: 1/1;
-	border: 1px solid #999;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.add-image-btn {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	font-size: 12px;
-	border: 1px solid #999;
-	padding: 3px 8px;
-	background: #f3f3f3;
-	cursor: pointer;
+    display: flex;
+    width: 100%;
+    aspect-ratio: 1/1;
+    border: 1px solid #999;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .thumbnail-box {
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap;
-	margin-top: 10px;
-	font-size: 13px;
-	align-items: center;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 13px;
+    align-items: center;
 }
 
 .thumbnail-box div {
-	width: 70px;
-	height: 70px;
-	border: 1px solid #999;
-	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.right {
-	flex: 1;
-}
-
-.form-box {
-	border: 1px solid #999;
-	padding: 20px;
-	margin-bottom: 20px;
-}
-
-.form-box div {
-	margin-bottom: 10px;
-}
-
-input, select {
-	padding: 5px;
-	box-sizing: border-box;
-}
-
-.category-row {
-	display: flex;
-	gap: 5px;
-	align-items: center;
-}
-
-.category-row select {
-	flex: 1;
-}
-
-.radio-group {
-	margin: 20px 0;
-	display: flex;
-	gap: 20px;
-	align-items: center;
-}
-
-.dynamic-options {
-	margin-top: 20px;
-}
-
-.color-block {
-	margin-bottom: 20px;
-	border-bottom: 1px solid #ccc;
-	padding-bottom: 10px;
-}
-
-.option-row {
-	display: flex;
-	gap: 10px;
-	align-items: center;
-	margin-bottom: 10px;
-}
-
-.option-row select, .option-row input {
-	padding: 5px;
-}
-
-.option-row button {
-	background: none;
-	border: none;
-	font-size: 16px;
-	cursor: pointer;
-	color: red;
-}
-
-.add-btn {
-	display: inline-block;
-	margin-top: 10px;
-	padding: 5px 10px;
-	background-color: #007BFF;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-.size-sublist {
-	margin-left: 20px;
-	margin-top: 10px;
+    width: 70px;
+    height: 70px;
+    border: 1px solid #999;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sub-thumbnails {
-	display: flex;
-	gap: 10px;
-	margin-top: 10px;
-	justify-content: center;
-}
-
-.sub-thumbnails {
-	display: flex;
-	gap: 10px;
-	margin-top: 10px;
-	justify-content: center;
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
 }
 
 .sub-thumb {
-	display: block;
-	width: 80px;
-	height: 80px;
-	border: 1px solid #999;
-	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-	position: relative;
-	background-color: #f5f5f5;
-	overflow: hidden;
+    display: block;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #999;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    background-color: #f5f5f5;
+    overflow: hidden;
 }
 
 .sub-thumb img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.sub-thumb button {
-	position: absolute;
-	top: 2px;
-	right: 2px;
-	background: transparent;
-	border: none;
-	color: red;
-	cursor: pointer;
-	font-size: 13px;
-	padding: 0;
+.form-box {
+    border: 1px solid #999;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-box div {
+    margin-bottom: 10px;
+}
+
+input, select {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.category-row {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.dynamic-options {
+    margin-top: 20px;
+}
+
+.color-block {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.option-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.option-row select, .option-row input {
+    padding: 5px;
+}
+
+.option-row button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: red;
+}
+
+.add-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .image-upload-section {
-	margin-top: 80px;
-	text-align: center;
-}
-
-.image-upload-section input[type="text"] {
-	width: 300px;
-	padding: 8px;
-	margin-bottom: 20px;
+    margin-top: 80px;
+    text-align: center;
 }
 
 .big-preview-box {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
-	margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
 .big-img-slot {
-	width: 400px;
-	height: 400px;
-	border: 2px solid #ccc;
-	background-color: #fafafa;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	overflow: hidden;
+    width: 400px;
+    height: 400px;
+    border: 2px solid #ccc;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .big-img-slot img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.big-img-slot button {
-	position: absolute;
-	top: 4px;
-	right: 4px;
-	background: transparent;
-	border: none;
-	color: red;
-	font-size: 16px;
-	cursor: pointer;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .final-submit-section {
-	text-align: center;
-	margin-top: 60px;
-}
-
-.final-submit-section textarea {
-	width: 80%;
-	height: 150px;
-	padding: 15px;
-	font-size: 16px;
-	resize: vertical;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	margin-bottom: 20px;
+    text-align: center;
+    margin-top: 60px;
 }
 
 .submit-btn {
-	padding: 12px 30px;
-	background-color: #28a745;
-	color: white;
-	font-size: 16px;
-	border: none;
-	border-radius: 6px;
-	cursor: pointer;
+    padding: 12px 30px;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .submit-btn:hover {
-	background-color: #218838;
+    background-color: #218838;
 }
 
 #bigImageTitle {
-	width: 500px;
-	height: 80px;
-	padding: 10px;
-	font-size: 15px;
-	resize: vertical;
-	border-radius: 6px;
-	border: 1px solid #ccc;
-}
-
-.option_table>tbody>tr>td {
-	border: 1px solid black;
-	text-align: center;
-}
-
-.option_table>tbody>tr>td:nth-child(1) {
-	width: 80px;
-}
-
-.option_table>tbody>tr>td>input {
-	border: none;
-	text-align: right;
-	width: 100px;
-}
-
-.x {
-	position: absolute;
-	right: 2px;
-	top: 0px;
-	color: red;
-	cursor: pointer;
+    width: 500px;
+    height: 80px;
+    padding: 10px;
+    font-size: 15px;
+    resize: vertical;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
 img {
-	display: block;
-	width: 100%;
-	height: auto;
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
 .hide {
-	display: none;
+    display: none;
+}
+
+.x {
+    position: absolute;
+    right: 2px;
+    top: 0px;
+    color: red;
+    cursor: pointer;
+}
+
+.option_table>tbody>tr>td {
+    border: 1px solid black;
+    text-align: center;
+}
+.option_table>tbody>tr>td:nth-child(1) {
+    width: 80px;
+}
+.option_table>tbody>tr>td>input {
+    border: none;
+    text-align: right;
+    width: 100px;
 }
 </style>
 </head>
 
-
 <body>
-	<jsp:include page="../common/header.jsp" />
-	<jsp:include page="adminSideBarStyle.jsp" />
-	<jsp:include page="adminSideBar.jsp" />
 
-	<div class="layout">
-		<div class="sidebar" style="width: 200px;"></div>
-		<div class="content">
-			<h2>상품등록</h2>
-			<form action="adminProductAdd" method="post"
-				enctype="multipart/form-data" id="regForm">
+<div class="content-wrapper">
+  <jsp:include page="adminSideBar.jsp" />
 
-				<div class="container">
-					<div class="left">
-						<div class="main-image" onclick="$('#mainImage1').click()">
-							<span class="x" id="main-x">✖</span> <img id="main-image"
-								src='${contextPath}/image/maincloths.png'>
-						</div>
+  <div class="main-content">
+    <h2>상품 등록</h2>
 
-						<div class="sub-thumbnails">
-							<div class="sub-thumb" onclick="$('#mainImage2').click()">
-								<span class="x" id="sub-thumb1-x">✖</span><img id="sub-thumb1"
-									src='${contextPath}/image/maincloths.png'>
-							</div>
-							<div class="sub-thumb" onclick="$('#mainImage3').click()">
-								<span class="x" id="sub-thumb2-x">✖</span><img id="sub-thumb2"
-									src='${contextPath}/image/maincloths.png'>
-							</div>
-							<div class="sub-thumb" onclick="$('#mainImage4').click()">
-								<span class="x" id="sub-thumb3-x">✖</span><img id="sub-thumb3"
-									src='${contextPath}/image/maincloths.png'>
-							</div>
-						</div>
+    <form action="adminProductAdd" method="post" enctype="multipart/form-data" id="regForm">
+      <div class="container">
+        <div class="left">
+          <div class="main-image" onclick="$('#mainImage1').click()">
+            <span class="x" id="main-x">✖</span>
+            <img id="main-image" src="${contextPath}/image/maincloths.png">
+          </div>
 
-						<div class="thumbnail-box" id="thumbnailBox"></div>
+          <div class="sub-thumbnails">
+            <div class="sub-thumb" onclick="$('#mainImage2').click()">
+              <span class="x" id="sub-thumb1-x">✖</span><img id="sub-thumb1" src="${contextPath}/image/maincloths.png">
+            </div>
+            <div class="sub-thumb" onclick="$('#mainImage3').click()">
+              <span class="x" id="sub-thumb2-x">✖</span><img id="sub-thumb2" src="${contextPath}/image/maincloths.png">
+            </div>
+            <div class="sub-thumb" onclick="$('#mainImage4').click()">
+              <span class="x" id="sub-thumb3-x">✖</span><img id="sub-thumb3" src="${contextPath}/image/maincloths.png">
+            </div>
+          </div>
 
-						<input type="file" id="mainImage1" name="mainImage1"
-							style="display: none" accept="image/*"
-							onchange="readURL(this,'main-image')"> <input type="file"
-							id="mainImage2" name="mainImage2" style="display: none"
-							accept="image/*" onchange="readURL(this,'sub-thumb1')"> <input
-							type="file" id="mainImage3" name="mainImage3"
-							style="display: none" accept="image/*"
-							onchange="readURL(this,'sub-thumb2')"> <input type="file"
-							id="mainImage4" name="mainImage4" style="display: none"
-							accept="image/*" onchange="readURL(this,'sub-thumb3')">
-					</div>
+          <div class="thumbnail-box" id="thumbnailBox"></div>
 
-					<div class="right">
-						<div class="form-box">
-							<div class="category-row">
-								<select id="categorySelect" name="category">
-									<c:forEach items="${categoryList}" var="category">
-										<option value="${category.categoryId}">${category.categoryName}</option>
-									</c:forEach>
-								</select> <span> > </span> <select id="subCategorySelect"
-									name="subCategory">
-									<c:forEach items="${subCategoryList}" var="subCategory">
-										<option value="${subCategory.subCategoryId}">${subCategory.subCategoryName}</option>
-									</c:forEach>
-								</select> <span style="margin-left: auto; font-size: 12px;">카테고리
-									선택</span>
-							</div>
+          <input type="file" id="mainImage1" name="mainImage1" style="display: none" accept="image/*" onchange="readURL(this,'main-image')">
+          <input type="file" id="mainImage2" name="mainImage2" style="display: none" accept="image/*" onchange="readURL(this,'sub-thumb1')">
+          <input type="file" id="mainImage3" name="mainImage3" style="display: none" accept="image/*" onchange="readURL(this,'sub-thumb2')">
+          <input type="file" id="mainImage4" name="mainImage4" style="display: none" accept="image/*" onchange="readURL(this,'sub-thumb3')">
+        </div>
 
-							<div>
-								<input type="text" name="name" placeholder="상품명 입력"
-									style="width: 100%;" required>
-							</div>
-							<div>
-								<input type="text" name="productId" placeholder="제품코드 입력"
-									style="width: 100%;" required>
-							</div>
-							<div>
-								<input type="text" name="cost" placeholder="원가 입력"
-									style="width: 100%;" required>
-							</div>
-							<div>
-								<input type="text" name="price" placeholder="판매가 입력"
-									style="width: 100%;" required>
-							</div>
-							<div>
-								<input type="text" name="discount" placeholder="할인가 입력"
-									style="width: 100%;" required>
-							</div>
-						</div>
+        <div class="right">
+          <div class="form-box">
+            <div class="category-row">
+              <select id="categorySelect" name="category">
+                <c:forEach items="${categoryList}" var="category">
+                  <option value="${category.categoryId}">${category.categoryName}</option>
+                </c:forEach>
+              </select>
+              <span> > </span>
+              <select id="subCategorySelect" name="subCategory">
+                <c:forEach items="${subCategoryList}" var="subCategory">
+                  <option value="${subCategory.subCategoryId}">${subCategory.subCategoryName}</option>
+                </c:forEach>
+              </select>
+              <span style="margin-left: auto; font-size: 12px;">카테고리 선택</span>
+            </div>
 
-						<div class="dynamic-options">
-							<div id="options-container"></div>
-						</div>
-						<div class="dynamic-options">
-							<div style="margin-bottom: 10px;">
-								<span class="add-btn" id="colorAdd">색상추가</span>
-							</div>
-						</div>
-					</div>
-				</div>
+            <div><input type="text" name="name" placeholder="상품명 입력" style="width: 100%;" required></div>
+            <div><input type="text" name="productId" placeholder="제품코드 입력" style="width: 100%;" required></div>
+            <div><input type="text" name="cost" placeholder="원가 입력" style="width: 100%;" required></div>
+            <div><input type="text" name="price" placeholder="판매가 입력" style="width: 100%;" required></div>
+            <div><input type="text" name="discount" placeholder="할인가 입력" style="width: 100%;" required></div>
+          </div>
 
-				<!-- ✨✨ 여기! "상세 이미지" / "사이즈 차트" 부분 전부 생략 없이 -->
-				<div class="image-upload-section">
-					<div class="big-preview-box" id="bigPreviewBox">
-						<div class="big-img-slot" onclick="$('#imageDetail1').click()">
-							<span class="x" id="image1-x">✖</span><img id="image1"
-								src="${contextPath}/image/cloths.jpg">
-						</div>
-						<div class="big-img-slot" onclick="$('#imageDetail2').click()">
-							<span class="x" id="image2-x">✖</span><img id="image2"
-								src="${contextPath}/image/cloths.jpg">
-						</div>
-						<div class="big-img-slot" onclick="$('#imageDetail3').click()">
-							<span class="x" id="image3-x">✖</span><img id="image3"
-								src="${contextPath}/image/cloths.jpg">
-						</div>
-						<div class="big-img-slot" onclick="$('#imageDetail4').click()">
-							<span class="x" id="image4-x">✖</span><img id="image4"
-								src="${contextPath}/image/cloths.jpg">
-						</div>
-					</div>
+          <div class="dynamic-options">
+            <div id="options-container"></div>
+          </div>
 
-					<input type="file" id="imageDetail1" name="image1"
-						style="display: none" accept="image/*"
-						onchange="readURL(this,'image1')"> <input type="file"
-						id="imageDetail2" name="image2" style="display: none"
-						accept="image/*" onchange="readURL(this,'image2')"> <input
-						type="file" id="imageDetail3" name="image3" style="display: none"
-						accept="image/*" onchange="readURL(this,'image3')"> <input
-						type="file" id="imageDetail4" name="image4" style="display: none"
-						accept="image/*" onchange="readURL(this,'image4')"> <input
-						type="text" id="bigImageTitle" placeholder="제품 설명글 입력"
-						name="description1" required />
+          <div class="dynamic-options">
+            <div style="margin-bottom: 10px;">
+              <span class="add-btn" id="colorAdd">색상추가</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-					<div class="big-preview-box" id="sizeImageBox">
-						<div class="big-img-slot hide" id="sizeImageSlot">
-							<span class="x" id="sizeImage-x">✖</span><img id="sizeImage">
-						</div>
-					</div>
+      <div class="image-upload-section">
+        <div class="big-preview-box" id="bigPreviewBox">
+          <div class="big-img-slot" onclick="$('#imageDetail1').click()">
+            <span class="x" id="image1-x">✖</span><img id="image1" src="${contextPath}/image/cloths.jpg">
+          </div>
+          <div class="big-img-slot" onclick="$('#imageDetail2').click()">
+            <span class="x" id="image2-x">✖</span><img id="image2" src="${contextPath}/image/cloths.jpg">
+          </div>
+          <div class="big-img-slot" onclick="$('#imageDetail3').click()">
+            <span class="x" id="image3-x">✖</span><img id="image3" src="${contextPath}/image/cloths.jpg">
+          </div>
+          <div class="big-img-slot" onclick="$('#imageDetail4').click()">
+            <span class="x" id="image4-x">✖</span><img id="image4" src="${contextPath}/image/cloths.jpg">
+          </div>
+        </div>
 
-					<input type="file" id="sizeImageInput" name="sizeChart"
-						style="display: none" accept="image/*"
-						onchange="sizeImageChange(this,'sizeImage')"> <span
-						class="add-btn" id="sizeImageUploadBtn"
-						onclick="$('#sizeImageInput').click()">+ 사이즈 이미지</span>
-				</div>
+        <input type="file" id="imageDetail1" name="image1" style="display: none" accept="image/*" onchange="readURL(this,'image1')">
+        <input type="file" id="imageDetail2" name="image2" style="display: none" accept="image/*" onchange="readURL(this,'image2')">
+        <input type="file" id="imageDetail3" name="image3" style="display: none" accept="image/*" onchange="readURL(this,'image3')">
+        <input type="file" id="imageDetail4" name="image4" style="display: none" accept="image/*" onchange="readURL(this,'image4')">
 
-				<!-- 등록하기 버튼 -->
-				<div class="final-submit-section">
-					<button class="submit-btn">등록하기</button>
-				</div>
+        <input type="text" id="bigImageTitle" placeholder="제품 설명글 입력" name="description1" required>
 
-			</form>
-		</div>
-	</div>
+        <div class="big-preview-box" id="sizeImageBox">
+          <div class="big-img-slot hide" id="sizeImageSlot">
+            <span class="x" id="sizeImage-x">✖</span><img id="sizeImage">
+          </div>
+        </div>
+
+        <input type="file" id="sizeImageInput" name="sizeChart" style="display: none" accept="image/*" onchange="sizeImageChange(this,'sizeImage')">
+        <span class="add-btn" id="sizeImageUploadBtn" onclick="$('#sizeImageInput').click()">+ 사이즈 이미지</span>
+      </div>
+
+      <div class="final-submit-section">
+        <button class="submit-btn">등록하기</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 	<jsp:include page="../common/footer.jsp" />
 

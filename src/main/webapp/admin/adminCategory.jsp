@@ -1,196 +1,206 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <title>카테고리 관리</title>
-  <jsp:include page="../common/header.jsp"/>
-  <jsp:include page="adminSideBarStyle.jsp"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Pretendard', sans-serif;
-      background-color: #f8f8f8;
-    }
+<meta charset="UTF-8" />
+<title>카테고리 관리</title>
+<jsp:include page="../common/header.jsp" />
+<jsp:include page="adminSideBarStyle.jsp" />
+<style>
+body {
+	margin: 0;
+	font-family: 'Pretendard', sans-serif;
+	background-color: #f8f8f8;
+}
 
-    h2 {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 30px;
-      text-align: center;
-    }
+h2 {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 30px;
+	text-align: center;
+}
 
-    .content-wrapper {
-      display: flex;
-      gap: 20px;
-      margin: 20px;
-    }
+.content-wrapper {
+	display: flex;
+	gap: 20px; /* 양쪽 사이 간격은 이걸로만 조정 */
+	margin: 20px; /* 전체 바깥 여백 */
+}
 
-    .sidebar {
-      width: 300px;
-      flex-shrink: 0;
-    }
+.content-wrapper>div:first-child { /* 사이드바 */
+	width: 280px;
+	background: white;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+	padding: 20px;
+	flex-shrink: 0;
+	min-height: 600px;
+}
 
-    .container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      width: 100%;
-      max-width: 1200px;
-      margin: 20px;
-      flex-grow: 1;
-    }
+.container {
+	background-color: white;
+	padding: 40px 50px;
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+	flex-grow: 1;
+	min-height: 600px;
+	/* ✅ margin: 20px; <<== 이거 없애야 해!! */
+}
 
-    .section {
-      margin-bottom: 40px;
-    }
+.section {
+	margin-bottom: 40px;
+}
 
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+.input-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 15px;
+}
 
-    input[type="text"], select {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14px;
-      flex: 1;
-    }
+input[type="text"], select {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	font-size: 14px;
+	flex: 1;
+}
 
-    button.add, button.delete {
-      background-color: #2563eb;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+button.add, button.delete {
+	background-color: #2563eb;
+	color: white;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
 
-    button.add:hover, button.delete:hover {
-      background-color: #1e40af;
-    }
+button.add:hover, button.delete:hover {
+	background-color: #1e40af;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
 
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+th, td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
 
-    th {
-      background-color: #f0f0f0;
-    }
+th {
+	background-color: #f0f0f0;
+}
 
-    button.delete {
-      background-color: red;
-      color: white;
-      border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 13px;
-      cursor: pointer;
-    }
+button.delete {
+	background-color: red;
+	color: white;
+	border-radius: 20px;
+	padding: 5px 12px;
+	font-size: 13px;
+	cursor: pointer;
+}
 
-    .btn-delete {
-      background-color: #ef4444;
-      color: #fff;
-      padding: 6px 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+.btn-delete {
+	background-color: #ef4444;
+	color: #fff;
+	padding: 6px 14px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
 
-    .btn-register {
-      background-color: #000;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.btn-register {
+	background-color: #000;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: bold;
+	cursor: pointer;
+}
 
-    .btn-register:hover {
-      background-color: #333;
-    }
-  </style>
+.btn-register:hover {
+	background-color: #333;
+}
+</style>
 </head>
 <body>
-  <div class="content-wrapper">
-    <jsp:include page="adminSideBar.jsp" />
-    <div class="container">
-      <h2>카테고리 관리</h2>
+	<div class="content-wrapper">
+		<jsp:include page="adminSideBar.jsp" />
+		<div class="container">
+			<h2>카테고리 관리</h2>
 
-      <!-- 대분류 -->
-      <div class="section">
-        <h3>대분류 관리</h3>
-        <div class="input-row">
-          <input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
-          <button class="add" id="mainAddBtn">추가</button>
-        </div>
-        <table id="mainCategoryTable">
-          <thead>
-            <tr><th>대분류명</th><th>삭제</th></tr>
-          </thead>
-          <tbody>
-            <c:forEach var="cat" items="${categoryList}">
-              <tr>
-                <td>${cat.categoryName}</td>
-                <td><button class="delete" onclick="deleteMainCategory(${cat.categoryId}, this)">삭제</button></td>
-              </tr>
-            </c:forEach>
-          </tbody>
-        </table>
-      </div>
+			<!-- 대분류 -->
+			<div class="section">
+				<h3>대분류 관리</h3>
+				<div class="input-row">
+					<input type="text" id="mainCategoryInput" placeholder="대분류명 입력">
+					<button class="add" id="mainAddBtn">추가</button>
+				</div>
+				<table id="mainCategoryTable">
+					<thead>
+						<tr>
+							<th>대분류명</th>
+							<th>삭제</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="cat" items="${categoryList}">
+							<tr>
+								<td>${cat.categoryName}</td>
+								<td><button class="delete"
+										onclick="deleteMainCategory(${cat.categoryId}, this)">삭제</button></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 
-      <!-- 소분류 -->
-      <div class="section">
-        <h3>소분류 관리</h3>
-        <div class="input-row">
-          <select id="mainCategorySelect">
-            <option value="">대분류 선택</option>
-            <c:forEach var="cat" items="${categoryList}">
-              <option value="${cat.categoryId}">${cat.categoryName}</option>
-            </c:forEach>
-          </select>
-          <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
-          <button class="add" id="subAddBtn">추가</button>
-        </div>
-        <table id="subCategoryTable">
-          <thead>
-            <tr><th>소분류명</th><th>대분류명</th><th>삭제</th></tr>
-          </thead>
-          <tbody>
-            <c:forEach var="sub" items="${subCategoryList}">
-              <tr>
-                <td>${sub.subCategoryName}</td>
-                <td>
-                  <c:forEach var="cat" items="${categoryList}">
-                    <c:if test="${cat.categoryId == sub.categoryId}">
+			<!-- 소분류 -->
+			<div class="section">
+				<h3>소분류 관리</h3>
+				<div class="input-row">
+					<select id="mainCategorySelect">
+						<option value="">대분류 선택</option>
+						<c:forEach var="cat" items="${categoryList}">
+							<option value="${cat.categoryId}">${cat.categoryName}</option>
+						</c:forEach>
+					</select> <input type="text" id="subCategoryInput" placeholder="소분류명 입력">
+					<button class="add" id="subAddBtn">추가</button>
+				</div>
+				<table id="subCategoryTable">
+					<thead>
+						<tr>
+							<th>소분류명</th>
+							<th>대분류명</th>
+							<th>삭제</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="sub" items="${subCategoryList}">
+							<tr>
+								<td>${sub.subCategoryName}</td>
+								<td><c:forEach var="cat" items="${categoryList}">
+										<c:if test="${cat.categoryId == sub.categoryId}">
                       ${cat.categoryName}
                     </c:if>
-                  </c:forEach>
-                </td>
-                <td><button class="delete" onclick="deleteSubCategory(${sub.subCategoryId}, this)">삭제</button></td>
-              </tr>
-            </c:forEach>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+									</c:forEach></td>
+								<td><button class="delete"
+										onclick="deleteSubCategory(${sub.subCategoryId}, this)">삭제</button></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-  <jsp:include page="../common/footer.jsp"/>
+	<jsp:include page="../common/footer.jsp" />
 
-  <script>
+	<script>
     $(function () {
       $("#mainAddBtn").click(function () {
         const name = $("#mainCategoryInput").val().trim();

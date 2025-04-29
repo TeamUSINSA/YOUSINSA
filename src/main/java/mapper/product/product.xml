@@ -61,12 +61,13 @@
 		LIMIT #{row}, 10
 	</select>
 
-	<select id="selectProductList" parameterType="Map"
-		resultType="product">
-		select product_id as c, name as name, main_image1 as
-		mainImage1 from product
-		where ${type} like '%${keyword}%'
-	</select>
+	<select id="selectProductList" parameterType="Map" resultType="dto.product.Product">
+	select product_id as productId, 
+	       name as name, 
+	       main_image1 as mainImage1
+	from product
+	where ${type} like '%${keyword}%'
+</select>
 
 	<select id="selectProductById" parameterType="int"
 		resultType="dto.product.Product">

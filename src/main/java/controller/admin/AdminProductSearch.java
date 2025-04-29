@@ -50,7 +50,7 @@ public class AdminProductSearch extends HttpServlet {
 			request.setAttribute("searchType", searchType);
 			request.setAttribute("keyword", keyword);
 			request.setAttribute("productList", productList);
-			request.getRequestDispatcher("admin/adminProductSearch.jsp").forward(request, response);
+			request.getRequestDispatcher("/admin/adminProductSearch.jsp").forward(request, response);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
