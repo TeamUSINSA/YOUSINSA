@@ -134,7 +134,7 @@
 </head>
 <body>
 
-<%@ include file="../common/header.jsp" %>
+<jsp:include page="/header" />
 <div class="layout">
   <!-- ⭐ 사이드바 -->
   <div class="sidebar">

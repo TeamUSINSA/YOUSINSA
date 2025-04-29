@@ -12,7 +12,7 @@ int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
 request.setAttribute("currentYear", currentYear);
 %>
 
-<%@ include file="/common/header.jsp" %>
+<jsp:include page="/header" />
 
 <style>
   .status-box {

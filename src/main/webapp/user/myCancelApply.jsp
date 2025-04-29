@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ include file="/common/header.jsp" %>
+<jsp:include page="/header" />
 
 <div class="mypage-layout">
   <%@ include file="mysidebar.jsp" %>

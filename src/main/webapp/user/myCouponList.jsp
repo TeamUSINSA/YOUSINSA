@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!-- 공통 헤더 -->
-<%@ include file="/common/header.jsp" %>
+<jsp:include page="/header" />
 
 <!-- 페이지 전용 스타일 -->
 <style>
