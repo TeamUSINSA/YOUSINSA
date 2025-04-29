@@ -1,12 +1,14 @@
           <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%
-String categoryId = request.getParameter("categoryId");
-String subCategoryId = request.getParameter("subCategoryId");
-boolean hasSubCategory = subCategoryId != null && !subCategoryId.isEmpty();
-request.setAttribute("hasSubCategory", hasSubCategory);
-%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%
+  // 서블릿에서 request.setAttribute("selectedCategoryId", Integer)로 넘긴 값
+  Integer selCatId = (Integer) request.getAttribute("selectedCategoryId");
+  String paramSub = request.getParameter("subCategoryId");
+%>
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -101,30 +103,38 @@ body {
 <body>
 	<jsp:include page="/header" />
 
-	<!-- ✅ 선택된 상위 카테고리 1개만 노출 -->
-	<div class="category-menu">
-		<c:forEach var="cat" items="${categoryList}">
-			<c:if test="${cat.categoryId == categoryId}">
-				<a href="/yousinsa/productList?categoryId=${cat.categoryId}"
-					class="${hasSubCategory ? '' : 'active-category'}">
-					${cat.categoryName} </a>
-			</c:if>
-		</c:forEach>
-	</div>
 
-	<!-- ✅ 서브카테고리 노출 -->
-	<c:if test="${not empty categoryId}">
-		<div class="subcategory-menu">
-			<c:forEach var="sub" items="${subCategoryList}">
-				<c:if test="${sub.categoryId == categoryId}">
-					<a
-						href="/yousinsa/productList?categoryId=${sub.categoryId}&subCategoryId=${sub.subCategoryId}"
-						class="${sub.subCategoryId == subCategoryId ? 'active' : ''}">
-						${sub.subCategoryName} </a>
-				</c:if>
-			</c:forEach>
-		</div>
-	</c:if>
+<!-- 1) 선택된 상위 카테고리 한 개만 -->
+<div class="current-category" style="text-align:center; margin:20px 0;">
+  <c:forEach var="cat" items="${categoryList}">
+    <c:if test="${cat.categoryId == selectedCategoryId}">
+      <h2>
+        <a
+          href="${pageContext.request.contextPath}/productList?categoryId=${cat.categoryId}"
+          class="${empty param.subCategoryId ? 'active-category' : ''}"
+          style="text-decoration:none; color:inherit;"
+        >
+          ${cat.categoryName}
+        </a>
+      </h2>
+    </c:if>
+  </c:forEach>
+</div>
+
+
+<!-- 2) 해당 상위 카테고리에 속한 서브카테고리 전부 -->
+<c:if test="${not empty selectedCategoryId}">
+  <div class="subcategory-menu" style="display:flex; justify-content:center; gap:20px; margin-bottom:40px;">
+    <c:forEach var="sub" items="${subCategoryList}">
+      <c:if test="${sub.categoryId == selectedCategoryId}">
+        <a href="${pageContext.request.contextPath}/productList?categoryId=${selectedCategoryId}&subCategoryId=${sub.subCategoryId}"
+           class="${sub.subCategoryId == param.subCategoryId ? 'active' : ''}">
+          ${sub.subCategoryName}
+        </a>
+      </c:if>
+    </c:forEach>
+  </div>
+</c:if>
 
 	<!-- ✅ 상품 리스트 -->
 <c:if test="${not empty productList}">

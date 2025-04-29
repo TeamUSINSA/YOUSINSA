@@ -92,4 +92,9 @@ public class ProductDAOImpl implements ProductDAO {
 		if (sqlSession != null)
 			sqlSession.close();
 	}
+	
+	 @Override
+	    public List<Product> selectLatestProducts(int count) throws Exception {
+	        return sqlSession.selectList("mapper.product.selectLatestProducts", count);
+	    }
 }

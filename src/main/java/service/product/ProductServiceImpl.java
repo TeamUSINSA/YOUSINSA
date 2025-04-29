@@ -43,4 +43,9 @@ public class ProductServiceImpl implements ProductService{
 		// TODO Auto-generated method stub
 		return selectById(productId);
 	}
+	
+	@Override
+    public List<Product> getLatestProducts(int count) throws Exception {
+        return productDAO.selectLatestProducts(count);
+    }
 }
