@@ -1,7 +1,9 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,41 +15,29 @@ import dto.order.Exchange;
 import service.order.ExchangeService;
 import service.order.ExchangeServiceImpl;
 
-/**
- * Servlet implementation class AdminExchange
- */
 @WebServlet("/adminExchange")
 public class AdminExchange extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+    private static final long serialVersionUID = 1L;
+
     public AdminExchange() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String status = request.getParameter("status");
             ExchangeService service = new ExchangeServiceImpl();
-            List<Exchange> returnList;
+            List<Exchange> exchangeList;
 
-            if ("completed".equals(status)) {
-                returnList = service.getExchangesByApproved(1); // 수락
-            } else if ("pending".equals(status)) {
-                returnList = service.getExchangesByApproved(0); // 대기
-            } else if ("rejected".equals(status)) {
-                returnList = service.getExchangesByApproved(2); // ✅ 반려 추가
+            if ("completed".equals(status) || "pending".equals(status) || "rejected".equals(status)) {
+                Map<String, Object> param = new HashMap<>();
+                param.put("status", status);
+                exchangeList = service.getExchangesByApproved(param);
             } else {
-                returnList = service.getAllExchanges(); // 전체
+                exchangeList = service.getAllExchanges();
             }
 
-            request.setAttribute("exchangeList", returnList);
+            request.setAttribute("exchangeList", exchangeList);
             request.setAttribute("totalPages", service.getTotalPages());
             request.getRequestDispatcher("/admin/adminExchange.jsp").forward(request, response);
         } catch (Exception e) {
@@ -56,7 +46,4 @@ public class AdminExchange extends HttpServlet {
             request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
     }
-
-
-
 }

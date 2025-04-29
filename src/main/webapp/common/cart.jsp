@@ -103,87 +103,84 @@ button:hover {
 </style>
 </head>
 <body>
-
-	<jsp:include page="/header" />
-	<h2 class="cart-title">장바구니</h2>
-
-	<c:if test="${empty cartList}">
-		<p style="text-align: center;">장바구니에 상품이 없습니다.</p>
-	</c:if>
-
+<jsp:include page="/header" />
 	<c:if test="${not empty cartList}">
-		<div class="cart-container">
-			<div class="cart-top-actions">
-				<button onclick="deleteSelected()">선택항목 삭제</button>
-			</div>
+  <div class="cart-container">
+    <div class="cart-top-actions">
+      <button onclick="deleteSelected()">선택항목 삭제</button>
+    </div>
 
-			<form id="cartForm" method="post">
-				<table class="cart-table">
-					<thead>
-						<tr>
-							<th><input type="checkbox" id="selectAll"
-								onclick="toggleAll(this)"></th>
-							<th>상품정보</th>
-							<th>수량</th>
-							<th>금액</th>
-							<th>삭제</th>
-						</tr>
-					</thead>
-					<tbody>
-<c:forEach var="item" items="${cartList}">
-  <tr
-    data-cart-id="${item.cartId}"
-    data-product-id="${item.productId}"
-    data-color="${item.color}"
-    data-size="${item.size}"
-    data-quantity="${item.quantity}"
-    data-unit="${item.price}">
-    <td>
-      <input type="checkbox" class="itemCheckbox">
-    </td>
-    <td>
-      <!-- 기존 코드 유지 -->
-      <div class="cart-item">
-        <img src="${pageContext.request.contextPath}/image/${item.mainImage1}" alt="${item.name}">
-        <div class="cart-info">
-          <div><b>${item.name}</b></div>
-          <div>옵션: ${item.color} / ${item.size}</div>
-        </div>
-      </div>
-    </td>
-    <td>
-      <div class="cart-qty">
-        <button type="button" onclick="changeQty(this, -1)">-</button>
-        <span class="qty">${item.quantity}</span>
-        <button type="button" onclick="changeQty(this, 1)">+</button>
-      </div>
-    </td>
-    <td>
-      <span class="price">
-        <fmt:formatNumber value="${item.price * item.quantity}" type="number"/>원
-      </span>
-    </td>
-    <td class="cart-actions">
-      <button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
-    </td>
-  </tr>
-</c:forEach>
+    <form id="cartForm" method="post">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+            <th>상품정보</th>
+            <th>수량</th>
+            <th>금액</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody>
+          <c:forEach var="item" items="${cartList}">
+            <!-- 상품 상세 URL 미리 생성 -->
+            <c:url var="detailUrl" value="/productDetail">
+              <c:param name="productId" value="${item.productId}" />
+            </c:url>
 
-					</tbody>
-				</table>
-			</form>
+            <tr
+              data-cart-id="${item.cartId}"
+              data-product-id="${item.productId}"
+              data-color="${item.color}"
+              data-size="${item.size}"
+              data-quantity="${item.quantity}"
+              data-unit="${item.price}"
+            >
+              <td>
+                <input type="checkbox" class="itemCheckbox" value="${item.cartId}">
+              </td>
+              <td>
+                <a href="${detailUrl}" style="display:flex; text-decoration:none; color:inherit;">
+                  <div class="cart-item">
+                    <img src="${pageContext.request.contextPath}/image/${item.mainImage1}" alt="${item.name}">
+                    <div class="cart-info">
+                      <div><b>${item.name}</b></div>
+                      <div>옵션: ${item.color} / ${item.size}</div>
+                    </div>
+                  </div>
+                </a>
+              </td>
+              <td>
+                <div class="cart-qty">
+                  <button type="button" onclick="changeQty(this, -1)">-</button>
+                  <span class="qty">${item.quantity}</span>
+                  <button type="button" onclick="changeQty(this, 1)">+</button>
+                </div>
+              </td>
+              <td>
+                <span class="price">
+                  <fmt:formatNumber value="${item.price * item.quantity}" type="number"/>원
+                </span>
+              </td>
+              <td class="cart-actions">
+                <button type="button" onclick="deleteSingle(${item.cartId})">삭제</button>
+              </td>
+            </tr>
+          </c:forEach>
+        </tbody>
+      </table>
+    </form>
 
-			<div class="cart-bottom-actions">
-<button id="orderSelectedBtn" class="button" onclick="orderSelected()">선택상품 주문</button>
-  <button id="orderAllBtn" class="button button-black" onclick="orderAll()">전체상품 주문</button>
-			</div>
-			<div class="cart-total"
-				style="max-width: 1000px; margin: 0 auto 40px; text-align: right; font-size: 16px; font-weight: bold;">
-				선택 합계: <span id="selectedSum">0</span>원
-			</div>
-		</div>
-	</c:if>
-
+    <div class="cart-bottom-actions">
+      <button id="orderSelectedBtn" class="button" onclick="orderSelected()">선택상품 주문</button>
+      <button id="orderAllBtn" class="button button-black" onclick="orderAll()">전체상품 주문</button>
+    </div>
+    <div class="cart-total"
+      style="max-width: 1000px; margin: 0 auto 40px; text-align: right; font-size: 16px; font-weight: bold;">
+      선택 합계: <span id="selectedSum">0</span>원
+    </div>
+  </div>
+</c:if>
 	<jsp:include page="/footer" />
 
 	<script>

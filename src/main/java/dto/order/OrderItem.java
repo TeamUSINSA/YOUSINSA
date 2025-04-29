@@ -18,6 +18,9 @@ public class OrderItem {
     private String mainImage1;
    
     private boolean hasReview;
+    private int cost;
+    public int getCost() { return cost; }
+    public void setCost(int cost) { this.cost = cost; }
 
 
 

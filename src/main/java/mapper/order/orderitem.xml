@@ -5,33 +5,63 @@
 
 <mapper namespace="mapper.orderitem">
 
-	<!-- 1) 주문별 조회 -->
-	<select id="selectByOrderId" parameterType="int"
-		resultType="dto.order.OrderItem">
-		SELECT *
-		FROM orderitem
-		WHERE order_id = #{orderId}
-	</select>
+  <!-- resultMap 정의 -->
+  <resultMap id="OrderItemResult" type="dto.order.OrderItem">
+    <id     property="orderItemId" column="order_item_id"/>
+    <result property="orderId"       column="order_id"/>
+    <result property="productId"     column="product_id"/>
+    <result property="quantity"      column="quantity"/>
+    <result property="couponId"      column="coupon_id"/>
+    <result property="color"         column="color"/>
+    <result property="size"          column="size"/>
+    <!-- product 테이블에서 가져온 가격 -->
+    <result property="cost"         column="cost"/>
+    <result property="name"          column="product_name"/>
+    <result property="mainImage1"    column="main_image1"/>
+  </resultMap>
 
-	<!-- 2) 삽입 -->
-	<insert id="insert" parameterType="dto.order.OrderItem"
-		useGeneratedKeys="true" keyProperty="orderItemId">
-		INSERT INTO orderitem
-		( order_id
-		, product_id
-		, quantity
-		, coupon_id
-		, color
-		, size
-		)
-		VALUES
-		( #{orderId}
-		, #{productId}
-		, #{quantity}
-		, #{couponId}
-		, #{color}
-		, #{size}
-		)
-	</insert>
+  <!-- 주문별 아이템 조회 -->
+  <select id="selectByOrderId"
+          parameterType="int"
+          resultMap="OrderItemResult">
+    SELECT
+      oi.order_item_id,
+      oi.order_id,
+      oi.product_id,
+      oi.quantity,
+      oi.coupon_id,
+      oi.color,
+      oi.size,
+      p.cost              AS cost,
+      p.name               AS product_name,
+      p.main_image1
+    FROM orderitem oi
+    JOIN product p
+      ON p.product_id = oi.product_id
+    WHERE oi.order_id = #{orderId}
+  </select>
+
+  <!-- (필요시) 아이템 삽입 -->
+  <insert id="insert"
+          parameterType="dto.order.OrderItem"
+          useGeneratedKeys="true"
+          keyProperty="orderItemId">
+    INSERT INTO orderitem
+      ( order_id
+      , product_id
+      , quantity
+      , coupon_id
+      , color
+      , size
+      )
+    VALUES
+      ( #{orderId}
+      , #{productId}
+      , #{quantity}
+      , #{couponId}
+      , #{color}
+      , #{size}
+      )
+  </insert>
 
 </mapper>

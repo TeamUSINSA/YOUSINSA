@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.order.myreturn">
+
+  <!-- 1. ResultMap 정의 -->
+  <resultMap id="ReturnMap" type="dto.order.Return">
+    <id     column="return_id"    property="returnId"/>
+    <result column="order_id"     property="orderId"/>
+    <result column="return_date"  property="returnDate"/>
+    <result column="reason"       property="reason"/>
+    <result column="user_id"      property="userId"/>
+
+    <association property="order" javaType="dto.order.OrderList">
+      <result column="order_date"      property="orderDate"/>
+      <result column="delivery_status" property="deliveryStatus"/>
+    </association>
+
+    <collection property="orderItems" ofType="dto.order.OrderItem">
+      <id     column="order_item_id" property="orderItemId"/>
+      <result column="product_id"     property="productId"/>
+      <result column="name"           property="name"/>
+      <result column="main_image1"    property="mainImage1"/>
+      <result column="color"          property="color"/>
+      <result column="size"           property="size"/>
+      <result column="quantity"       property="quantity"/>
+      <result column="item_status"    property="status"/>
+      <result column="total_price"    property="price"/>
+    </collection>
+  </resultMap>
+
+  <!-- 2. 반품 내역 조회 -->
+  <select id="selectReturnList"
+          parameterType="map"
+          resultMap="ReturnMap">
+    SELECT
+      r.return_id       AS return_id,
+      i.order_id		AS order_id,
+      r.return_date     AS return_date,
+      r.reason,
+      r.user_id,
+      o.order_date,
+      o.delivery_status,
+      i.order_item_id,
+      p.product_id,
+      p.name,
+      p.main_image1,
+      i.color,
+      i.size,
+      i.quantity,
+      i.status         AS item_status,
+      (p.cost * i.quantity) AS total_price
+    FROM `return` r
+    JOIN orderitem  i ON i.order_item_id = r.order_item_id
+    JOIN orderlist  o ON o.order_id      = i.order_id
+    JOIN product    p ON p.product_id    = i.product_id
+    WHERE r.user_id      = #{userId}
+      AND r.return_date  BETWEEN #{startDate} AND #{endDate}
+  </select>
+
+  <!-- 3. 반품 등록 -->
+  <insert id="insertReturn" parameterType="dto.order.Return">
+    INSERT INTO `return`
+      (order_item_id, return_date, reason, user_id)
+    VALUES
+      (#{orderItemId}, #{returnDate}, #{reason}, #{userId})
+  </insert>
+
+  <!-- 4. 상품 상태 변경 -->
+  <update id="updateOrderItemToReturned" parameterType="int">
+    UPDATE orderitem
+      SET status = '반품완료'
+    WHERE order_item_id = #{orderItemId}
+  </update>
+
+</mapper>

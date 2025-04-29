@@ -15,4 +15,9 @@
         SELECT CEIL(COUNT(*) / 10.0) FROM exchange
     </select>
 
+    <!-- ✨ 여기를 추가 -->
+    <select id="selectExchangeById" parameterType="int" resultType="dto.order.Exchange">
+        SELECT * FROM exchange WHERE exchange_id = #{exchangeId}
+    </select>
+
 </mapper>

@@ -14,4 +14,6 @@ public interface QNADAO {
 	void updateAnswer(QnA qna) throws Exception;
 
 	void deleteQnA(int qnaId) throws Exception;
+	
+	 List<QnA> findQnAByFilter(String filter) throws Exception;
 }

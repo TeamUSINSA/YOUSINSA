@@ -56,4 +56,15 @@ public class QNADAOImpl implements QNADAO {
             throw e;
         }
     }
+
+    @Override
+    public List<QnA> findQnAByFilter(String filter) {
+        if ("done".equals(filter)) {
+            return session.selectList("mapper.qna.selectDoneQnA");
+        } else if ("waiting".equals(filter)) {
+            return session.selectList("mapper.qna.selectWaitingQnA");
+        } else {
+            return session.selectList("mapper.qna.selectAllQnA");
+        }
+    }
 }

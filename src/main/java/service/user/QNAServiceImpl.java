@@ -34,4 +34,9 @@ public class QNAServiceImpl implements QNAService {
     public void removeQnA(int qnaId) throws Exception {
         qnaDAO.deleteQnA(qnaId);
     }
+
+	@Override
+	public List<QnA> getQnAByFilter(String filter) throws Exception {
+		return qnaDAO.findQnAByFilter(filter);
+	}
 }

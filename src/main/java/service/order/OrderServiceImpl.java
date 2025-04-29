@@ -46,7 +46,17 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> getOrdersByDateRange(String userId, Date startDate, Date endDate) throws Exception {
-		return orderDAO.getOrdersByDateRange(userId, startDate, endDate);
+		// 1) DAO 호출: userId, 날짜 범위에 맞는 전체 주문을 가져온다
+		List<Order> orders = orderDAO.getOrdersByDateRange(userId, startDate, endDate);
+		// 2) Java 8+ removeIf 로 “취소완료” 또는 “반품완료” 상태 주문을 **리스트에서 제거**
+        orders.removeIf(o ->
+            "취소완료".equals(o.getDeliveryStatus()) ||
+            "반품완료".equals(o.getDeliveryStatus())
+        );
+
+        // 3) (선택) 품목별 리뷰 플래그 설정이나 기타 후처리
+
+        return orders;
 	}
 
 	@Override

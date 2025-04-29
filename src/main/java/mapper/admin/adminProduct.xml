@@ -89,7 +89,7 @@
 
 	<!-- ✅ 프로덕트 아이디로 스톡 조회 : 클리어 -->
 	<select id="selectStockByProductId" parameterType="Integer"
-		resultType="stock">
+		resultType="productStock">
 		select * from productstock where product_id=#{productId}
 	</select>
 

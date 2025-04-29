@@ -1,10 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="java.util.*" %>
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
-<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -20,16 +15,29 @@
     .main-layout {
       display: flex;
       min-height: 100vh;
+      margin: 0; /* 기본 여백 없앰 */
     }
+    /* 사이드바 스타일 */
     .sidebar {
-      width: 250px;
+      width: 280px;
       background: #ffffff;
       border-right: 1px solid #ddd;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      padding: 20px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      height: 100vh;  /* 사이드바가 화면 높이를 넘지 않도록 설정 */
+      position: fixed; /* 스크롤 시에도 고정되도록 */
+      top: 0;
+      left: 0;
     }
+    /* 메인 콘텐츠 스타일 */
     .main-content {
-      flex: 1;
+      flex-grow: 1;
       padding: 40px;
       background-color: #f8f8f8;
+      margin-left: 300px; /* 사이드바 크기만큼 여백 추가 */
+      margin-top: 60px; /* 헤더 여백 */
     }
     h2 {
       font-size: 24px;
@@ -94,10 +102,12 @@
 <body>
 
 <div class="main-layout">
+  <!-- 사이드바 -->
   <div class="sidebar">
     <jsp:include page="adminSideBar.jsp" />
   </div>
 
+  <!-- 메인 콘텐츠 -->
   <div class="main-content">
     <h2>상품 검색</h2>
     <div class="container">

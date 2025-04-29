@@ -76,7 +76,8 @@ public class OrderServlet extends HttpServlet {
 				var p = productService.selectById(o.getProductId());
 				o.setName(p.getName());
 				o.setImage(p.getMainImage1());
-				o.setUnitPrice(p.getPrice());
+				int salePrice = p.getPrice() - p.getDiscount();
+				o.setUnitPrice(salePrice);
 
 				orderList.add(o);
 			}

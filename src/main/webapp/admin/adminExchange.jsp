@@ -1,6 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,28 +14,33 @@ body {
   font-family: 'Pretendard', sans-serif;
   background-color: #f8f8f8;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
-.layout {
+.content-wrapper {
   display: flex;
-  flex: 1;
-  min-height: calc(100vh - 200px); /* 헤더+푸터 높이 제외 */
+  gap: 30px;
+  margin: 20px;
 }
 
-.sidebar {
-  width: 250px;
-  background-color: #fff;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+/* adminSideBar.jsp 바로 스타일링 */
+.content-wrapper > div:first-child {
+  width: 280px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   padding: 20px;
-  box-sizing: border-box;
+  flex-shrink: 0;
+  min-height: 600px;
 }
 
-.main-wrapper {
-  flex: 1;
-  padding: 40px;
-  box-sizing: border-box;
+/* 메인 콘텐츠 */
+.main-content {
+  flex-grow: 1;
+  background: white;
+  padding: 40px 50px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  min-height: 600px;
 }
 
 h2 {
@@ -44,28 +49,29 @@ h2 {
   margin-bottom: 30px;
 }
 
-.container {
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
-.search-container form {
+.search-form label {
+  font-size: 14px;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 6px;
 }
 
 .btn-search {
   background-color: #000;
-  color: #fff;
+  color: white;
   padding: 8px 20px;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
+  border: none;
+  font-size: 14px;
 }
 
 .btn-search:hover {
@@ -75,17 +81,23 @@ h2 {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 th, td {
   padding: 12px;
   text-align: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 thead {
   background-color: #f0f0f0;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
 }
 
 .status-complete {
@@ -104,102 +116,97 @@ thead {
 }
 
 .pagination {
-  text-align: center;
   margin-top: 30px;
+  text-align: center;
 }
 
 .pagination a {
+  display: inline-block;
   margin: 0 5px;
-  text-decoration: none;
+  padding: 6px 12px;
+  background-color: #eee;
   color: #333;
-  font-weight: bold;
+  text-decoration: none;
+  border-radius: 6px;
 }
 
-.pagination a:hover {
-  text-decoration: underline;
+.pagination a.active {
+  background-color: black;
+  color: white;
 }
 </style>
 </head>
+
 <body>
+<div class="content-wrapper">
 
-<div class="layout">
-  <div class="sidebar">
-    <jsp:include page="adminSideBar.jsp" />
-  </div>
-  <div class="main-wrapper">
+  <!-- ❌ 불필요한 div 감싸기 제거 -->
+  <jsp:include page="adminSideBar.jsp" />
+
+  <!-- 메인 콘텐츠 -->
+  <div class="main-content">
     <h2>교환 접수</h2>
-    <div class="container">
-      <div class="search-container">
-        <form method="get" action="${pageContext.request.contextPath}/adminExchange">
-          <label>
-            <input type="radio" name="status" value="all" ${param.status == 'all' || param.status == null ? 'checked' : ''}> 전체
-          </label>
-          <label>
-            <input type="radio" name="status" value="completed" ${param.status == 'completed' ? 'checked' : ''}> 교환 완료
-          </label>
-          <label>
-            <input type="radio" name="status" value="pending" ${param.status == 'pending' ? 'checked' : ''}> 교환 대기
-          </label>
-          <label>
-            <input type="radio" name="status" value="rejected" ${param.status == 'rejected' ? 'checked' : ''}> 교환 반려
-          </label>
-          <button type="submit" class="btn-search">검색</button>
-        </form>
-      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>접수일시</th>
-            <th>주문번호</th>
-            <th>교환사유</th>
-            <th>현재상태</th>
-          </tr>
-        </thead>
-        <tbody>
-          <c:choose>
-            <c:when test="${not empty exchangeList}">
-              <c:forEach var="exchange" items="${exchangeList}">
-                <tr onclick="location.href='${pageContext.request.contextPath}/adminExchangeDetail?exchangeId=${exchange.exchangeId}'" style="cursor: pointer;">
-                  <td>${exchange.exchangeDate}</td>
-                  <td>${exchange.orderItemId}</td>
-                  <td>${exchange.reason}</td>
-                  <td>
-                    <c:choose>
-                      <c:when test="${exchange.approved == 1}">
-                        <span class="status-complete">교환 수락</span>
-                      </c:when>
-                      <c:when test="${exchange.approved == 0}">
-                        <span class="status-pending">신청 접수</span>
-                      </c:when>
-                      <c:when test="${exchange.approved == 2}">
-                        <span class="status-rejected">교환 반려</span>
-                      </c:when>
-                      <c:otherwise>
-                        <span class="status-pending">처리되지 않음</span>
-                      </c:otherwise>
-                    </c:choose>
-                  </td>
-                </tr>
-              </c:forEach>
-            </c:when>
-            <c:otherwise>
-              <tr>
-                <td colspan="4">검색 결과가 없습니다.</td>
+    <form method="get" action="${pageContext.request.contextPath}/adminExchange" class="search-form">
+      <label><input type="radio" name="status" value="all" ${param.status == 'all' || param.status == null ? 'checked' : ''}> 전체</label>
+      <label><input type="radio" name="status" value="completed" ${param.status == 'completed' ? 'checked' : ''}> 교환 완료</label>
+      <label><input type="radio" name="status" value="pending" ${param.status == 'pending' ? 'checked' : ''}> 교환 대기</label>
+      <label><input type="radio" name="status" value="rejected" ${param.status == 'rejected' ? 'checked' : ''}> 교환 반려</label>
+      <button type="submit" class="btn-search">검색</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>접수일시</th>
+          <th>주문번호</th>
+          <th>교환사유</th>
+          <th>현재상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <c:choose>
+          <c:when test="${not empty exchangeList}">
+            <c:forEach var="exchange" items="${exchangeList}">
+              <tr onclick="location.href='${pageContext.request.contextPath}/adminExchangeDetail?exchangeId=${exchange.exchangeId}'">
+                <td>${exchange.exchangeDate}</td>
+                <td>${exchange.orderItemId}</td>
+                <td>${exchange.reason}</td>
+                <td>
+                  <c:choose>
+                    <c:when test="${exchange.approved == 1}">
+                      <span class="status-complete">교환 수락</span>
+                    </c:when>
+                    <c:when test="${exchange.approved == 0}">
+                      <span class="status-pending">신청 접수</span>
+                    </c:when>
+                    <c:when test="${exchange.approved == 2}">
+                      <span class="status-rejected">교환 반려</span>
+                    </c:when>
+                    <c:otherwise>
+                      <span class="status-pending">처리되지 않음</span>
+                    </c:otherwise>
+                  </c:choose>
+                </td>
               </tr>
-            </c:otherwise>
-          </c:choose>
-        </tbody>
-      </table>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <tr><td colspan="4">검색 결과가 없습니다.</td></tr>
+          </c:otherwise>
+        </c:choose>
+      </tbody>
+    </table>
 
-      <div class="pagination">
-        <c:forEach var="i" begin="1" end="${totalPages}">
-          <a href="${pageContext.request.contextPath}/adminExchange?page=${i}&status=${param.status}">${i}</a>
-        </c:forEach>
-      </div>
+    <div class="pagination">
+      <c:forEach var="i" begin="1" end="${totalPages}">
+        <a href="${pageContext.request.contextPath}/adminExchange?page=${i}&status=${param.status}" class="${i == param.page ? 'active' : ''}">${i}</a>
+      </c:forEach>
     </div>
+
   </div>
 </div>
+
 <jsp:include page="../common/footer.jsp" />
 </body>
 </html>

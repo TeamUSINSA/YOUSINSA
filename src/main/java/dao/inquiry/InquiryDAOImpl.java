@@ -43,4 +43,12 @@ public class InquiryDAOImpl implements InquiryDAO {
     public List<Inquiry> selectByStatus(String status) throws Exception {
         return sqlSession.selectList("mapper.user.inquiry.selectByStatus", status);
     }
+    
+    @Override
+    public List<Inquiry> selectByProductId(int productId) throws Exception {
+        return sqlSession.selectList(
+            "mapper.user.inquiry.selectByProductId",
+            productId
+        );
+    }
 }

@@ -26,14 +26,17 @@ public class AdminQNA extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<QnA> qnaList = qnaService.getAllQnA();  // ✅ DAO 말고 Service를 통해 호출
-            request.setAttribute("qnaList", qnaList);   // ✅ JSP에 넘길 데이터 저장
-            request.getRequestDispatcher("/admin/adminQNA.jsp").forward(request, response);  // ✅ 페이지 이동
+            String filter = request.getParameter("filter"); // ✅ 추가: 필터 파라미터 받기
+            List<QnA> qnaList = qnaService.getQnAByFilter(filter); // ✅ 필터에 맞게 가져오기
+
+            request.setAttribute("qnaList", qnaList);   
+            request.getRequestDispatcher("/admin/adminQNA.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/error.jsp"); // 에러 시 에러페이지 이동
+            response.sendRedirect(request.getContextPath() + "/error.jsp");
         }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

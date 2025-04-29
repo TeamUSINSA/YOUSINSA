@@ -184,10 +184,36 @@ body {
 					<span style="color: #facc15;">리뷰 ${fn:length(reviewList)}개</span>
 				</div>
 
-				<div>
-					가격: <span id="basePrice"><fmt:formatNumber
-							value="${product.price}" type="number" />원</span>
-				</div>
+<!-- price 영역 -->
+<div>
+  <%-- 1) 최종가, 할인율 계산 --%>
+  <c:set var="finalPrice"   value="${product.price - product.discount}" />
+  <c:set var="discountRate" value="${(product.discount * 100) / product.price}" />
+
+  <c:choose>
+    <c:when test="${product.discount > 0}">
+      <span style="color:red; font-weight:bold;">
+        <fmt:formatNumber value="${discountRate}"
+                          type="number"
+                          maxFractionDigits="0"/>% 할인
+      </span>
+      &nbsp;
+      <span style="text-decoration:line-through; color:#000;">
+        <fmt:formatNumber value="${product.price}" type="number"/>원
+      </span>
+      &nbsp;
+      <span id="basePrice" style="color:red; font-weight:bold;">
+        <fmt:formatNumber value="${finalPrice}" type="number"/>원
+      </span>
+    </c:when>
+    <c:otherwise>
+      <span id="basePrice">
+        <fmt:formatNumber value="${product.price}" type="number"/>원
+      </span>
+    </c:otherwise>
+  </c:choose>
+</div>
+
 
 				<!-- 드롭다운 -->
 				<select id="colorSelect" style="margin-top: 10px;">
@@ -207,7 +233,7 @@ body {
 						class="button"
 						style="font-size: 20px; display: flex; align-items: center; gap: 8px;">
 						<!-- 아직 로그인 체크·likedByUser 속성이 없다면 기본 🤍 아이콘 사용 -->
-						<span id="likeIcon">${likedByUser ? '💖' : '🤍'}</span> <span
+						<span id="likeIcon">${likedByUser ? '❤️' : '🤍'}</span> <span
 							id="likeCount">${likeCount}</span>
 					</button>
 				</div>
@@ -324,19 +350,105 @@ body {
 			</c:forEach>
 		</section>
 
-		<section id="inquiry" class="p-4 border mt-4">
-			<h3>상품문의</h3>
-			<c:forEach var="inq" items="${inquiryList}">
-				<div class="border p-4 mb-4 inquiry-item">
-					<strong>${inq.title}</strong><br />
-					<c:choose>
-						<c:when test="${inq.secret}">🔒 비밀글입니다.</c:when>
-						<c:otherwise>${inq.content}</c:otherwise>
-					</c:choose>
-					<div class="text-sm">작성자: ${inq.writerId} | ${inq.regDate}</div>
-				</div>
-			</c:forEach>
-		</section>
+<section id="inquiry" class="p-4 border mt-4">
+  <h3>상품문의</h3>
+  <c:forEach var="inq" items="${inquiryList}">
+    <div class="border p-4 mb-4 inquiry-item">
+      <strong>${inq.title}</strong><br/>
+
+      <%-- 판매자이거나 본인이 쓴 글이면 내용·이미지·답변 표시 --%>
+      <c:choose>
+        <c:when test="${sessionScope.isSeller or sessionScope.userId eq inq.userId}">
+          <p>${inq.content}</p>
+
+          <%-- 첨부 이미지가 있으면 보여주기 --%>
+<c:if test="${not empty inq.image}">
+  <div style="margin-top:8px;">
+    <img
+      src="${pageContext.request.contextPath}/image/${inq.image}"
+      alt="첨부 이미지"
+      style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;"
+    />
+  </div>
+</c:if>
+
+
+          <c:if test="${not empty inq.answer}">
+            <div style="margin-top:8px; color:blue;">
+              <strong>답변:</strong> ${inq.answer}
+            </div>
+          </c:if>
+        </c:when>
+        <c:otherwise>
+          🔒 비밀글입니다.
+        </c:otherwise>
+      </c:choose>
+
+      <div class="text-sm">
+        작성자: ${inq.userId} | ${inq.questionDate}
+      </div>
+    </div>
+  </c:forEach>
+
+  <%-- 로그인 여부에 따라 문의하기 폼 제공 --%>
+  <c:choose>
+    <c:when test="${not empty sessionScope.userId}">
+      <button type="button" id="openInquiryForm" class="btn">문의하기</button>
+      <div id="inquiryForm" style="display:none; margin-top:16px;">
+<form action="<c:url value='/inquiryAdd'/>"
+      method="post"
+      enctype="multipart/form-data">
+  <input type="hidden" name="productId" value="${product.productId}" />
+  <div>
+    <label>제목</label><br/>
+    <input type="text" name="title" required style="width:100%;"/>
+  </div>
+  <div style="margin-top:8px;">
+    <label>내용</label><br/>
+    <textarea name="content" rows="4" required style="width:100%;"></textarea>
+  </div>
+  <div style="margin-top:8px;">
+    <label>사진 첨부</label><br/>
+    <input type="file" name="image" accept="image/*" onchange="previewImage(event)"/>
+    <img id="preview" style="display:none; margin-top:8px; max-width:100%;"/>
+  </div>
+  <div style="margin-top:8px;">
+    <button type="submit" class="btn">등록</button>
+    <button type="button" id="cancelInquiry" class="btn">취소</button>
+  </div>
+</form>
+<script>
+  document.getElementById('openInquiryForm').onclick = () => {
+    document.getElementById('inquiryForm').style.display = 'block';
+  };
+  document.getElementById('cancelInquiry').onclick = () => {
+    document.getElementById('inquiryForm').style.display = 'none';
+  };
+  function previewImage(evt) {
+    const file = evt.target.files[0], img = document.getElementById('preview');
+    if (!file) return img.style.display = 'none';
+    img.src = URL.createObjectURL(file);
+    img.style.display = 'block';
+  }
+</script>
+
+      </div>
+      <script>
+        document.getElementById('openInquiryForm').onclick = () => {
+          document.getElementById('inquiryForm').style.display = 'block';
+        };
+        document.getElementById('cancelInquiry').onclick = () => {
+          document.getElementById('inquiryForm').style.display = 'none';
+        };
+      </script>
+    </c:when>
+    <c:otherwise>
+      <a href="<c:url value='/login'/>">로그인 후 문의하기</a>
+    </c:otherwise>
+  </c:choose>
+</section>
+
+		
 	</div>
 	<jsp:include page="/footer" />
 

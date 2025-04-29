@@ -1,6 +1,8 @@
 package dao.order;
 
 import java.util.List;
+import java.util.Map;
+
 import dto.order.Exchange;
 
 public interface ExchangeDAO {
@@ -8,7 +10,7 @@ public interface ExchangeDAO {
 
 	int getTotalPages() throws Exception;
 	
-	List<Exchange> selectExchangesByApproved(int approved) throws Exception;
+	List<Exchange> selectExchangesByApproved(Map<String, Object> param) throws Exception;
 	
 	Exchange selectExchangeById(int exchangeId) throws Exception;
 	
