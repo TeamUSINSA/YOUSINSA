@@ -12,7 +12,9 @@ public class Coupon {
 	private Date endDate;
 	private String type;
 	private boolean active;
-
+	private int period;
+	
+	private Coupon coupon;
 
 	public Coupon() {
 	}
@@ -31,9 +33,31 @@ public class Coupon {
 	}
 
 	// Getter & Setter
+	
+	
 	public int getCouponId() {
 		return couponId;
 	}
+
+	public Coupon getCoupon() {
+		return coupon;
+	}
+
+
+	public void setCoupon(Coupon coupon) {
+		this.coupon = coupon;
+	}
+
+
+	public int getPeriod() {
+		return period;
+	}
+
+
+	public void setPeriod(int period) {
+		this.period = period;
+	}
+
 
 	public void setCouponId(int couponId) {
 		this.couponId = couponId;
