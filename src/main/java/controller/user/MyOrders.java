@@ -26,8 +26,6 @@ import service.user.ReviewServiceImpl;
 @WebServlet("/myOrders")
 public class MyOrders extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private OrderService service = new OrderServiceImpl();
-	private ReviewService reviewService = new ReviewServiceImpl();
 
 	public MyOrders() {
 		super();
@@ -37,6 +35,8 @@ public class MyOrders extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("userId");
+		OrderService service = new OrderServiceImpl();
+		ReviewService reviewService = new ReviewServiceImpl();
 
 		if (userId == null) {
 			response.sendRedirect(request.getContextPath() + "/login");

@@ -8,7 +8,7 @@
     <select id="selectAllOrders" resultType="dto.order.OrderList">
         SELECT order_id, user_id, order_date, total_price, delivery_status,
                delivery_request, payment_method,
-               point_id, receiver_name, receiver_phone, receiver_address
+                receiver_name, receiver_phone, receiver_address
         FROM orderlist
         ORDER BY order_date DESC
     </select>
@@ -52,7 +52,6 @@
         <result property="deliveryRequest" column="delivery_request"/>
         <result property="paymentMethod" column="payment_method"/>
         <result property="userId" column="user_id"/>
-        <result property="pointId" column="point_id"/>
         <result property="receiverName" column="receiver_name"/>
         <result property="receiverPhone" column="receiver_phone"/>
         <result property="receiverAddress" column="receiver_address"/>
@@ -118,7 +117,7 @@
     <select id="getOrderDetailById" parameterType="int" resultMap="orderListWithItemsResultMap">
         SELECT o.order_id, o.order_date, o.total_price, o.delivery_status,
                o.delivery_request, o.payment_method, o.user_id,
-               o.point_id, o.receiver_name, o.receiver_phone, o.receiver_address,
+               o.receiver_name, o.receiver_phone, o.receiver_address,
                o.used_point, o.coupon_discount,
                oi.order_item_id, oi.product_id, oi.quantity, oi.status,
                oi.color, oi.size,
@@ -173,7 +172,7 @@
     <select id="findOrderListById" parameterType="int" resultType="dto.order.OrderList">
         SELECT order_id, user_id, order_date, total_price, delivery_status,
                delivery_request, payment_method,
-               point_id, receiver_name, receiver_phone, receiver_address
+                receiver_name, receiver_phone, receiver_address
         FROM orderlist
         WHERE order_id = #{orderId}
     </select>

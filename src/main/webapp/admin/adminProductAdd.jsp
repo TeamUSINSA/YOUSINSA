@@ -389,7 +389,7 @@ img {
 		
 		<div class="content">
 			<h2>상품등록</h2>
-			<form action="adminproductadd" method="post"
+			<form action="adminProductAdd" method="post"
 				enctype="multipart/form-data" id="regForm">
 				<div class="container">
 					<div class="left">
