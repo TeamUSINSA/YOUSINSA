@@ -9,7 +9,8 @@
 	<update id="updateProduct" parameterType="dto.product.Product">
 		UPDATE product
 		SET
-		name = #{name},
+		name =
+		#{name},
 		cost = #{cost},
 		price = #{price},
 		discount = #{discount},
@@ -19,38 +20,51 @@
 		main_image1 = #{mainImage1},
 		main_image2 = #{mainImage2},
 		main_image3 = #{mainImage3},
-		main_image4 = #{mainImage4},
+		main_image4 =
+		#{mainImage4},
 		image1 = #{image1},
 		image2 = #{image2},
-		image3 = #{image3},
+		image3 =
+		#{image3},
 		image4 = #{image4},
 		image5 = #{image5},
 		image6 = #{image6},
 		image7 = #{image7},
 		image8 = #{image8},
 		image9 = #{image9},
-		image10 = #{image10},
+		image10 =
+		#{image10},
+		size_type = #{sizeType},
 		size_chart = #{sizeChart}
-		WHERE product_id = #{productId}
+		WHERE
+		product_id =
+		#{productId}
 	</update>
 
 
 	<!-- ✅ 상품 등록 : 클리어 -->
-<insert id="insertProduct" parameterType="dto.product.Product">
-  INSERT INTO product (
-    product_id, name, cost, price, discount, sub_category_id, 
-    size_type, reg_date, description1, description2, 
-    main_image1, main_image2, main_image3, main_image4, 
-    image1, image2, image3, image4, image5, image6, image7, image8, image9, image10, 
-    size_chart
-  ) VALUES (
-    #{productId}, #{name}, #{cost}, #{price}, #{discount}, #{subCategoryId}, 
-    #{sizeType}, NOW(), #{description1}, #{description2}, 
-    #{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4}, 
-    #{image1}, #{image2}, #{image3}, #{image4}, #{image5}, #{image6}, #{image7}, #{image8}, #{image9}, #{image10}, 
-    #{sizeChart}
-  )
-</insert>
+	<insert id="insertProduct" parameterType="dto.product.Product">
+		INSERT INTO product (
+		product_id, name, cost, price, discount, sub_category_id,
+		size_type,
+		reg_date, description1, description2,
+		main_image1, main_image2,
+		main_image3, main_image4,
+		image1, image2, image3, image4, image5,
+		image6, image7, image8, image9,
+		image10,
+		size_chart
+		) VALUES (
+		#{productId}, #{name}, #{cost}, #{price}, #{discount},
+		#{subCategoryId},
+		#{sizeType}, NOW(), #{description1}, #{description2},
+		#{mainImage1}, #{mainImage2}, #{mainImage3}, #{mainImage4},
+		#{image1},
+		#{image2}, #{image3}, #{image4}, #{image5}, #{image6}, #{image7},
+		#{image8}, #{image9}, #{image10},
+		#{sizeChart}
+		)
+	</insert>
 
 
 
@@ -105,5 +119,33 @@
 		SELECT size, quantity FROM productstock WHERE
 		product_id=#{productId} AND color=#{color}
 	</select>
+
+	<!-- 재고 존재 여부 확인 -->
+	<select id="countStockByProductIdColorSize" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM productstock
+		WHERE product_id = #{productId}
+		AND color = #{color}
+		AND size = #{size}
+	</select>
+
+	<!-- 재고 수량 업데이트 -->
+	<update id="updateStockQuantity"
+		parameterType="dto.product.ProductStock">
+		UPDATE productstock
+		SET quantity = #{quantity}
+		WHERE product_id = #{productId}
+		AND color = #{color}
+		AND size = #{size}
+	</update>
+
+	<!-- 재고 새로 삽입 -->
+	<insert id="insertProductStock"
+		parameterType="dto.product.ProductStock">
+		INSERT INTO productstock (product_id, color, size, quantity)
+		VALUES (#{productId}, #{color}, #{size}, #{quantity})
+	</insert>
+
 
 </mapper>

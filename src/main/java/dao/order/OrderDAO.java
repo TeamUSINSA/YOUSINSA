@@ -45,4 +45,6 @@ public interface OrderDAO {
     OrderList getOrderDetailById(int orderId) throws Exception;
 
     List<OrderList> selectOrderListByUser(String userId) throws Exception;
+    
+    void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception;
 }

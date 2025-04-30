@@ -61,12 +61,25 @@
 		LIMIT #{row}, 10
 	</select>
 
-	<select id="selectProductList" parameterType="Map" resultType="dto.product.Product">
-	select product_id as productId, 
-	       name as name, 
-	       main_image1 as mainImage1
-	from product
-	where ${type} like '%${keyword}%'
+	<select id="selectProductList" parameterType="map" resultType="dto.product.Product">
+  SELECT product_id AS productId,
+         name,
+         main_image1 AS mainImage1
+  FROM product
+  <where>
+    <choose>
+      <when test="type == 'name'">
+        name LIKE CONCAT('%', #{keyword}, '%')
+      </when>
+      <when test="type == 'description1'">
+        description1 LIKE CONCAT('%', #{keyword}, '%')
+      </when>
+      <!-- 필요 시 더 추가 -->
+      <otherwise>
+        1=1
+      </otherwise>
+    </choose>
+  </where>
 </select>
 
 	<select id="selectProductById" parameterType="int"
@@ -79,6 +92,7 @@
 		discount,
 		sub_category_id,
 		type,
+		size_type,
 		reg_date,
 		description1,
 		description2,

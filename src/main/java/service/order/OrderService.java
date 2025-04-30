@@ -45,4 +45,6 @@ public interface OrderService {
     Product findProductById(int productId) throws Exception;
 
     List<OrderList> findOrdersByUserId(String userId) throws Exception;
+    
+    void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception;
 }

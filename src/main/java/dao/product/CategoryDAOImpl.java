@@ -51,4 +51,8 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sqlSession.selectList("mapper.category.selectCategoryWithSubList");
 	}
 
+	@Override
+	public SubCategory selectSubCategoryById(int subCategoryId) throws Exception {
+	    return sqlSession.selectOne("mapper.category.selectSubCategoryById", subCategoryId);
+	}
 }

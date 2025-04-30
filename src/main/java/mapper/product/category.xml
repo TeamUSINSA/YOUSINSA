@@ -78,4 +78,11 @@
   ORDER BY c.category_id, s.sub_category_id
 </select>
 
+<!-- 여기에 추가 -->
+<select id="selectSubCategoryById" resultType="dto.product.SubCategory" parameterType="int">
+    SELECT *
+    FROM subcategory
+    WHERE sub_category_id = #{subCategoryId}
+</select>
+
 </mapper>
