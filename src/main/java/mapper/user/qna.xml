@@ -38,7 +38,7 @@
     </select>
 
     <!-- ✅ QNA 질문 등록 -->
-    <insert id="insertQnA" parameterType="dto.user.QnA">
+    <insert id="insertQnA" parameterType="qna">
         INSERT INTO qna (
             title,
             content,
@@ -107,5 +107,64 @@
         WHERE status = '답변대기'
         ORDER BY question_date DESC
     </select>
+
+
+<!-- 마이페이지용 -->
+<!-- 내가 쓴 QnA 목록 (페이징용) -->
+  <select id="selectByUserId"
+          parameterType="map"
+          resultType="qna">
+    SELECT
+      qna_id         AS qnaId,
+    title,
+    content,
+    answer,
+    image,
+    user_id        AS userId,
+    type,
+    status,
+    question_date  AS questionDate
+    FROM qna
+    WHERE user_id = #{userId}
+    ORDER BY question_date DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <!-- 전체 건수 조회 (페이징 계산용) -->
+  <select id="countByUserId"
+          parameterType="string"
+          resultType="int">
+    SELECT COUNT(*) FROM qna
+    WHERE user_id = #{userId}
+  </select>
+
+  <!-- 단건 조회 (수정폼, 상세보기) -->
+  <select id="selectById"
+          parameterType="int"
+          resultType="qna">
+    SELECT
+      qna_id         AS qnaId,
+    title,
+    content,
+    answer,
+    image,
+    user_id        AS userId,
+    type,
+    status,
+    question_date  AS questionDate
+    FROM qna
+    WHERE qna_id = #{qnaId}
+  </select>
+
+  <!-- QnA 수정 -->
+  <update id="updateQnA" parameterType="qna">
+    UPDATE qna
+    SET
+      title        = #{title},
+      content      = #{content},
+      image        = #{image},
+      type         = #{type}
+    WHERE qna_id = #{qnaId}
+  </update>
 
 </mapper>

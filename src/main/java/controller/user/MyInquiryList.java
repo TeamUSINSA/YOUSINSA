@@ -54,6 +54,7 @@ public class MyInquiryList extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		// 로그인 체크
 		HttpSession session = request.getSession(false);
 		String userId = (String) session.getAttribute("userId");
