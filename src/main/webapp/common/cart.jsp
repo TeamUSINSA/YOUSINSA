@@ -106,9 +106,6 @@ button:hover {
 <jsp:include page="/header" />
 	<c:if test="${not empty cartList}">
   <div class="cart-container">
-    <div class="cart-top-actions">
-      <button onclick="deleteSelected()">선택항목 삭제</button>
-    </div>
 
     <form id="cartForm" method="post">
       <table class="cart-table">
@@ -172,6 +169,7 @@ button:hover {
     </form>
 
     <div class="cart-bottom-actions">
+    <button onclick="deleteSelected()">선택항목 삭제</button>
       <button id="orderSelectedBtn" class="button" onclick="orderSelected()">선택상품 주문</button>
       <button id="orderAllBtn" class="button button-black" onclick="orderAll()">전체상품 주문</button>
     </div>
@@ -179,6 +177,16 @@ button:hover {
       style="max-width: 1000px; margin: 0 auto 40px; text-align: right; font-size: 16px; font-weight: bold;">
       선택 합계: <span id="selectedSum">0</span>원
     </div>
+  </div>
+</c:if>
+
+<c:if test="${empty cartList}">
+  <div class="cart-empty" style="text-align:center; margin:60px 0; font-size:18px; color:#000;">
+    <p>장바구니에 담긴 상품이 없습니다.</p>
+    <a href="${pageContext.request.contextPath}/productList"
+       style="display:inline-block; margin-top:12px; padding:8px 16px; background:#000; color:#fff; text-decoration:none; border-radius:4px;">
+      상품 보러 가기
+    </a>
   </div>
 </c:if>
 	<jsp:include page="/footer" />

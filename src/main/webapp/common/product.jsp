@@ -98,6 +98,41 @@ body {
     color: crimson;
     text-decoration: underline;
   }
+  /* ─── pagination 스타일 ─── */
+#pagination {
+  text-align: center;
+  margin: 40px 0;
+  font-family: Arial, sans-serif;
+}
+
+#pagination a {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  transition: background-color .2s, color .2s;
+}
+
+#pagination a:hover {
+  background-color: #f5f5f5;
+}
+
+#pagination a.active {
+  background-color: #C92071;
+  color: #fff;
+  border-color: #C92071;
+}
+
+#pagination a.disabled {
+  color: #ccc;
+  border-color: #eee;
+  pointer-events: none;
+}
+  
 </style>
 </head>
 <body>
@@ -177,11 +212,89 @@ body {
 </c:if>
 
 
+
 	<!-- ✅ 상품 없음 -->
 	<c:if test="${empty productList}">
 		<div class="empty-message">상품이 없습니다.</div>
 	</c:if>
+	
+	
+<!-- 페이지 네비게이션 -->
+<c:if test="${last > 1}">
+  <div id="pagination" style="text-align:center; margin:40px 0;">
+    <!-- 이전 -->
+    <c:if test="${page > 1}">
+      <c:url var="prevUrl" value="/productList">
+        <c:param name="page" value="${page-1}" />
+        <c:if test="${not empty param.name}">
+          <c:param name="name" value="${param.name}" />
+        </c:if>
+        <c:if test="${not empty param.categoryId}">
+          <c:param name="categoryId" value="${param.categoryId}" />
+        </c:if>
+        <c:if test="${not empty param.subCategoryId}">
+          <c:param name="subCategoryId" value="${param.subCategoryId}" />
+        </c:if>
+      </c:url>
+      <a href="${prevUrl}">&laquo; 이전</a>
+    </c:if>
 
-	<jsp:include page="/footer" />
+    <!-- 번호 -->
+    <c:forEach begin="1" end="${last}" var="i">
+      <c:url var="pageUrl" value="/productList">
+        <c:param name="page" value="${i}" />
+        <c:if test="${not empty param.name}">
+          <c:param name="name" value="${param.name}" />
+        </c:if>
+        <c:if test="${not empty param.categoryId}">
+          <c:param name="categoryId" value="${param.categoryId}" />
+        </c:if>
+        <c:if test="${not empty param.subCategoryId}">
+          <c:param name="subCategoryId" value="${param.subCategoryId}" />
+        </c:if>
+      </c:url>
+      <a href="${pageUrl}"
+         <c:if test="${i == page}">style="font-weight:bold;color:crimson;"</c:if>>
+        ${i}
+      </a>
+    </c:forEach>
+
+    <!-- 다음 -->
+    <c:if test="${page < last}">
+      <c:url var="nextUrl" value="/productList">
+        <c:param name="page" value="${page+1}" />
+        <c:if test="${not empty param.name}">
+          <c:param name="name" value="${param.name}" />
+        </c:if>
+        <c:if test="${not empty param.categoryId}">
+          <c:param name="categoryId" value="${param.categoryId}" />
+        </c:if>
+        <c:if test="${not empty param.subCategoryId}">
+          <c:param name="subCategoryId" value="${param.subCategoryId}" />
+        </c:if>
+      </c:url>
+      <a href="${nextUrl}">다음 &raquo;</a>
+    </c:if>
+  </div>
+
+  <script>
+    document.getElementById('pagination').scrollIntoView();
+  </script>
+</c:if>
+
+	
+	
+	
+	
+
+   <%@ include file="../common/footer.jsp" %>
+   
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 페이지 로드 완료 후 즉시 맨 위로 스크롤
+    window.scrollTo(0, 0);
+  });
+</script>
+
 </body>
 </html>

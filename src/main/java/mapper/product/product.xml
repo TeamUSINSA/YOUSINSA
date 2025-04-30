@@ -215,4 +215,88 @@
   LIMIT #{count} 
 </select>
 
+<select id="findByName"          
+        parameterType="string"   
+        resultType="dto.product.Product">
+
+  SELECT
+    product_id   AS productId,
+    name         AS name,
+    price        AS price,
+    discount     AS discount,
+    main_image1  AS mainImage1
+  FROM product
+  WHERE name LIKE CONCAT('%', #{value}, '%')
+
+</select>
+
+<!-- 1) 이름 검색 페이징 -->
+<select id="findByNamePaged"
+        parameterType="map"             
+        resultType="dto.product.Product">
+  SELECT
+    product_id   AS productId,
+    name,
+    price,
+    discount,
+    main_image1  AS mainImage1
+  FROM product
+  WHERE name LIKE CONCAT('%', #{keyword}, '%')
+  ORDER BY product_id DESC
+  LIMIT  #{limit}
+  OFFSET #{offset}
+</select>
+
+<select id="countByName"
+        parameterType="string"
+        resultType="int">
+  SELECT COUNT(*)
+  FROM   product
+  WHERE  name LIKE CONCAT('%', #{keyword}, '%')
+</select>
+
+
+<!-- 2) 서브카테고리 페이징 -->
+<select id="selectProductsBySubCategoryPaged"
+        parameterType="map"               
+        resultType="dto.product.Product">
+  SELECT *
+  FROM   product
+  WHERE  sub_category_id = #{subCategoryId}
+  ORDER  BY product_id DESC
+  LIMIT  #{limit}
+  OFFSET #{offset}
+</select>
+
+<select id="countBySubCategory"
+        parameterType="int"
+        resultType="int">
+  SELECT COUNT(*)
+  FROM   product
+  WHERE  sub_category_id = #{subCategoryId}
+</select>
+
+
+<!-- 3) 카테고리(대분류) 페이징 -->
+<select id="selectProductsByCategoryPaged"
+        parameterType="map"               
+        resultType="dto.product.Product">
+  SELECT p.*
+  FROM   product p
+  JOIN   subcategory s ON p.sub_category_id = s.sub_category_id
+  WHERE  s.category_id = #{categoryId}
+  ORDER  BY p.product_id DESC
+  LIMIT  #{limit}
+  OFFSET #{offset}
+</select>
+
+<select id="countByCategory"
+        parameterType="int"
+        resultType="int">
+  SELECT COUNT(*)
+  FROM   product p
+  JOIN   subcategory s ON p.sub_category_id = s.sub_category_id
+  WHERE  s.category_id = #{categoryId}
+</select>
+
 </mapper>
