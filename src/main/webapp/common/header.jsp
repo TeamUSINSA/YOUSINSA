@@ -353,16 +353,43 @@ body {
 					</c:if>
 				</div>
 			</c:forEach>
-			<a href="/recommend">추천상품</a> <a href="/popular">인기상품</a> <a
-				href="/best">베스트</a> <a href="/new">신상품</a>
+			 <a href="/yousinsa/productList?popular">인기상품</a>  <a href="/yousinsa/productList?new">신상품</a>
 		</div>
 
 		<!-- 검색창 -->
-		<div class="search-box">
-			<input type="text" placeholder="검색어를 입력하세요.">
-			<button>
-				<i class="fas fa-magnifying-glass"></i>
-			</button>
-		</div>
+<div class="search-box">
+  <input type="text" id="inp" placeholder="검색어를 입력하세요." />
+  <button>
+    <i class="fas fa-magnifying-glass"></i>
+  </button>
+</div>
+
+<script>
+  const inp = document.getElementById('inp');
+  let composing = false;
+
+  inp.addEventListener('compositionstart', () => {
+    composing = true;
+  });
+  inp.addEventListener('compositionend', () => {
+    composing = false;
+    limitNonSpace();
+  });
+  inp.addEventListener('input', () => {
+    if (!composing) {
+      limitNonSpace();
+    }
+  });
+
+  function limitNonSpace() {
+    // 공백 제거
+    const noSpace = inp.value.replace(/\s/g, '');
+    // 2글자 이상이면 잘라내기
+    inp.value = noSpace.length > 2 
+      ? noSpace.slice(0, 2) 
+      : noSpace;
+  }
+</script>
+
 	</div>
 </div>

@@ -30,6 +30,8 @@ public interface ProductDAO {
 	
 	List<String> getAllMainCategories() throws Exception;
     List<String> getAllSubCategories() throws Exception;
+
+	List<Product> selectLatestProducts(int count) throws Exception;
     
 
 

@@ -14,7 +14,7 @@
   request.setAttribute("currentYear", currentYear);
 %>
 
-<%@ include file="/common/header.jsp" %>
+<jsp:include page="/header" />
 
 <style>
   .filter-box {

@@ -18,4 +18,6 @@ public interface ProductService {
 
 	Product findProductById(int productId) throws Exception;
 
+	List<Product> getLatestProducts(int count) throws Exception;
+
 }

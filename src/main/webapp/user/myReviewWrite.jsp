@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
-<%@ include file="/common/header.jsp"%>
+<jsp:include page="/header" />
 <head>
   <meta charset="UTF-8">
   <title>후기 작성</title>

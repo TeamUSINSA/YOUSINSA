@@ -1,64 +1,141 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
-    .footer-wrapper {
-        background-color: #ffffff;
-        border-top: 1px solid #e5e7eb;
-        font-size: 0.875rem;
-        color: #4b5563;
-        padding: 24px 0;
-    }
+.footer-wrapper {
+    background-color: #fafafa;
+    border-top: 1px solid #ddd;
+    font-size: 13px;
+    color: #555;
+    width: 100%;
+}
 
-    .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-top: 16px;
-    }
+.footer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    .footer-logo {
-        width: 200px;
-        height: auto;
-        opacity: 0.6;
-    }
-    
-    .footer {
-    	clear:both;
-    	width: 100%;
-    }
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.footer-top-left h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.footer-top-left p {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.footer-btn {
+    background-color: #222;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 3px;
+    text-decoration: none;
+    margin-right: 6px;
+}
+
+.footer-links {
+    font-size: 12px;
+    color: #666;
+}
+
+.footer-links a {
+    color: #666;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+}
+
+.footer-bottom-left {
+    font-size: 11px;
+    color: #999;
+    line-height: 1.6;
+    flex: 1;
+    min-width: 0;
+}
+
+.footer-logo {
+    width: 300px;
+    height: auto;
+    opacity: 0.9;
+}
 </style>
-<div class="footer" style="width:900px;margin:0 auto">
-<footer class="footer-wrapper" >
-    <div class="max-w-7xl mx-auto px-4" >
-        <div class="flex flex-col md:flex-row justify-between mb-4" >
-            <div>
-                <h3 class="font-bold text-gray-900 mb-1">고객센터 1234-1234</h3>
-                <p class="text-xs text-gray-500 mb-2">
-                    운영시간: 평일 09:00 ~ 18:00 (점심시간 12:00 ~ 13:00 제외)
-                </p>
-                <div class="space-x-2">
-                    <a href="/qna" class="bg-black text-white text-xs px-3 py-1 rounded inline-block">Notice</a>
-                    <a href="/contact" class="bg-black text-white text-xs px-3 py-1 rounded inline-block">1:1 문의</a>
-                </div>
-            </div>
-            <div class="flex items-center justify-end mt-4 md:mt-0 text-xs text-gray-500 space-x-2">
-                <a href="#" class="hover:underline">개인정보처리방침</a> |
-                <a href="#" class="hover:underline">이용약관</a> |
-                <a href="#" class="hover:underline">분쟁해결기준</a> |
-                <a href="#" class="hover:underline">안전거래센터</a> |
-                <a href="#" class="hover:underline">결제대행위탁사</a>
-            </div>
-        </div>
 
-        <div class="footer-bottom">
-            <div class="text-[11px] text-gray-500 space-y-1">
-                <p>상호명: ****** &nbsp;&nbsp; 사업장소재지: 서울특별시 금천구 가산디지털1로 70 호서벤처타워 9층 &nbsp;&nbsp; 팩스:070-1234-1234 &nbsp;&nbsp; 사업자등록번호: ***-**-***** &nbsp;&nbsp; 통신판매업신고 2025-서울금천-1710</p>
-                <p>전화번호: ****-**** &nbsp;&nbsp; 이메일: daecham124@gmail.com &nbsp;&nbsp; 대표: 신대혁</p>
-                <p>해당 사이트에서 판매되는 모든 상품에 관한 모든 민형의 책임은 유신사에 있습니다.</p>
-                <p class="pt-1">© YOUSINSA Corp. All rights reserved.</p>
-            </div>
-
-            <img src="${pageContext.request.contextPath}/image/footerImage.PNG" class="footer-logo" alt="공정거래위원회">
-        </div>
+<!-- ✅ footer 요소 -->
+<div class="footer-wrapper" id="autoStickyFooter">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-top-left">
+        <h3>고객센터 1234-1234</h3>
+        <p>운영시간: 평일 09:00 ~ 18:00 (점심시간 12:00 ~ 13:00 제외)</p>
+        <a href="${pageContext.request.contextPath}/notice" class="footer-btn">Notice</a>
+        <a href="/contact" class="footer-btn">1:1 문의</a>
+      </div>
+      <div class="footer-links">
+        <a href="#">개인정보처리방침</a> |
+        <a href="#">이용약관</a> |
+        <a href="#">분쟁해결기준</a> |
+        <a href="#">안전거래센터</a> |
+        <a href="#">결제대행위탁사</a>
+      </div>
     </div>
-</footer>
+
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <p>상호명: ****** | 사업장소재지: 서울특별시 금천구 가산디지털1로 70 호서벤처타워 9층 | 팩스: 070-1234-1234</p>
+        <p>사업자등록번호: ***-**-***** | 통신판매업신고 2025-서울금천-1710</p>
+        <p>전화번호: ****-**** | 이메일: daecham124@gmail.com | 대표: 신대혁</p>
+        <p>해당 사이트에서 판매되는 모든 상품에 관한 모든 민형의 책임은 유신사에 있습니다.</p>
+        <p style="margin-top: 8px;">© YOUSINSA Corp. All rights reserved.</p>
+      </div>
+      <img src="${pageContext.request.contextPath}/image/footerImage.PNG" class="footer-logo" alt="공정거래위원회">
+    </div>
+  </div>
 </div>
+
+<!-- ✅ 푸터를 바닥으로 밀어내는 자바스크립트 -->
+<script>
+(function () {
+  const footer = document.getElementById("autoStickyFooter");
+  const body = document.body;
+  const html = document.documentElement;
+
+  function adjustFooterPosition() {
+    const bodyHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowHeight = window.innerHeight;
+
+    const footerHeight = footer.offsetHeight;
+    const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+
+    const spaceBelow = windowHeight - (footerTop + footerHeight);
+    if (spaceBelow > 0) {
+      footer.style.marginTop = spaceBelow + "px";
+    }
+  }
+
+  window.addEventListener("load", adjustFooterPosition);
+  window.addEventListener("resize", adjustFooterPosition);
+})();
+</script>

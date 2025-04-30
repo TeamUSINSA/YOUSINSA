@@ -201,4 +201,18 @@
 	WHERE o.order_date BETWEEN #{start} AND #{end}
 	GROUP BY c.category_name
 </select>
+
+<select id="selectLatestProducts"
+        resultType="dto.product.Product">
+  SELECT
+    product_id   AS productId,
+    name         AS name,
+    price        AS price,
+    discount         AS discount,
+    main_image1  AS mainImage1
+  FROM product
+  ORDER BY reg_date DESC
+  LIMIT #{count} 
+</select>
+
 </mapper>

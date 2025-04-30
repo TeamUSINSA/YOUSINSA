@@ -121,5 +121,11 @@ public class UserDAOImpl implements UserDAO {
 		public List<User> findUsersByName(String name) throws Exception {
 		    return sqlSession.selectList("mapper.user.findByName", name);
 		}
+		
+		@Override
+		public void insertKakaoUser(User user) throws Exception {
+		    sqlSession.insert("mapper.user.insertKakaoUser", user);
+		    sqlSession.commit();
+		}
 	
 }

@@ -13,40 +13,42 @@ import service.product.ProductService;
 import service.product.ProductServiceImpl;
 import service.product.BannerProductService;
 import service.product.BannerProductServiceImpl;
+import service.order.OrderItemService;
+import service.order.OrderItemServiceImpl;
 
 @WebServlet("/main")
 public class Main extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public Main() {
-		super();
-	}
+    public Main() {
+        super();
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		ProductService productService = new ProductServiceImpl();
-		BannerProductService bannerService = new BannerProductServiceImpl();
+        ProductService productService       = new ProductServiceImpl();
+        BannerProductService bannerService  = new BannerProductServiceImpl();
+        OrderItemService orderItemService   = new OrderItemServiceImpl();
 
-		try {
-			// ✅ 배너 테이블에서 메인/서브 배너 조회
-			List<BannerProduct> mainBannerList = bannerService.getMainBannerList();
-			List<BannerProduct> subBannerList = bannerService.getSubBannerList();
+        try {
+            // 배너
+            List<BannerProduct> mainBannerList = bannerService.getMainBannerList();
+            List<BannerProduct> subBannerList  = bannerService.getSubBannerList();
+            List<Product> newList     = productService.getLatestProducts(4);
+            List<Product> popularList = orderItemService.getTopSellingProducts(4);
 
-			// ✅ 기존 인기상품, 추천상품은 product 테이블 기준 유지
-			List<Product> popularList = productService.getRandomProductsByType("popular", 4);
-			List<Product> recommendList = productService.getRandomProductsByType("recommend", 4);
+            request.setAttribute("mainBannerList", mainBannerList);
+            request.setAttribute("subBannerList",  subBannerList);
+            request.setAttribute("newList",         newList);
+            request.setAttribute("popularList",     popularList);
 
-			// request에 담기
-			request.setAttribute("mainBannerList", mainBannerList);
-			request.setAttribute("subBannerList", subBannerList);
-			request.setAttribute("popularList", popularList);
-			request.setAttribute("recommendList", recommendList);
-
-			request.getRequestDispatcher("/common/main.jsp").forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "메인 페이지 로딩 실패");
-		}
-	}
+            request.getRequestDispatcher("/common/main.jsp")
+                   .forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "메인 페이지 로딩 실패");
+        }
+    }
 }

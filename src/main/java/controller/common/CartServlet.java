@@ -31,7 +31,7 @@ public class CartServlet extends HttpServlet {
 		String userId = (String) session.getAttribute("userId");
 
 		if (userId == null) {
-			response.sendRedirect(request.getContextPath() + "/common/login.jsp");
+			response.sendRedirect("login");
 			return;
 		}
 

@@ -4,13 +4,35 @@
          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.alert">
 
-  <!-- 체크되지 않은 알림 개수 -->
-  <select id="countUncheckedAlerts" parameterType="string" resultType="int">
-    SELECT COUNT(*)
-      FROM alert
-     WHERE user_id = #{userId}
-       AND checked = 0
-  </select>
+	<!-- 체크되지 않은 알림 개수 -->
+	<select id="countUncheckedAlerts" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM alert
+		WHERE user_id = #{userId}
+		AND checked = 0
+	</select>
 
+	<select id="selectByUser" parameterType="string" resultType="alert"
+		>
+		SELECT
+		alert_id,
+		content,
+		checked,
+		sender_id,
+		sender_name,
+		user_id,
+		title,
+		type
+		FROM alert
+		WHERE user_id = #{userId}
+		ORDER BY alert_id DESC
+	</select>
+	
+	<update id="markAsChecked" parameterType="int">
+    UPDATE alert
+    SET checked = 1
+    WHERE alert_id = #{alertId}
+    </update>
 
 </mapper>

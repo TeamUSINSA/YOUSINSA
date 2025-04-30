@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, dto.product.BannerProduct, dto.product.Product"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <%
 List<BannerProduct> mainBannerList = (List<BannerProduct>) request.getAttribute("mainBannerList");
 List<BannerProduct> subBannerList = (List<BannerProduct>) request.getAttribute("subBannerList"); 
@@ -32,15 +34,30 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 
 </style>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then(function(registration) {
+        console.log('✅ Service Worker 등록 성공:', registration);
+      })
+      .catch(function(error) {
+        console.error('❌ Service Worker 등록 실패:', error);
+      });
+  }
+</script>
+<script type="module" src="${pageContext.request.contextPath}/app.js"></script>
+
+
 </head>
 <body>
 <jsp:include page="/header" />
 	<!-- ✅ 슬라이드 배너 영역 -->
+	<div style="max-width: 920px; margin: 0 auto;">
 <div class="slider-container" data-slider="main"
 	style="position: relative; overflow: hidden; width: 100%; height: 800px;">
 	<c:forEach var="banner" items="${mainBannerList}" varStatus="status">
 		<a
-			href="${pageContext.request.contextPath}/product/detail?productId=${banner.productId}"
+			href="${pageContext.request.contextPath}/productDetail?productId=${banner.productId}"
 			class="main-slide"
 			style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 				  opacity: ${status.first ? '1' : '0'}; z-index: ${status.first ? '1' : '0'}; transition: opacity 1s;">
@@ -63,35 +80,39 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 
 	<!-- ✅ 베스트 컬렉션 (인기상품) -->
 	<div style="text-align: center; margin: 40px 0;">
-		<h2>유신사 베스트 컬렉션</h2>
-		<p>
-			소란스럽지 않은 일상 속 조용히 빛나는 것들<br>작은 디테일 하나까지 담은 유신사의 베스트 아이템을 만나보세요.
-		</p>
-	</div>
-	
-<div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
-	<c:forEach var="product" items="${popularList}">
-		<a
-			href="${pageContext.request.contextPath}/product/detail?productId=${product.productId}"
-			style="text-align: center; text-decoration: none; color: black; width: 200px;">
-			<img
-				src="${pageContext.request.contextPath}/image/${product.mainImage1}"
-				alt="${product.name}"
-				style="width: 100%;" />
-			<div style="margin-top: 8px;">
-				${product.name}<br />
-				₩<fmt:formatNumber value="${product.price}" type="number" />
-			</div>
-		</a>
-	</c:forEach>
+    <h2>유신사 인기 컬렉션</h2>
+    <p>
+        많은 사랑을 받은 스테디셀러가 한자리에!<br>
+        고객들이 선택한 베스트 아이템을 만나보세요.
+    </p>
 </div>
+
+<div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 40px;">
+    <c:forEach var="product" items="${popularList}">
+        <a
+            href="${pageContext.request.contextPath}/productDetail?productId=${product.productId}"
+            style="text-align: center; text-decoration: none; color: black; width: 200px;">
+            <img
+                src="${pageContext.request.contextPath}/image/${product.mainImage1}"
+                alt="${product.name}"
+                style="width:200px; height:200px; object-fit:cover;" />
+            <div style="margin-top: 8px;">
+                ${product.name}<br />
+                <c:set var="salePrice" value="${product.price - product.discount}" />
+₩<fmt:formatNumber value="${salePrice}" type="number" />
+                
+            </div>
+        </a>
+    </c:forEach>
+</div>
+	
 
 
 	<div class="slider-container" data-slider="sub"
 		style="position: relative; overflow: hidden; width: 100%; height: 800px;">
 		<c:forEach var="banner" items="${subBannerList}" varStatus="status">
   <a
-    href="${pageContext.request.contextPath}/product/detail?productId=${banner.productId}"
+    href="${pageContext.request.contextPath}/productDetail?productId=${banner.productId}"
     class="sub-slide"
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       opacity: ${status.first ? '1' : '0'}; z-index: ${status.first ? '1' : '0'}; transition: opacity 1s;">
@@ -120,20 +141,23 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 		</p>
 	</div>
 
-	<div
-		style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
-		<c:forEach var="product" items="${recommendList}">
-			<a
-				href="${pageContext.request.contextPath}/product/detail?productId=${product.productId}"
-				style="text-align: center; text-decoration: none; color: black; width: 200px;">
-				<img
-				src="${pageContext.request.contextPath}/image/${product.mainImage1}"
-				alt="${product.name}" style="width: 100%;"><br>
-				<div>${product.name}<br>₩${product.price}
-				</div>
-			</a>
-		</c:forEach>
-	</div>
+<div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+    <c:forEach var="product" items="${newList}">
+        <a
+            href="${pageContext.request.contextPath}/productDetail?productId=${product.productId}"
+            style="text-align: center; text-decoration: none; color: black; width: 200px;">
+            <img
+                src="${pageContext.request.contextPath}/image/${product.mainImage1}"
+                alt="${product.name}"
+                style="width:200px; height:200px; object-fit:cover;" />
+            <div style="margin-top: 8px;">
+                ${product.name}<br />
+               <c:set var="salePrice" value="${product.price - product.discount}" />
+₩<fmt:formatNumber value="${salePrice}" type="number" />
+               	</div>
+        </a>
+    </c:forEach>
+</div>
 
 	<!-- 2 x 2 카드 구성 -->
 	<div
@@ -168,7 +192,8 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 			</div>
 		</a>
 	</div>
-   <jsp:include page="/footer" />
+	</div>
+   <%@ include file="../common/footer.jsp" %>
 </body>
 
 <script>

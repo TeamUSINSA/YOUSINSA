@@ -63,5 +63,31 @@
       , #{size}
       )
   </insert>
+  
+
+<select id="selectTopSellingProducts"
+        parameterType="int"
+        resultType="dto.product.Product">
+  SELECT
+    p.product_id    AS productId,
+    p.name          AS name,
+    p.price         AS price,
+    p.discount      AS discount,
+    p.main_image1   AS mainImage1
+  FROM product p
+  JOIN (
+    SELECT product_id
+         , SUM(quantity) AS total_qty
+      FROM orderitem
+     GROUP BY product_id
+     ORDER BY total_qty DESC
+     LIMIT #{count}    
+  ) oi
+    ON p.product_id = oi.product_id
+</select>
+
+  
+  
+
 
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import dao.order.OrderItemDAO;
 import dao.order.OrderItemDAOImpl;
 import dto.order.OrderItem;
+import dto.product.Product;
 
 public class OrderItemServiceImpl implements OrderItemService {
 
@@ -19,5 +20,10 @@ public class OrderItemServiceImpl implements OrderItemService {
 	public void addItem(OrderItem item) throws Exception {
 		dao.insert(item);
 	}
+	
+	 @Override
+	 public List<Product> getTopSellingProducts(int count) throws Exception {
+	        return dao.selectTopSellingProducts(count);
+	    }
 
 }
