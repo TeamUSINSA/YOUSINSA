@@ -21,9 +21,10 @@ public class AdminProductDAOImpl implements AdminProductDAO {
         sqlSession.commit();
     }
 
+
     @Override
     public void updateProduct(Product product) throws Exception {
-        sqlSession.update("mapper.admin.product.updateProduct", product);
+        sqlSession.update("mapper.admin.product.updateProduct", product); // admin 추가
         sqlSession.commit();
     }
 
@@ -81,4 +82,45 @@ public class AdminProductDAOImpl implements AdminProductDAO {
 		sqlSession.delete("mapper.admin.product.deleteStockByProductId", productId);
 		sqlSession.commit();
 	}	
+	
+	@Override
+    public void deleteStockByProductId(Integer productId, SqlSession session) throws Exception {
+        session.delete("mapper.admin.product.deleteStockByProductId", productId);
+        session.commit();
+    }
+
+    @Override
+    public void updateProduct(Product product, SqlSession session) throws Exception {
+        session.update("mapper.admin.product.updateProduct", product);
+        session.commit();
+    }
+
+    @Override
+    public void insertProductStockList(List<ProductStock> stockList, SqlSession session) throws Exception {
+        if (stockList != null && !stockList.isEmpty()) {
+            session.insert("mapper.admin.product.insertStockList", stockList);
+            session.commit();
+        }
+    }
+    
+    @Override
+    public int countStockByProductIdColorSize(int productId, String color, String size, SqlSession session) throws Exception {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("productId", productId);
+        paramMap.put("color", color);
+        paramMap.put("size", size);
+        return session.selectOne("mapper.admin.product.countStockByProductIdColorSize", paramMap);
+    }
+
+    @Override
+    public void updateStockQuantity(ProductStock stock, SqlSession session) throws Exception {
+        session.update("mapper.admin.product.updateStockQuantity", stock);
+        session.commit();
+    }
+
+    @Override
+    public void insertProductStock(ProductStock stock, SqlSession session) throws Exception {
+        session.insert("mapper.admin.product.insertProductStock", stock);
+        session.commit();
+    }
 }

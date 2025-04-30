@@ -122,4 +122,9 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderList> findOrdersByUserId(String userId) throws Exception {
         return orderDAO.findOrdersByUserId(userId);
     }
+    
+    @Override
+    public void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception {
+        orderDAO.updateDeliveryStatus(orderId, deliveryStatus);
+    }
 }

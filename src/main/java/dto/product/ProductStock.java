@@ -6,6 +6,14 @@ public class ProductStock {
 	private String color;
 	private String size;
 	private int quantity;
+	
+	   // ✅ 새로 추가!
+    public ProductStock(int productId, String color, String size, Integer quantity) {
+        this.productId = productId;
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
+    }
 
 	public ProductStock() {}
 
