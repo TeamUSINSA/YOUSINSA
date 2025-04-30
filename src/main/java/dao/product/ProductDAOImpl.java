@@ -97,4 +97,53 @@ public class ProductDAOImpl implements ProductDAO {
 	    public List<Product> selectLatestProducts(int count) throws Exception {
 	        return sqlSession.selectList("mapper.product.selectLatestProducts", count);
 	    }
+	 
+	 @Override
+	    public List<Product> findByName(String name) throws Exception {
+	        return sqlSession.selectList("mapper.product.findByName", name);
+	    }
+	 
+	 @Override
+	 public List<Product> findByNamePaged(String keyword, int offset, int limit) throws Exception {
+	     Map<String, Object> param = new HashMap<>();
+	     param.put("keyword", keyword);
+	     param.put("offset",  offset);
+	     param.put("limit",   limit);
+	     return sqlSession.selectList("mapper.product.findByNamePaged", param);
+	 }
+
+	 @Override
+	 public int countByName(String keyword) throws Exception {
+	     return sqlSession.selectOne("mapper.product.countByName", keyword);
+	 }
+
+	 /** 서브카테고리 페이징 */
+	 @Override
+	 public List<Product> selectProductsBySubCategoryPaged(int subCategoryId, int offset, int limit) throws Exception {
+	     Map<String, Object> param = new HashMap<>();
+	     param.put("subCategoryId", subCategoryId);
+	     param.put("offset",        offset);
+	     param.put("limit",         limit);
+	     return sqlSession.selectList("mapper.product.selectProductsBySubCategoryPaged", param);
+	 }
+
+	 @Override
+	 public int countBySubCategory(int subCategoryId) throws Exception {
+	     return sqlSession.selectOne("mapper.product.countBySubCategory", subCategoryId);
+	 }
+
+	 /** 카테고리(대분류) 페이징 */
+	 @Override
+	 public List<Product> selectProductsByCategoryPaged(int categoryId, int offset, int limit) throws Exception {
+	     Map<String, Object> param = new HashMap<>();
+	     param.put("categoryId", categoryId);
+	     param.put("offset",     offset);
+	     param.put("limit",      limit);
+	     return sqlSession.selectList("mapper.product.selectProductsByCategoryPaged", param);
+	 }
+
+	 @Override
+	 public int countByCategory(int categoryId) throws Exception {
+	     return sqlSession.selectOne("mapper.product.countByCategory", categoryId);
+	 }
 }

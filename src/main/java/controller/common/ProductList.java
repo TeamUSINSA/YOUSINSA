@@ -2,75 +2,92 @@ package controller.common;
 
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import dto.product.Category;
 import dto.product.Product;
 import dto.product.SubCategory;
 import service.order.OrderItemService;
 import service.order.OrderItemServiceImpl;
-import service.product.CategoryService;
-import service.product.CategoryServiceImpl;
-import service.product.ProductService;
-import service.product.ProductServiceImpl;
+import service.product.*;
 
 @WebServlet("/productList")
 public class ProductList extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // 필드에서 바로 초기화
-    private CategoryService categoryService = new CategoryServiceImpl();
-    private ProductService productService   = new ProductServiceImpl();
-    private OrderItemService orderItemService = new OrderItemServiceImpl();
+    private final CategoryService categoryService = new CategoryServiceImpl();
+    private final ProductService  productService  = new ProductServiceImpl();
+    private final OrderItemService orderItemService = new OrderItemServiceImpl();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
         try {
-            // 1) 카테고리 리스트 무조건 가져오기
-            List<Category> categoryList       = categoryService.selectCategoryList();
+            /* ■ 공통 분류 데이터 */
+            List<Category>    categoryList    = categoryService.selectCategoryList();
             List<SubCategory> subCategoryList = categoryService.selectSubCategoryList();
-            request.setAttribute("categoryList",     categoryList);
-            request.setAttribute("subCategoryList",  subCategoryList);
+            req.setAttribute("categoryList",    categoryList);
+            req.setAttribute("subCategoryList", subCategoryList);
 
-            // 2) 파라미터에 따라 productList 결정
-            String popular = request.getParameter("popular");
-            String news    = request.getParameter("new");
-            String subId   = request.getParameter("subCategoryId");
-            String catId   = request.getParameter("categoryId");
+            /* ■ 페이징 파라미터 */
+            final int size = 40;
+            int page = 1;
+            try { page = Integer.parseInt(req.getParameter("page")); } catch (Exception ignored) {}
+            int total = 0;
 
-            List<Product> productList = null;
-            if (popular != null) {
-                productList = orderItemService.getTopSellingProducts(40);
-            } else if (news != null) {
-                productList = productService.getLatestProducts(40);
-            } else if (subId != null) {
-                productList = productService.getProductsBySubCategory(Integer.parseInt(subId));
-            } else if (catId != null) {
-                productList = productService.getProductsByCategory(Integer.parseInt(catId));
+            /* ■ 조건 파라미터 */
+            String name  = req.getParameter("name");
+            String pop   = req.getParameter("popular");
+            String news  = req.getParameter("new");
+            String subId = req.getParameter("subCategoryId");
+            String catId = req.getParameter("categoryId");
+
+            List<Product> productList;
+
+            if (name != null && !name.isBlank()) {                             // ① 이름 검색
+                productList = productService.findByNamePaged(name.trim(), page, size);
+                total       = productService.countByName(name.trim());
+
+            } else if (subId != null) {                                        // ② 서브카테고리
+                int sid      = Integer.parseInt(subId);
+                productList  = productService.getProductsBySubCategoryPaged(sid, page, size);
+                total        = productService.countBySubCategory(sid);
+
+            } else if (catId != null) {                                        // ③ 카테고리
+                int cid      = Integer.parseInt(catId);
+                productList  = productService.getProductsByCategoryPaged(cid, page, size);
+                total        = productService.countByCategory(cid);
+
+            } else if (pop != null) {                                          // ④ 베스트
+                productList = orderItemService.getTopSellingProducts(size);
+                total       = size;   // 고정 40
+
+            } else if (news != null) {                                         // ⑤ 신상품
+                productList = productService.getLatestProducts(size);
+                total       = size;   // 고정 40
+
+            } else {                                                           // ⑥ 조건 없음
+                productList = List.of();
             }
-            
-            Integer selectedCategoryId = null;
-            if (request.getParameter("categoryId") != null) {
-                selectedCategoryId = Integer.valueOf(request.getParameter("categoryId"));
-            }
-            request.setAttribute("selectedCategoryId", selectedCategoryId);
 
+            int last = (int)Math.ceil(total / (double)size);
 
-            request.setAttribute("productList", productList);
-            request.setAttribute("subCategoryList", subCategoryList);
-            request.getRequestDispatcher("/common/product.jsp")
-                   .forward(request, response);
+            /* ■ 뷰 전달 */
+            req.setAttribute("productList", productList);
+            req.setAttribute("page", page);
+            req.setAttribute("last", last);
+            req.setAttribute("selectedCategoryId",
+                             catId == null ? null : Integer.valueOf(catId));
+
+            req.getRequestDispatcher("/common/product.jsp").forward(req, resp);
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "상품 목록 로딩 실패");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                           "상품 목록 로딩 실패");
         }
     }
 }
-

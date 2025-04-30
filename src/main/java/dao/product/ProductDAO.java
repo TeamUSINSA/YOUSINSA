@@ -32,6 +32,22 @@ public interface ProductDAO {
     List<String> getAllSubCategories() throws Exception;
 
 	List<Product> selectLatestProducts(int count) throws Exception;
+
+	List<Product> findByName(String name) throws Exception;
+
+	List<Product> findByNamePaged(String keyword, int offset, int limit) throws Exception;
+
+	int countByName(String keyword) throws Exception;
+
+	/** 서브카테고리 페이징 */
+	List<Product> selectProductsBySubCategoryPaged(int subCategoryId, int offset, int limit) throws Exception;
+
+	int countBySubCategory(int subCategoryId) throws Exception;
+
+	/** 카테고리(대분류) 페이징 */
+	List<Product> selectProductsByCategoryPaged(int categoryId, int offset, int limit) throws Exception;
+
+	int countByCategory(int categoryId) throws Exception;
     
 
 

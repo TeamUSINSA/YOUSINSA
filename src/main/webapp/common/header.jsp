@@ -359,35 +359,30 @@ body {
 		<!-- 검색창 -->
 <div class="search-box">
   <input type="text" id="inp" placeholder="검색어를 입력하세요." />
-  <button>
+   <button id="searchBtn">
     <i class="fas fa-magnifying-glass"></i>
   </button>
 </div>
 
 <script>
-  const inp = document.getElementById('inp');
-  let composing = false;
+  // 버튼 클릭
+  document.getElementById('searchBtn').addEventListener('click', doSearch);
 
-  inp.addEventListener('compositionstart', () => {
-    composing = true;
+  // Enter 키
+  document.getElementById('inp').addEventListener('keyup', e => {
+    if (e.key === 'Enter') doSearch();
   });
-  inp.addEventListener('compositionend', () => {
-    composing = false;
-    limitNonSpace();
-  });
-  inp.addEventListener('input', () => {
-    if (!composing) {
-      limitNonSpace();
+
+  function doSearch() {
+    const raw = document.getElementById('inp').value.trim();
+    const keyword = raw.replace(/\s/g, '');   // 공백 제거
+
+    if (keyword.length < 2) {                 // 두 글자 미만이면 취소
+      alert('검색어를 두 글자 이상 입력해 주세요.');
+      return;
     }
-  });
 
-  function limitNonSpace() {
-    // 공백 제거
-    const noSpace = inp.value.replace(/\s/g, '');
-    // 2글자 이상이면 잘라내기
-    inp.value = noSpace.length > 2 
-      ? noSpace.slice(0, 2) 
-      : noSpace;
+    location.href = '/yousinsa/productList?name=' + encodeURIComponent(raw);
   }
 </script>
 
