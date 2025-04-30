@@ -7,36 +7,38 @@
 
   <!-- 1) PENDING 상태로 주문 헤더 삽입 -->
   <insert id="insertPendingOrder"
-          parameterType="orderList"
-          useGeneratedKeys="true"
-          keyProperty="orderId">
-    INSERT INTO orderlist
-      ( user_id,
-        order_date,
-        total_price,
-        delivery_request,
-        payment_method,
-        receiver_name,
-        receiver_phone,
-        receiver_address,
-        used_point,
-        coupon_discount,
-        payment_status
-      )
-    VALUES
-      ( #{userId},
-        NOW(),                 <!-- DB 현재 날짜 -->
-        #{totalPrice},
-        #{deliveryRequest},
-        #{paymentMethod},
-        #{receiverName},
-        #{receiverPhone},
-        #{receiverAddress},
-        #{usedPoint},
-        #{couponDiscount},
-        #{paymentStatus}
-      )
-  </insert>
+        parameterType="orderList"
+        useGeneratedKeys="true"
+        keyProperty="orderId">
+  INSERT INTO orderlist
+    ( user_id,
+      order_date,
+      total_price,
+      delivery_request,
+      payment_method,
+      receiver_name,
+      receiver_phone,
+      receiver_address,
+      used_point,
+      coupon_discount,
+      payment_status,
+      delivery_status
+    )
+  VALUES
+    ( #{userId},
+      NOW(),
+      #{totalPrice},
+      #{deliveryRequest},
+      #{paymentMethod},
+      #{receiverName},
+      #{receiverPhone},
+      #{receiverAddress},
+      #{usedPoint},
+      #{couponDiscount},
+      #{paymentStatus},
+      '배송준비중'
+    )
+</insert>
 
   <!-- 2) PK(order_id)로 주문 헤더 조회 -->
   <select id="selectByOrderId"
@@ -73,5 +75,11 @@
        SET payment_status = 'CANCELLED'
      WHERE order_id = #{orderId}
   </update>
+  
+  <update id="updateDeliveryStatus" parameterType="map">
+    UPDATE orderlist
+    SET delivery_status = #{deliveryStatus}
+    WHERE order_id = #{orderId}
+</update>
 
 </mapper>

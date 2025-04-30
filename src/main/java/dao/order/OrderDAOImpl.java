@@ -124,4 +124,12 @@ public class OrderDAOImpl implements OrderDAO {
     public List<OrderList> selectOrderListByUser(String userId) throws Exception {
         return sqlSession.selectList("mapper.order.selectOrderListByUser", userId);
     }
+    
+    @Override
+    public void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderId", orderId);
+        params.put("deliveryStatus", deliveryStatus);
+        sqlSession.update("mapper.orderlist.updateDeliveryStatus", params);
+    }
 }

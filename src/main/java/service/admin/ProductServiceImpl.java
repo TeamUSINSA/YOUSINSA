@@ -1,4 +1,3 @@
-
 package service.admin;
 
 import java.io.File;
@@ -6,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -16,114 +17,14 @@ import dto.product.Product;
 import dto.product.ProductAndOption;
 import dto.product.ProductOption;
 import dto.product.ProductStock;
+import utils.MybatisSqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
 
-	// DAO 연결
 	private AdminProductDAO productDAO = new AdminProductDAOImpl();
 
 	@Override
 	public Integer regProduct(HttpServletRequest request) throws Exception {
-	    String path = request.getServletContext().getRealPath("upload");
-	    int size = 10 * 1024 * 1024;
-
-	    MultipartRequest multi = new MultipartRequest(request, path, size, "utf-8", new DefaultFileRenamePolicy());
-
-	    // 상품 기본 정보
-	    Integer productId = Integer.parseInt(multi.getParameter("productId"));
-	    String name = multi.getParameter("name");
-	    Integer cost = Integer.parseInt(multi.getParameter("cost"));
-	    Integer price = Integer.parseInt(multi.getParameter("price"));
-	    Integer discount = Integer.parseInt(multi.getParameter("discount"));
-	    Integer category = Integer.parseInt(multi.getParameter("category"));
-	    Integer subCategory = Integer.parseInt(multi.getParameter("subCategory"));
-	    String description1 = multi.getParameter("description1");
-
-	    String mainImage1 = multi.getFilesystemName("mainImage1");
-	    String mainImage2 = multi.getFilesystemName("mainImage2");
-	    String mainImage3 = multi.getFilesystemName("mainImage3");
-	    String mainImage4 = multi.getFilesystemName("mainImage4");
-	    String image1 = multi.getFilesystemName("image1");
-	    String image2 = multi.getFilesystemName("image2");
-	    String image3 = multi.getFilesystemName("image3");
-	    String image4 = multi.getFilesystemName("image4");
-	    String sizeChart = multi.getFilesystemName("sizeChart");
-
-	    Product product = new Product();
-	    product.setProductId(productId);
-	    product.setName(name);
-	    product.setCost(cost);
-	    product.setPrice(price);
-	    product.setDiscount(discount);
-	    product.setCategoryId(category);
-	    product.setSubCategoryId(subCategory);
-	    product.setDescription1(description1);
-	    product.setMainImage1(mainImage1);
-	    product.setMainImage2(mainImage2);
-	    product.setMainImage3(mainImage3);
-	    product.setMainImage4(mainImage4);
-	    product.setImage1(image1);
-	    product.setImage2(image2);
-	    product.setImage3(image3);
-	    product.setImage4(image4);
-	    product.setSizeChart(sizeChart);
-
-	    // 옵션 관련
-	    String[] colorList = multi.getParameterValues("color");
-	    String[] sizeTypes = multi.getParameterValues("sizeType");
-
-	    List<ProductStock> stockList = new ArrayList<>();
-
-	    if (colorList != null) {
-	        for (int i = 0; i < colorList.length; i++) {
-	            String sizeType = (sizeTypes != null && sizeTypes.length > i) ? sizeTypes[i] : "F"; // 기본값 'F'
-
-	            if ("F".equals(sizeType)) {
-	                String[] fSizeList = multi.getParameterValues("F");
-	                if (fSizeList == null || fSizeList.length <= i) {
-	                    throw new IllegalArgumentException("F 사이즈 수량이 색상 개수보다 적습니다.");
-	                }
-	                Integer quantity = Integer.parseInt(fSizeList[i]);
-	                ProductStock stock = new ProductStock();
-	                stock.setProductId(productId);
-	                stock.setColor(colorList[i]);
-	                stock.setSize("F");
-	                stock.setQuantity(quantity);
-	                stockList.add(stock);
-
-	            } else { // M 사이즈 그룹
-	                String[] xsSizeList = multi.getParameterValues("XS");
-	                String[] sSizeList = multi.getParameterValues("S");
-	                String[] mSizeList = multi.getParameterValues("M");
-	                String[] lSizeList = multi.getParameterValues("L");
-	                String[] xlSizeList = multi.getParameterValues("XL");
-
-	                String[] sizeNames = {"XS", "S", "M", "L", "XL"};
-	                String[][] sizeArrays = {xsSizeList, sSizeList, mSizeList, lSizeList, xlSizeList};
-
-	                for (int j = 0; j < sizeNames.length; j++) {
-	                    if (sizeArrays[j] != null && sizeArrays[j].length > i && sizeArrays[j][i] != null && !sizeArrays[j][i].trim().isEmpty()) {
-	                        Integer quantity = Integer.parseInt(sizeArrays[j][i]);
-	                        ProductStock stock = new ProductStock();
-	                        stock.setProductId(productId);
-	                        stock.setColor(colorList[i]);
-	                        stock.setSize(sizeNames[j]);
-	                        stock.setQuantity(quantity);
-	                        stockList.add(stock);
-	                    }
-	                }
-	            }
-	        }
-	    }
-
-	    productDAO.insertProduct(product);
-	    setProductStockList(stockList);
-
-	    return productId;
-	}
-
-	@Override
-	public Integer modifyProduct(HttpServletRequest request) throws Exception {
 		String path = request.getServletContext().getRealPath("upload");
 		int size = 10 * 1024 * 1024;
 
@@ -134,30 +35,14 @@ public class ProductServiceImpl implements ProductService {
 		Integer cost = Integer.parseInt(multi.getParameter("cost"));
 		Integer price = Integer.parseInt(multi.getParameter("price"));
 		Integer discount = Integer.parseInt(multi.getParameter("discount"));
-		Integer category = Integer.parseInt(multi.getParameter("category"));
+//		Integer category = Integer.parseInt(multi.getParameter("category"));
 		Integer subCategory = Integer.parseInt(multi.getParameter("subCategory"));
 		String description1 = multi.getParameter("description1");
-		;
-		String sizeType = multi.getParameter("sizeType");
-		String mainImage1 = multi.getFilesystemName("mainImage1");
-		String mainImage2 = multi.getFilesystemName("mainImage2");
-		String mainImage3 = multi.getFilesystemName("mainImage3");
-		String mainImage4 = multi.getFilesystemName("mainImage4");
-		String image1 = multi.getFilesystemName("image1");
-		String image2 = multi.getFilesystemName("image2");
-		String image3 = multi.getFilesystemName("image3");
-		String image4 = multi.getFilesystemName("image4");
-		String sizeChart = multi.getFilesystemName("sizeChart");
 
-		String oldMainImage1 = multi.getParameter("oldMainImage1");
-		String oldMainImage2 = multi.getParameter("oldMainImage2");
-		String oldMainImage3 = multi.getParameter("oldMainImage3");
-		String oldMainImage4 = multi.getParameter("oldMainImage4");
-		String oldImage1 = multi.getParameter("oldImage1");
-		String oldImage2 = multi.getParameter("oldImage2");
-		String oldImage3 = multi.getParameter("oldImage3");
-		String oldImage4 = multi.getParameter("oldImage4");
-		String oldSizeChart = multi.getParameter("oldSizeChart");
+		String sizeType = multi.getParameter("sizeType");
+		if (sizeType == null || sizeType.trim().isEmpty()) {
+			sizeType = "F";
+		}
 
 		Product product = new Product();
 		product.setProductId(productId);
@@ -165,146 +50,218 @@ public class ProductServiceImpl implements ProductService {
 		product.setCost(cost);
 		product.setPrice(price);
 		product.setDiscount(discount);
-		product.setCategoryId(category);
+//		product.setCategoryId(category);
 		product.setSubCategoryId(subCategory);
-		product.setSizeType(sizeType);
 		product.setDescription1(description1);
-		product.setMainImage1(mainImage1);
-		product.setMainImage2(mainImage2);
-		product.setMainImage3(mainImage3);
-		product.setMainImage4(mainImage4);
-		product.setImage1(image1);
-		product.setImage2(image2);
-		product.setImage3(image3);
-		product.setImage4(image4);
-		product.setSizeChart(sizeChart);
+		product.setSizeType(sizeType);
+		product.setMainImage1(multi.getFilesystemName("mainImage1"));
+		product.setMainImage2(multi.getFilesystemName("mainImage2"));
+		product.setMainImage3(multi.getFilesystemName("mainImage3"));
+		product.setMainImage4(multi.getFilesystemName("mainImage4"));
+		product.setImage1(multi.getFilesystemName("image1"));
+		product.setImage2(multi.getFilesystemName("image2"));
+		product.setImage3(multi.getFilesystemName("image3"));
+		product.setImage4(multi.getFilesystemName("image4"));
+		product.setSizeChart(multi.getFilesystemName("sizeChart"));
 
-		String[] colorList = multi.getParameterValues("color");
-		List<ProductStock> stockList = new ArrayList<>();
-		if (sizeType.equals("F")) {
-			String[] fSizeList = multi.getParameterValues("F");
-			if (fSizeList != null) {
-				for (int i = 0; i < colorList.length; i++) {
-					if (fSizeList.length > i && fSizeList[i] != null && fSizeList[i].trim().length() > 0) {
-						Integer quantity = Integer.parseInt(fSizeList[i]);
-						ProductStock stock = new ProductStock();
-						stock.setProductId(productId);
-						stock.setColor(colorList[i]);
-						stock.setSize("F");
-						stock.setQuantity(quantity);
-						stockList.add(stock);
-					}
-				}
-			}
-		} else {
-			String[] xsSizeList = multi.getParameterValues("XS");
-			String[] sSizeList = multi.getParameterValues("S");
-			String[] mSizeList = multi.getParameterValues("M");
-			String[] lSizeList = multi.getParameterValues("L");
-			String[] xlSizeList = multi.getParameterValues("XL");
-			for (int i = 0; i < colorList.length; i++) {
-				Integer quantity = 0;
-				if (xsSizeList[i] != null && xsSizeList[i].trim().length() > 0)
-					quantity = Integer.parseInt(xsSizeList[i]);
-				ProductStock stock = new ProductStock();
-				stock.setProductId(productId);
-				stock.setColor(colorList[i]);
-				stock.setSize("XS");
-				stock.setQuantity(quantity);
-				stockList.add(stock);
+		List<ProductStock> stockList = parseStockList(multi, productId, sizeType);
 
-				if (sSizeList[i] != null && sSizeList[i].trim().length() > 0)
-					quantity = Integer.parseInt(sSizeList[i]);
-				else
-					quantity = 0;
-				stock = new ProductStock();
-				stock.setProductId(productId);
-				stock.setColor(colorList[i]);
-				stock.setSize("S");
-				stock.setQuantity(quantity);
-				stockList.add(stock);
-
-				if (mSizeList[i] != null && mSizeList[i].trim().length() > 0)
-					quantity = Integer.parseInt(mSizeList[i]);
-				else
-					quantity = 0;
-				stock = new ProductStock();
-				stock.setProductId(productId);
-				stock.setColor(colorList[i]);
-				stock.setSize("M");
-				stock.setQuantity(quantity);
-				stockList.add(stock);
-
-				if (lSizeList[i] != null && lSizeList[i].trim().length() > 0)
-					quantity = Integer.parseInt(lSizeList[i]);
-				else
-					quantity = 0;
-				stock = new ProductStock();
-				stock.setProductId(productId);
-				stock.setColor(colorList[i]);
-				stock.setSize("L");
-				stock.setQuantity(quantity);
-				stockList.add(stock);
-
-				if (xlSizeList[i] != null && xlSizeList[i].trim().length() > 0)
-					quantity = Integer.parseInt(xlSizeList[i]);
-				else
-					quantity = 0;
-				stock = new ProductStock();
-				stock.setProductId(productId);
-				stock.setColor(colorList[i]);
-				stock.setSize("XL");
-				stock.setQuantity(quantity);
-				stockList.add(stock);
-			}
-		}
-
-//		    System.out.println(product);
-//		    System.out.println(stockList);    	
-
-		// 이미지 복원
-		// mainImage1
-		if (oldMainImage1 != null && product.getMainImage1() == null) {
-			product.setMainImage1(oldMainImage1);
-		}
-		// mainImage2
-		if (oldMainImage2 != null && product.getMainImage2() == null) {
-			product.setMainImage2(oldMainImage2);
-		}
-		// mainImage3
-		if (oldMainImage3 != null && product.getMainImage3() == null) {
-			product.setMainImage3(oldMainImage3);
-		}
-		// mainImage4
-		if (oldMainImage4 != null && product.getMainImage4() == null) {
-			product.setMainImage4(oldMainImage4);
-		}
-		// image1
-		if (oldImage1 != null && product.getImage1() == null) {
-			product.setImage1(oldImage1);
-		}
-		// image2
-		if (oldImage2 != null && product.getImage2() == null) {
-			product.setImage2(oldImage2);
-		}
-		// image1
-		if (oldImage3 != null && product.getImage3() == null) {
-			product.setImage3(oldImage3);
-		}
-		// image1
-		if (oldImage4 != null && product.getImage4() == null) {
-			product.setImage4(oldImage4);
-		}
-		// sizeChart
-		if (oldSizeChart != null && product.getSizeChart() == null) {
-			product.setSizeChart(oldSizeChart);
-		}
-
-		productDAO.deleteStockByProductId(productId);
-		productDAO.updateProduct(product);
+		productDAO.insertProduct(product);
 		setProductStockList(stockList);
+
 		return productId;
 	}
+
+	public Integer modifyProduct(HttpServletRequest request) throws Exception {
+	    String path = request.getServletContext().getRealPath("upload");
+	    int size = 10 * 1024 * 1024;
+
+	    SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false); // auto-commit false
+
+	    try {
+	        MultipartRequest multi = new MultipartRequest(request, path, size, "utf-8", new DefaultFileRenamePolicy());
+
+	        System.out.println("multi = " + multi);
+	        System.out.println("multi.getParameter(productId) = " + multi.getParameter("productId"));
+
+	        String productIdStr = multi.getParameter("productId");
+	        Integer productId = (productIdStr == null || productIdStr.isEmpty()) ? null : Integer.parseInt(productIdStr);
+
+	        String name = multi.getParameter("name");
+
+	        String costStr = multi.getParameter("cost");
+	        Integer cost = (costStr == null || costStr.trim().isEmpty()) ? 0 : Integer.parseInt(costStr);
+
+	        String priceStr = multi.getParameter("price");
+	        Integer price = (priceStr == null || priceStr.trim().isEmpty()) ? 0 : Integer.parseInt(priceStr);
+
+	        String discountStr = multi.getParameter("discount");
+	        Integer discount = (discountStr == null || discountStr.trim().isEmpty()) ? 0 : Integer.parseInt(discountStr);
+
+	        String subCategoryStr = multi.getParameter("subCategory");
+	        Integer subCategory = null;
+	        if (subCategoryStr != null && !subCategoryStr.isEmpty()) {
+	            subCategory = Integer.parseInt(subCategoryStr);
+	            if (subCategory == 0) {
+	                throw new IllegalArgumentException("서브카테고리를 선택해야 합니다.");
+	            }
+	        } else {
+	            throw new IllegalArgumentException("서브카테고리를 선택해야 합니다.");
+	        }
+
+	        String description1 = multi.getParameter("description1");
+
+	        String sizeType = multi.getParameter("sizeType");
+	        if (sizeType == null || sizeType.trim().isEmpty()) {
+	            sizeType = "F";
+	        }
+
+	        Product product = new Product();
+	        product.setProductId(productId);
+	        product.setName(name);
+	        product.setCost(cost);
+	        product.setPrice(price);
+	        product.setDiscount(discount);
+	        product.setSubCategoryId(subCategory);
+	        product.setSizeType(sizeType);
+	        product.setDescription1(description1);
+
+	        restoreImages(multi, product);
+
+	        List<ProductStock> stockList = parseStockList(multi, productId, sizeType);
+	        System.out.println(stockList);
+
+	        for (ProductStock ps : stockList) {
+	            if (ps.getColor() == null || ps.getColor().isBlank()
+	                    || ps.getSize() == null || ps.getSize().isBlank()
+	                    || ps.getQuantity() <= 0 ){
+	                throw new IllegalArgumentException("색상, 사이즈, 수량을 모두 입력해야 합니다.");
+	            }
+	        }
+
+	        productDAO.updateProduct(product, session);
+
+	        for (ProductStock ps : stockList) {
+	            int count = productDAO.countStockByProductIdColorSize(
+	                ps.getProductId(), ps.getColor(), ps.getSize(), session);
+
+	            System.out.println(productId);
+	            System.out.println(ps.getColor());
+	            System.out.println(ps.getSize());
+	            System.out.println(count);
+	            System.out.println("====================================================================");
+	            
+	            if (count > 0) {
+	                productDAO.updateStockQuantity(ps, session);
+	            } else {
+	                productDAO.insertProductStock(ps, session);
+	            }
+	        }
+
+
+	        session.commit();
+	        return productId;
+
+	    } catch (Exception e) {
+	        session.rollback();
+	        throw e;
+	    } finally {
+	        session.close();
+	    }
+	}
+
+
+	private void restoreImages(MultipartRequest multi, Product product) {
+		String[] imageFields = { "mainImage1", "mainImage2", "mainImage3", "mainImage4", "image1", "image2", "image3",
+				"image4", "sizeChart" };
+
+		for (String field : imageFields) {
+			String newFile = multi.getFilesystemName(field);
+			String oldFile = multi.getParameter("old" + capitalize(field));
+
+			if (newFile != null) {
+				setProductImage(product, field, newFile);
+			} else if (oldFile != null && !"".equals(oldFile)) {
+				setProductImage(product, field, oldFile);
+			}
+		}
+	}
+
+	private String capitalize(String str) {
+		if (str == null || str.isEmpty())
+			return str;
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+
+	private void setProductImage(Product product, String field, String filename) {
+		switch (field) {
+		case "mainImage1":
+			product.setMainImage1(filename);
+			break;
+		case "mainImage2":
+			product.setMainImage2(filename);
+			break;
+		case "mainImage3":
+			product.setMainImage3(filename);
+			break;
+		case "mainImage4":
+			product.setMainImage4(filename);
+			break;
+		case "image1":
+			product.setImage1(filename);
+			break;
+		case "image2":
+			product.setImage2(filename);
+			break;
+		case "image3":
+			product.setImage3(filename);
+			break;
+		case "image4":
+			product.setImage4(filename);
+			break;
+		case "sizeChart":
+			product.setSizeChart(filename);
+			break;
+		}
+	}
+
+	private List<ProductStock> parseStockList(MultipartRequest multi, int productId, String sizeType) {
+	    List<ProductStock> stockList = new ArrayList<>();
+	    
+	    String[] colorList = multi.getParameterValues("color");
+
+	    // 🔥 colorList가 null이면 아예 재고 리스트 없이 끝내기
+	    if (colorList == null || colorList.length == 0) {
+	        return stockList;
+	    }
+
+	    if ("F".equals(sizeType)) {
+	        String[] fSizeList = multi.getParameterValues("F");
+	        for (int i = 0; i < colorList.length; i++) {
+	            // 🔥🔥 fSizeList도 null 체크
+	            if (fSizeList != null && fSizeList.length > i && fSizeList[i] != null && !fSizeList[i].trim().isEmpty()) {
+	                Integer quantity = Integer.parseInt(fSizeList[i]);
+	                ProductStock stock = new ProductStock(productId, colorList[i], "F", quantity);
+	                stockList.add(stock);
+	            }
+	        }
+	    } else {
+	        String[] sizeNames = {"XS", "S", "M", "L", "XL"};
+	        for (int i = 0; i < colorList.length; i++) {
+	            for (String sizeName : sizeNames) {
+	                String[] sizeArray = multi.getParameterValues(sizeName);
+	                if (sizeArray != null && sizeArray.length > i && sizeArray[i] != null && !sizeArray[i].trim().isEmpty()) {
+	                    Integer quantity = Integer.parseInt(sizeArray[i]);
+	                    ProductStock stock = new ProductStock(productId, colorList[i], sizeName, quantity);
+	                    stockList.add(stock);
+	                }
+	            }
+	        }
+	    }
+
+	    return stockList;
+	}
+
 
 	@Override
 	public void deleteProductById(int productId) throws Exception {

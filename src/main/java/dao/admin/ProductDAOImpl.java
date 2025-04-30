@@ -22,7 +22,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void updateProduct(Product product) throws Exception {
-        sqlSession.update("mapper.product.updateProduct", product);
+        sqlSession.update("mapper.admin.product.updateProduct", product); // 🔥 admin 추가!
         sqlSession.commit();
     }
 
