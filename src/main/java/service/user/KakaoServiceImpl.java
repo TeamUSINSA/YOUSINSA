@@ -15,7 +15,7 @@ import dao.user.UserDAOImpl;
 import dto.user.User;
 
 public class KakaoServiceImpl implements KakaoService {
-    private static final String CLIENT_ID = "";
+    private static final String CLIENT_ID = "888443c6b67363c2f04b7ea5408a3a95";
     private static final String REDIRECT_URI = "http://localhost:8080/yousinsa/kakao"; // 네 프로젝트 주소
     private UserDAO userDao = new UserDAOImpl();
 
