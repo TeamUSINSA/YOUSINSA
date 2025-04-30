@@ -31,6 +31,7 @@
         <typeAlias type="dto.user.UserCoupon" alias="userCoupon"/>
         <typeAlias type="dto.user.RestockRequest" alias="restockrequest"/>
         <typeAlias type="dto.user.UserCoupon" alias="mycoupon"/>
+        <typeAlias type="dto.user.Inquiry" alias="inquiry"/>
     </typeAliases>
 
 
