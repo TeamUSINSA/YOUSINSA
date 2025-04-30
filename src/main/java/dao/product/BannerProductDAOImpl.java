@@ -27,7 +27,9 @@ public class BannerProductDAOImpl implements BannerProductDAO {
 
     @Override
     public List<BannerProduct> selectAllBanners() throws Exception {
-        return sqlSession.selectList("mapper.bannerproduct.selectAllBannerList");  // 쿼리 추가
+        try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return session.selectList("mapper.bannerproduct.selectAllBannerList");
+        }
     }
 
     @Override
