@@ -28,13 +28,15 @@ import service.user.LikeServiceImpl;
 public class ProductDetail extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ProductDetailService productService = new ProductDetailServiceImpl();
-    private LikeService likeService = new LikeServiceImpl();
-    private InquiryService inquiryService     = new InquiryServiceImpl();
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	 ProductDetailService productService = new ProductDetailServiceImpl();
+         LikeService likeService = new LikeServiceImpl();
+         InquiryService inquiryService     = new InquiryServiceImpl();
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
 
@@ -43,8 +45,6 @@ public class ProductDetail extends HttpServlet {
             int likeCount                  = productService.getLikeCount(productId);
             double avgRating               = productService.getAvgRating(productId);
             List<Review> reviewList        = productService.getReviews(productId);
-
-            // ↓ 기존 productService.getInquiries → inquiryService.getByProductId 로 변경
             List<Inquiry> inquiryList      = inquiryService.getByProductId(productId);
 
             HttpSession session = request.getSession(false);

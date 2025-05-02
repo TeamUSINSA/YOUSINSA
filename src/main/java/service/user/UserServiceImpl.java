@@ -102,4 +102,8 @@ public class UserServiceImpl implements UserService{
 	 public List<User> findUsersByName(String name) throws Exception {
 	     return userDao.findUsersByName(name);
 	 }
+	 @Override
+	 public boolean checkPassword(String userId, String currentPassword) throws Exception {
+	     return userDao.checkPassword(userId, currentPassword) > 0;
+	 }
 }

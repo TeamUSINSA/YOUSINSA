@@ -21,12 +21,13 @@ import service.user.InquiryServiceImpl;
 )
 public class InquiryAdd extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private InquiryService inquiryService = new InquiryServiceImpl();
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        InquiryService inquiryService = new InquiryServiceImpl();
 
         HttpSession session = request.getSession(false);
         String userId = (session != null) ? (String) session.getAttribute("userId") : null;
@@ -37,6 +38,7 @@ public class InquiryAdd extends HttpServlet {
 
         // 1) 폼 데이터
         int productId = Integer.parseInt(request.getParameter("productId"));
+        String type    = request.getParameter("type");
         String title   = request.getParameter("title");
         String content = request.getParameter("content");
 
@@ -66,6 +68,7 @@ public class InquiryAdd extends HttpServlet {
         Inquiry inq = new Inquiry();
         inq.setUserId(userId);
         inq.setProductId(productId);
+        inq.setType(type);
         inq.setTitle(title);
         inq.setContent(content);
         inq.setImage(filename);      // 이미지 파일명 (or null)

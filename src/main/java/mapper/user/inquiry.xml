@@ -47,9 +47,9 @@
     <!-- 새 문의 등록 -->
     <insert id="insertInquiry" parameterType="dto.user.Inquiry" useGeneratedKeys="true" keyProperty="inquiryId">
         INSERT INTO inquiry
-            (title, content, image, user_id, product_id, question_date, status)
+            (title, content, image, user_id, product_id, question_date, status, type)
         VALUES
-            (#{title}, #{content}, #{image}, #{userId}, #{productId}, NOW(), #{status})
+            (#{title}, #{content}, #{image}, #{userId}, #{productId}, NOW(), #{status}, #{type})
     </insert>
 
 <!-- 사용자 쿼리 -->

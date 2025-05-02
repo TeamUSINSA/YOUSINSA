@@ -20,13 +20,13 @@ import service.order.CartServiceImpl;
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CartService service = new CartServiceImpl();
+	
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-
+		request.setCharacterEncoding("UTF-8");
+		CartService service = new CartServiceImpl();
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("userId");
 

@@ -9,7 +9,6 @@ import dto.user.UserCoupon;
 
 public interface CouponDAO {
     void insertCoupon(Coupon coupon) throws Exception;
-    int insertUserCoupon(int couponId, String userId) throws Exception;
     List<Coupon> selectAllCoupons() throws Exception;
     void deleteCouponById(int couponId) throws Exception;
     List<Coupon> selectCouponPage(Map<String, Object> params) throws Exception;
@@ -19,7 +18,8 @@ public interface CouponDAO {
 	List<Coupon> selectValidCoupons() throws Exception;
 	
 	void updateUserCouponUsed(UserCoupon uc) throws Exception;
-
+	int insertUserCoupon(Map<String,Object> params) throws Exception;
+	Coupon selectCouponById(int couponId) throws Exception;
 
 }
 

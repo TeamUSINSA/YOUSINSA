@@ -139,26 +139,44 @@ body {
 	<jsp:include page="/header" />
 
 
-<!-- 1) 선택된 상위 카테고리 한 개만 -->
+<!-- 1) 선택된 상위 카테고리 한 개만 또는 특수 목록 -->
 <div class="current-category" style="text-align:center; margin:20px 0;">
-  <c:forEach var="cat" items="${categoryList}">
-    <c:if test="${cat.categoryId == selectedCategoryId}">
-      <h2>
-        <a
-          href="${pageContext.request.contextPath}/productList?categoryId=${cat.categoryId}"
-          class="${empty param.subCategoryId ? 'active-category' : ''}"
-          style="text-decoration:none; color:inherit;"
-        >
-          ${cat.categoryName}
-        </a>
-      </h2>
-    </c:if>
-  </c:forEach>
+
+  <c:choose>
+
+    <c:when test="${param.popular ne null}">
+      <h2>인기상품</h2>
+    </c:when>
+
+
+    <c:when test="${param['new'] ne null}">
+      <h2>신상품</h2>
+    </c:when>
+
+
+    <c:otherwise>
+      <c:forEach var="cat" items="${categoryList}">
+        <c:if test="${cat.categoryId == selectedCategoryId}">
+          <h2>
+            <a href="${pageContext.request.contextPath}/productList?categoryId=${cat.categoryId}"
+               class="${empty param.subCategoryId ? 'active-category' : ''}"
+               style="text-decoration:none; color:inherit;">
+              ${cat.categoryName}
+            </a>
+          </h2>
+        </c:if>
+      </c:forEach>
+    </c:otherwise>
+  </c:choose>
+
 </div>
 
 
+
 <!-- 2) 해당 상위 카테고리에 속한 서브카테고리 전부 -->
-<c:if test="${not empty selectedCategoryId}">
+<c:if test="${selectedCategoryId ne null
+            and param.popular  eq null
+            and param['new']  eq null}">
   <div class="subcategory-menu" style="display:flex; justify-content:center; gap:20px; margin-bottom:40px;">
     <c:forEach var="sub" items="${subCategoryList}">
       <c:if test="${sub.categoryId == selectedCategoryId}">

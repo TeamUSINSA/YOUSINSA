@@ -91,7 +91,7 @@
       <div class="coupon-item">
 
         <div class="coupon-info">
-          <img src="https://cdn-icons-png.flaticon.com/512/6464/6464503.png"
+          <img src="${pageContext.request.contextPath}/image/coupon.png"
                alt="쿠폰 아이콘"
                style="width:48px; height:48px; margin-right:12px;"/>
           <div class="coupon-details">
@@ -114,7 +114,7 @@
               ${coupon.description}
             </div>
             <div class="coupon-valid" style="font-size:12px; color:#888;">
-              유효기간: ${coupon.startDate} ~ ${coupon.endDate}
+              다운로드 가능 기간: ${coupon.startDate} ~ ${coupon.endDate}
             </div>
           </div>
         </div>
@@ -135,6 +135,9 @@
               </form>
             </c:otherwise>
           </c:choose>
+           <div style="font-size:12px; color:#888; margin-top:4px;">
+        유효 일수: ${coupon.period}일
+      </div>
         </div>
       </div>
     </c:forEach>
