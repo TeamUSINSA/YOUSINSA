@@ -17,4 +17,5 @@ public interface CouponService {
     Coupon getCouponById(int couponId) throws Exception;
     void downloadCoupon(int couponId, String userId,
                         LocalDate issueDate, LocalDate expireDate) throws Exception;
+	void expireUserCoupons(String userId) throws Exception;
 }

@@ -12,7 +12,7 @@
     start_date, end_date, period, type, active
   FROM coupon
   WHERE active = 1
-    AND type = 'manual'                 <!-- ← manual -->
+    AND type = 'manual'                
     AND CURDATE() BETWEEN start_date AND end_date
 </select>
 
@@ -47,6 +47,16 @@
   FROM coupon
   WHERE coupon_id = #{couponId}
 </select>
+
+<!-- mapper/coupon.xml -->
+<update id="expireCouponsByUser" parameterType="string"><![CDATA[
+  UPDATE usercoupon
+     SET used = 1
+   WHERE user_id = #{userId}
+     AND used = 0
+     AND expire_date < CURDATE()
+]]></update>
+
 
 </mapper>
 

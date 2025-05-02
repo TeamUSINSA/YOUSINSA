@@ -1,13 +1,20 @@
 package controller.common;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dto.user.User;
 import service.user.UserService;
 import service.user.UserServiceImpl;
+import service.order.CouponService;
+import service.order.CouponServiceImpl;
 
 @WebServlet("/login")
 public class Login extends HttpServlet {
@@ -35,6 +42,7 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 
 		request.setCharacterEncoding("utf-8");
+	
 
 		String userId = request.getParameter("userId");
 		String password = request.getParameter("password");
@@ -56,7 +64,9 @@ public class Login extends HttpServlet {
 					response.sendRedirect("login?error=2");
 					return;
 				}
-
+				
+				CouponService couponService = new CouponServiceImpl();
+				couponService.expireUserCoupons(loginUser.getUserId());
 				// ✅ 세션 저장
 				HttpSession session = request.getSession();
 				session.setAttribute("userId", loginUser.getUserId());

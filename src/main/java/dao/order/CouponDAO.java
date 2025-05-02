@@ -20,6 +20,7 @@ public interface CouponDAO {
 	void updateUserCouponUsed(UserCoupon uc) throws Exception;
 	int insertUserCoupon(Map<String,Object> params) throws Exception;
 	Coupon selectCouponById(int couponId) throws Exception;
+	int expireCouponsByUser(String userId) throws Exception;
 
 }
 

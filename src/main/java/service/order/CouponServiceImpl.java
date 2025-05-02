@@ -49,4 +49,9 @@ public class CouponServiceImpl implements CouponService {
         params.put("expireDate", expireDate);
         couponDAO.insertUserCoupon(params);
     }
+    
+    @Override
+    public void expireUserCoupons(String userId) throws Exception {
+        couponDAO.expireCouponsByUser(userId);
+    }
 }

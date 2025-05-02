@@ -83,6 +83,11 @@ public class CouponDAOImpl implements CouponDAO {
     public int insertUserCoupon(Map<String, Object> params) throws Exception {
         return sqlSession.insert("mapper.coupon.insertUserCoupon", params);
     }
+    
+    @Override
+    public int expireCouponsByUser(String userId) throws Exception {
+        return sqlSession.update("mapper.coupon.expireCouponsByUser", userId);
+    }
 
 }
 
