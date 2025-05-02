@@ -128,15 +128,15 @@
           <label>쿠폰 형식</label>
           <div class="radio-group">
             <label class="radio-inline">
-              <input type="radio" name="type" id="auto" value="auto" checked> 자동쿠폰
-              <select id="autoCouponSelect">
-                <option value="">선택</option>
-                <option>가입쿠폰</option>
-                <option>생일쿠폰</option>
-                <option>5만원 이상</option>
-                <option>10만원 이상</option>
-                <option>50만원 이상</option>
-                <option>100만원 이상</option>
+              <input type="radio"id="auto" checked> 자동쿠폰
+              <select id="autoCouponSelect" name="type">
+                <option>선택</option>
+                <option value="couponJoin">가입쿠폰</option>
+                <option value="couponBirthday">생일쿠폰</option>
+                <option value="couponOver5">5만원 이상</option>
+                <option value="couponOver10">10만원 이상</option>
+                <option value="couponOver50">50만원 이상</option>
+                <option value="couponOver100">100만원 이상</option>
               </select>
             </label>
             <label class="radio-inline">
