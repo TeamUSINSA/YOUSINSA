@@ -144,11 +144,124 @@ body {
 	margin: 24px 0;
 }
 
+/* 사이즈 차트 이미지 작게 조정 */
 .size-chart img {
-	max-width: 100%;
-	height: auto;
-	border: 1px solid #eee;
+  display: block;
+  width: 500px;      /* 원하는 고정 너비 */
+  max-width: 90%;    /* 컨테이너 폭 대비 최대 90% */
+  height: auto;
+  margin: 16px auto; /* 위아래 여백 + 가로 중앙 정렬 */
+}
+
+
+.btn-inquiry, .btn-inquiry-secondary {
+	background: #303030;
+	color: #fff;
+	border: none;
+	padding: 8px 16px;
 	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.btn-inquiry:hover, .btn-inquiry-secondary:hover {
+	opacity: 0.8;
+}
+
+.inquiry-buttons {
+	text-align: right;
+	margin-top: 16px;
+}
+
+.inquiry-card {
+	max-width: 400px;
+	margin: 16px auto;
+	padding: 16px;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	background: #fafafa;
+}
+/* 입력창 공통 */
+.inquiry-card input[type="text"], .inquiry-card textarea {
+	width: 100%;
+	padding: 8px 12px;
+	font-size: 14px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-bottom: 12px;
+}
+
+.inquiry-card textarea {
+	height: 80px;
+	resize: vertical;
+}
+/* 파일 선택 라벨 */
+.inquiry-card .file-label {
+	display: inline-block;
+	background: #303030;
+	color: #fff;
+	padding: 6px 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 13px;
+	margin-bottom: 0;
+}
+
+.inquiry-card .file-label:hover {
+	opacity: 0.9;
+}
+
+.inquiry-card .file-name {
+	margin-left: 8px;
+	font-size: 12px;
+	color: #666;
+	vertical-align: middle;
+}
+/* 버튼 그룹 */
+.inquiry-card .btn-group {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 16px;
+}
+
+.inquiry-card .btn-inquiry, .inquiry-card .btn-inquiry-secondary {
+	width: 100px;
+	padding: 8px 0;
+	font-size: 14px;
+	border-radius: 4px;
+	border: none;
+	cursor: pointer;
+}
+
+.inquiry-card .btn-inquiry {
+	background: #303030;
+	color: #fff;
+}
+
+.inquiry-card .btn-inquiry-secondary {
+	background: #fff;
+	color: #303030;
+	border: 1px solid #ccc;
+}
+
+.inquiry-card .btn-inquiry:hover, .inquiry-card .btn-inquiry-secondary:hover
+	{
+	opacity: 0.9;
+}
+.description {
+  /* 이미지와 같은 최대 너비 */
+  max-width: 400px;
+  margin: 16px auto;            /* 위아래 여백 + 가운데 정렬 */
+  padding: 16px;                /* 안쪽 여백 */
+  background: #f9f9f9;          /* 은은한 회색배경 */
+  border: 1px solid #e0e0e0;    /* 연한 테두리 */
+  border-radius: 8px;           /* 둥근 모서리 */
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 </style>
 </head>
@@ -156,102 +269,145 @@ body {
 	<jsp:include page="/header" />
 	<div class="container">
 		<section class="grid">
+			<!-- 좌측: 메인 이미지 + 썸네일 -->
 			<div>
-				<!-- 메인 이미지 (id="mainImage" 꼭 지정) -->
+
+				<!-- 메인 이미지 -->
 				<img id="mainImage"
 					src="${pageContext.request.contextPath}/image/${product.mainImage1}"
 					style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px;"
 					alt="${product.name}" />
 
-				<!-- 썸네일 3개 -->
-				<div class="thumbnails">
-					<img class="thumb active"
-						src="${pageContext.request.contextPath}/image/${product.mainImage2}"
-						data-index="2" alt="썸네일2" /> <img class="thumb"
-						src="${pageContext.request.contextPath}/image/${product.mainImage3}"
-						data-index="3" alt="썸네일3" /> <img class="thumb"
-						src="${pageContext.request.contextPath}/image/${product.mainImage4}"
-						data-index="4" alt="썸네일4" />
+				<!-- 썸네일 4장 고정 노출 -->
+				<div class="thumbnails"
+					style="display: flex; gap: 8px; margin-top: 10px;">
+					<c:if test="${not empty product.mainImage1}">
+						<img class="thumb"
+							src="${pageContext.request.contextPath}/image/${product.mainImage1}"
+							data-src="${pageContext.request.contextPath}/image/${product.mainImage1}"
+							alt="썸네일1"
+							style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+					</c:if>
+
+					<c:if test="${not empty product.mainImage2}">
+						<img class="thumb"
+							src="${pageContext.request.contextPath}/image/${product.mainImage2}"
+							data-src="${pageContext.request.contextPath}/image/${product.mainImage2}"
+							alt="썸네일2"
+							style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+					</c:if>
+
+					<c:if test="${not empty product.mainImage3}">
+						<img class="thumb"
+							src="${pageContext.request.contextPath}/image/${product.mainImage3}"
+							data-src="${pageContext.request.contextPath}/image/${product.mainImage3}"
+							alt="썸네일3"
+							style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+					</c:if>
+
+					<c:if test="${not empty product.mainImage4}">
+						<img class="thumb"
+							src="${pageContext.request.contextPath}/image/${product.mainImage4}"
+							data-src="${pageContext.request.contextPath}/image/${product.mainImage4}"
+							alt="썸네일4"
+							style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;" />
+					</c:if>
 				</div>
+
+
 			</div>
 
+			<!-- 우측: 제목 + 별점 + 좋아요 + 가격 + 드롭다운 -->
 			<div>
-				<h2>${product.name}</h2>
+				<!-- 제목 + 별점 + 후기 + 좋아요 버튼 -->
+				<div
+					style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+					<div>
+						<h2 style="font-size: 28px; margin: 0;">${product.name}</h2>
+						<div
+							style="display: flex; align-items: center; gap: 8px; font-size: 16px; margin-top: 10px;">
+							<div id="starRating" data-rating="${avgRating}"
+								style="color: #facc15;"></div>
+							<span style="color: #666;">(${avgRating}점)</span> <span
+								style="color: #666;">| 리뷰 ${fn:length(reviewList)}개</span>
+						</div>
+					</div>
 
-				<!-- ⭐ 별점 & 리뷰 개수 -->
-				<div style="margin: 6px 0;">
-					<c:forEach begin="1" end="${avgRating}" var="i">⭐</c:forEach>
-					<span style="color: #facc15;">리뷰 ${fn:length(reviewList)}개</span>
+					<button id="likeBtn" data-product-id="${product.productId}"
+						class="button"
+						style="background: white; border-radius: 8px; padding: 4px 10px; display: flex; align-items: center; gap: 6px; font-size: 16px;">
+						<span id="likeIcon">${likedByUser ? '❤️' : '🤍'}</span> <span
+							id="likeCount">${likeCount}</span>
+					</button>
 				</div>
 
-<!-- price 영역 -->
-<div>
-  <%-- 1) 최종가, 할인율 계산 --%>
-  <c:set var="finalPrice"   value="${product.price - product.discount}" />
-  <c:set var="discountRate" value="${(product.discount * 100) / product.price}" />
 
-  <c:choose>
-    <c:when test="${product.discount > 0}">
-      <span style="color:red; font-weight:bold;">
-        <fmt:formatNumber value="${discountRate}"
-                          type="number"
-                          maxFractionDigits="0"/>% 할인
-      </span>
-      &nbsp;
-      <span style="text-decoration:line-through; color:#000;">
-        <fmt:formatNumber value="${product.price}" type="number"/>원
-      </span>
-      &nbsp;
-      <span id="basePrice" style="color:red; font-weight:bold;">
-        <fmt:formatNumber value="${finalPrice}" type="number"/>원
-      </span>
-    </c:when>
-    <c:otherwise>
-      <span id="basePrice">
-        <fmt:formatNumber value="${product.price}" type="number"/>원
-      </span>
-    </c:otherwise>
-  </c:choose>
-</div>
+				<!-- 가격 -->
+				<div style="margin: 32px 0; font-size: 20px; line-height: 1.5;">
+					<c:set var="finalPrice" value="${product.price - product.discount}" />
+					<c:set var="discountRate"
+						value="${(product.discount * 100) / product.price}" />
+
+					<c:choose>
+						<c:when test="${product.discount > 0}">
+							<!-- 원가 -->
+							<div style="color: #999; text-decoration: line-through;">
+								<fmt:formatNumber value="${product.price}" type="number" />
+								원
+							</div>
+							<!-- 할인율 + 최종가 -->
+							<div>
+								<span style="color: red; font-weight: bold;"> <fmt:formatNumber
+										value="${discountRate}" type="number" maxFractionDigits="0" />%
+								</span> &nbsp; <span id="basePrice"
+									style="color: #000; font-weight: bold;"> <fmt:formatNumber
+										value="${finalPrice}" type="number" />원
+								</span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div id="basePrice" style="color: #000; font-weight: bold;">
+								<fmt:formatNumber value="${product.price}" type="number" />
+								원
+							</div>
+						</c:otherwise>
+					</c:choose>
+				</div>
+
+
 
 
 				<!-- 드롭다운 -->
-				<select id="colorSelect" style="margin-top: 10px;">
+				<select id="colorSelect"
+					style="margin-top: 32px 0; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
 					<option value="" disabled selected>색상 선택</option>
-				</select> <select id="sizeSelect" disabled style="margin-top: 10px;">
+				</select> <select id="sizeSelect" disabled
+					style="margin-top: 10px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
 					<option value="" disabled selected>사이즈 선택</option>
 				</select>
 
 				<!-- 옵션 출력 -->
 				<div id="optionContainer" class="option-box"
 					style="margin-top: 12px;"></div>
-				<div id="totalPrice" style="margin-top: 10px;">총 합계: 0원</div>
 
-				<!-- 👍 좋아요 수 표시 -->
-				<div style="margin: 20px 0;">
-					<button id="likeBtn" data-product-id="${product.productId}"
-						class="button"
-						style="font-size: 20px; display: flex; align-items: center; gap: 8px;">
-						<!-- 아직 로그인 체크·likedByUser 속성이 없다면 기본 🤍 아이콘 사용 -->
-						<span id="likeIcon">${likedByUser ? '❤️' : '🤍'}</span> <span
-							id="likeCount">${likeCount}</span>
-					</button>
-				</div>
+				<!-- 총합 -->
+				<div id="totalPrice"
+					style="text-align: right; margin: 16px 0; font-size: 18px; font-weight: bold;">
+					총 합계: 0원</div>
 
-				<!-- 장바구니 / 구매 버튼 -->
+				<!-- 버튼 -->
 				<div style="display: flex; gap: 10px;">
 					<button id="addCartBtn" data-product-id="${product.productId}"
 						class="button" style="flex: 1;">장바구니</button>
-					<button id="buyNowBtn" class="button button-black" style="flex: 1;">구매하기</button>
+					<button id="buyNowBtn" class="button button-black" style="flex: 1; background-color:#303030">구매하기</button>
 				</div>
 			</div>
-
 		</section>
 
 
 		<div class="tab">
-			<a href="#info">정보</a> <a href="#size">사이즈표</a> <a href="#review">후기</a>
-			<a href="#inquiry">문의</a>
+			<a href="#info">상품설명</a> <a href="#size">사이즈표</a> <a href="#review">후기</a>
+			<a href="#inquiry">상품문의</a>
 		</div>
 
 		<section id="info" class="p-4 border mt-4">
@@ -332,13 +488,15 @@ body {
 			</c:if>
 
 			<!-- 사이즈 차트 -->
-			<c:if test="${not empty product.sizeChart}">
-				<div class="size-chart">
-					<img
-						src="${pageContext.request.contextPath}/image/${product.sizeChart}"
-						alt="사이즈 차트" />
-				</div>
-			</c:if>
+			<section id="size" class="p-4 border mt-4">
+				<c:if test="${not empty product.sizeChart}">
+					<div class="size-chart">
+						<img
+							src="${pageContext.request.contextPath}/image/${product.sizeChart}"
+							alt="사이즈 차트" />
+					</div>
+				</c:if>
+			</section>
 		</section>
 
 		<section id="review" class="p-4 border mt-4">
@@ -346,111 +504,168 @@ body {
 			<c:forEach var="review" items="${reviewList}">
 				<div class="border p-4 mb-4 review-item">
 					<strong>${review.userId}</strong> ⭐ ${review.rating}<br /> <span>${review.content}</span>
+					<c:if test="${not empty review.image}">
+  <div style="margin-top:8px;">
+    <img
+      src="${pageContext.request.contextPath}/image/${review.image}"
+      alt="리뷰 이미지"
+      style="width:200px; height:200px; object-fit:cover; border-radius:4px;"
+    />
+  </div>
+</c:if>
+					
 				</div>
 			</c:forEach>
 		</section>
 
-<section id="inquiry" class="p-4 border mt-4">
-  <h3>상품문의</h3>
-  <c:forEach var="inq" items="${inquiryList}">
-    <div class="border p-4 mb-4 inquiry-item">
-      <strong>${inq.title}</strong><br/>
-
-      <%-- 판매자이거나 본인이 쓴 글이면 내용·이미지·답변 표시 --%>
-      <c:choose>
-        <c:when test="${sessionScope.isSeller or sessionScope.userId eq inq.userId}">
-          <p>${inq.content}</p>
-
-          <%-- 첨부 이미지가 있으면 보여주기 --%>
-<c:if test="${not empty inq.image}">
-  <div style="margin-top:8px;">
-    <img
-      src="${pageContext.request.contextPath}/image/${inq.image}"
-      alt="첨부 이미지"
-      style="max-width:200px; height:auto; border:1px solid #ccc; border-radius:4px;"
-    />
-  </div>
-</c:if>
+		<section id="inquiry" class="p-4 border mt-4">
+			<h3>상품문의</h3>
 
 
-          <c:if test="${not empty inq.answer}">
-            <div style="margin-top:8px; color:blue;">
-              <strong>답변:</strong> ${inq.answer}
-            </div>
-          </c:if>
-        </c:when>
-        <c:otherwise>
-          🔒 비밀글입니다.
-        </c:otherwise>
-      </c:choose>
+			<div class="inquiry-buttons"
+				style="text-align: right; margin-bottom: 8px;">
+				<c:choose>
+					<c:when test="${sessionScope.isSeller}">
+						<a href="<c:url value='/admin/inquiryList'/>"
+							class="btn-inquiry-secondary"> 문의 관리 </a>
+					</c:when>
+					<c:when test="${not empty sessionScope.userId}">
+						<a href="#myInquiry" class="btn-inquiry"
+							style="margin-right: 4px;"> 내가 쓴 문의 </a>
+					</c:when>
+				</c:choose>
+			</div>
 
-      <div class="text-sm">
-        작성자: ${inq.userId} | ${inq.questionDate}
-      </div>
-    </div>
-  </c:forEach>
 
-  <%-- 로그인 여부에 따라 문의하기 폼 제공 --%>
-  <c:choose>
-    <c:when test="${not empty sessionScope.userId}">
-      <button type="button" id="openInquiryForm" class="btn">문의하기</button>
-      <div id="inquiryForm" style="display:none; margin-top:16px;">
-<form action="<c:url value='/inquiryAdd'/>"
-      method="post"
-      enctype="multipart/form-data">
-  <input type="hidden" name="productId" value="${product.productId}" />
-  <div>
-    <label>제목</label><br/>
-    <input type="text" name="title" required style="width:100%;"/>
-  </div>
-  <div style="margin-top:8px;">
-    <label>내용</label><br/>
-    <textarea name="content" rows="4" required style="width:100%;"></textarea>
-  </div>
-  <div style="margin-top:8px;">
-    <label>사진 첨부</label><br/>
-    <input type="file" name="image" accept="image/*" onchange="previewImage(event)"/>
-    <img id="preview" style="display:none; margin-top:8px; max-width:100%;"/>
-  </div>
-  <div style="margin-top:8px;">
-    <button type="submit" class="btn">등록</button>
-    <button type="button" id="cancelInquiry" class="btn">취소</button>
-  </div>
-</form>
-<script>
+			<c:forEach var="inq" items="${inquiryList}">
+				<c:choose>
+
+					<c:when test="${inq.userId eq sessionScope.userId}">
+						<div id="myInquiry" class="border p-4 mb-4 inquiry-item"
+							style="scroll-margin-top: 80px;">
+							<strong>${inq.title}</strong><br />
+							<p>${inq.content}</p>
+							<c:if test="${not empty inq.image}">
+								<div style="margin-top: 8px;">
+									<img
+										src="${pageContext.request.contextPath}/image/${inq.image}"
+										alt="첨부 이미지"
+										style="max-width: 200px; height: auto; border: 1px solid #ccc; border-radius: 4px;" />
+								</div>
+							</c:if>
+							<c:if test="${not empty inq.answer}">
+								<div style="margin-top: 8px; color: blue;">
+									<strong>답변:</strong> ${inq.answer}
+								</div>
+							</c:if>
+							<div class="text-sm">작성자: ${inq.userId} |
+								${inq.questionDate}</div>
+						</div>
+					</c:when>
+
+					<c:otherwise>
+						<div class="border p-4 mb-4 inquiry-item">
+							<strong>${inq.title}</strong><br />
+							<c:choose>
+								<c:when test="${sessionScope.isSeller}">
+
+									<p>${inq.content}</p>
+									<c:if test="${not empty inq.image}">
+										<div style="margin-top: 8px;">
+											<img
+												src="${pageContext.request.contextPath}/image/${inq.image}"
+												alt="첨부 이미지"
+												style="max-width: 200px; height: auto; border: 1px solid #ccc; border-radius: 4px;" />
+										</div>
+									</c:if>
+									<c:if test="${not empty inq.answer}">
+										<div style="margin-top: 8px; color: blue;">
+											<strong>답변:</strong> ${inq.answer}
+										</div>
+									</c:if>
+								</c:when>
+								<c:otherwise>
+              🔒 비밀글입니다.
+            </c:otherwise>
+							</c:choose>
+							<div class="text-sm">작성자: ${inq.userId} |
+								${inq.questionDate}</div>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+
+
+			<c:choose>
+				<c:when test="${not empty sessionScope.userId}">
+					<div class="inquiry-buttons" style="text-align: right;">
+						<button type="button" id="openInquiryForm" class="btn-inquiry">문의하기</button>
+					</div>
+
+					<!-- 문의하기 폼 -->
+					<div id="inquiryForm" class="inquiry-card" style="display: none;">
+						<form action="<c:url value='/inquiryAdd'/>" method="post"
+							enctype="multipart/form-data">
+							<input type="hidden" name="productId"
+								value="${product.productId}" /> <input type="text" name="title"
+								placeholder="제목" required />
+
+  <select name="type" required
+            style="width:100%; padding:8px 12px; font-size:14px;
+                   border:1px solid #ddd; border-radius:4px;
+                   margin-bottom:12px; background:#fff;">
+      <option value="" disabled selected>문의 종류 선택</option>
+      <option value="배송문의">배송문의</option>
+      <option value="취소/교환/반품">취소/교환/반품</option>
+      <option value="주문/결제">주문/결제</option>
+      <option value="기타">기타</option>
+    </select>
+    
+							<textarea name="content" placeholder="내용" required></textarea>
+
+							<input type="file" id="inquiryImage" name="image"
+								accept="image/*" onchange="previewImage(event)"
+								style="display: none;" /> <label for="inquiryImage"
+								class="file-label">사진 선택</label> <span id="previewFilename"
+								class="file-name"></span>
+
+							<div class="btn-group">
+								<button type="submit" class="btn-inquiry">등록</button>
+								<button type="button" id="cancelInquiry"
+									class="btn-inquiry-secondary">취소</button>
+							</div>
+						</form>
+					</div>
+
+					<script>
+  // 파일 선택 후 파일명 표시
+  function previewImage(evt) {
+    const file = evt.target.files[0];
+    document.getElementById('previewFilename').textContent = file ? file.name : '';
+  }
+  // 열기/닫기
   document.getElementById('openInquiryForm').onclick = () => {
     document.getElementById('inquiryForm').style.display = 'block';
   };
   document.getElementById('cancelInquiry').onclick = () => {
     document.getElementById('inquiryForm').style.display = 'none';
   };
-  function previewImage(evt) {
-    const file = evt.target.files[0], img = document.getElementById('preview');
-    if (!file) return img.style.display = 'none';
-    img.src = URL.createObjectURL(file);
-    img.style.display = 'block';
-  }
 </script>
 
-      </div>
-      <script>
-        document.getElementById('openInquiryForm').onclick = () => {
-          document.getElementById('inquiryForm').style.display = 'block';
-        };
-        document.getElementById('cancelInquiry').onclick = () => {
-          document.getElementById('inquiryForm').style.display = 'none';
-        };
-      </script>
-    </c:when>
-    <c:otherwise>
-      <a href="<c:url value='/login'/>">로그인 후 문의하기</a>
-    </c:otherwise>
-  </c:choose>
-</section>
+				</c:when>
+				<c:otherwise>
+					<div class="inquiry-buttons" style="text-align: right;">
+						<a href="<c:url value='/login'/>" class="btn-inquiry">로그인 후
+							문의하기</a>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</section>
 
-		
+
+
 	</div>
-   <%@ include file="../common/footer.jsp" %>
+	<%@ include file="../common/footer.jsp"%>
 
 
 	<!-- 1) 옵션 선택 & 총합 계산 스크립트 -->
@@ -513,58 +728,104 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     sizeSelect.disabled = false;
   });
-
-  // 6) 사이즈 선택 시 항목 추가
+  
+//6) 사이즈 선택 시 항목 추가
   sizeSelect.addEventListener('change', function() {
-    const c = colorSelect.value;
-    const s = this.value;
+    // 1) 선택값 얻기
+    const c = colorSelect.value.trim();
+    const rawText = this.options[this.selectedIndex].text;        // ex) "M - 재고: 10"
+    const s = rawText.split(' - ')[0].trim();                      // => "M"
     if (!c || !s) return;
 
-    // 중복 방지
-    if (optionContainer.querySelector(
-          `[data-color="${c}"][data-size="${s}"]`
-        )) return;
+    // 2) 이미 추가된 항목 있는지 찾기
+    const existing = optionContainer.querySelector(
+      '.selected-item[data-color="' + c + '"][data-size="' + s + '"]'
+    );
 
-    const div = document.createElement('div');
-    div.className = 'selected-item';
-    div.dataset.color = c;
-    div.dataset.size  = s;
-    div.style.cssText =
-      'display:flex;align-items:center;gap:8px;'
-      + 'border:1px solid #ccc;padding:10px;'
-      + 'border-radius:8px;margin-top:10px;';
+    if (existing) {
+      // 2a) 있으면 수량 +1, 가격 갱신
+      const cntEl = existing.querySelector('.count');
+      let cnt = parseInt(cntEl.textContent, 10) + 1;
+      cntEl.textContent = cnt;
+      existing.querySelector('.price').textContent =
+        (cnt * basePrice).toLocaleString() + '원';
+      updateTotal();
 
-    div.innerHTML =
-      '<span style="min-width:100px;display:inline-block;color:#000;">'
-        + c + ' · ' + s +
-      '</span>'
-      + '<button class="minus button">-</button>'
-      + '<span class="count">1</span>'
-      + '<button class="plus button">+</button>'
-      + '<span class="price">' + basePrice.toLocaleString() + '원</span>'
-      + '<button class="remove button">×</button>';
+    } else {
+      // 2b) 새 항목 생성
+      const div = document.createElement('div');
+      div.className = 'selected-item';
+      div.dataset.color = c;
+      div.dataset.size  = s;
+      div.style.cssText =
+        'display:flex;align-items:center;gap:8px;'
+        + 'border:1px solid #ccc;padding:10px;'
+        + 'border-radius:8px;margin-top:10px;';
+      div.innerHTML =
+        '<div style="flex:1;display:flex;align-items:center;">' +
+          '<span style="min-width:100px;color:#000;">' + c + ' · ' + s + '</span>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;justify-content:center;gap:8px;width:150px;">' +
+          '<button class="minus button" style="width:32px;height:32px;border:1px solid #ccc;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;">-</button>' +
+          '<span class="count" style="min-width:20px;text-align:center;">1</span>' +
+          '<button class="plus button"  style="width:32px;height:32px;border:1px solid #ccc;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;">+</button>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-left:auto;">' +
+          '<span class="price" style="min-width:60px;text-align:right;color:#000;">' +
+            basePrice.toLocaleString() + '원' +
+          '</span>' +
+          '<button class="remove button" style="width:32px;height:32px;border:1px solid #ccc;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;color:#f00;">×</button>' +
+        '</div>';
 
-    div.querySelector('.minus').addEventListener('click', () => {
-      const cntEl = div.querySelector('.count');
-      let cnt = parseInt(cntEl.textContent, 10);
-      if (cnt > 1) { cntEl.textContent = --cnt; updateTotal(); }
-    });
-    div.querySelector('.plus').addEventListener('click', () => {
-      const cntEl = div.querySelector('.count');
-      let cnt = parseInt(cntEl.textContent, 10);
-      if (cnt < stockList.find(i=>i.color.trim()===c&&i.size.trim()===s).quantity) {
-        cntEl.textContent = ++cnt; updateTotal();
-      } else {
-        alert('재고를 초과할 수 없습니다.');
-      }
-    });
-    div.querySelector('.remove').addEventListener('click', () => {
-      div.remove(); updateTotal();
-    });
+      // 3) 버튼 이벤트 바인딩
+      div.querySelector('.minus').addEventListener('click', () => {
+        const cntEl = div.querySelector('.count');
+        let cnt = parseInt(cntEl.textContent, 10) - 1;
+        if (cnt > 0) {
+          cntEl.textContent = cnt;
+          div.querySelector('.price').textContent =
+            (cnt * basePrice).toLocaleString() + '원';
+        } else {
+          div.remove();
+        }
+        updateTotal();
+      });
+      div.querySelector('.plus').addEventListener('click', () => {
+        const cntEl = div.querySelector('.count');
+        let cnt = parseInt(cntEl.textContent, 10) + 1;
+        const maxQty = stockList.find(i=>i.color.trim()===c&&i.size.trim()===s).quantity;
+        if (cnt <= maxQty) {
+          cntEl.textContent = cnt;
+          div.querySelector('.price').textContent =
+            (cnt * basePrice).toLocaleString() + '원';
+        } else {
+          alert('재고를 초과할 수 없습니다.');
+        }
+        updateTotal();
+      });
+      div.querySelector('.remove').addEventListener('click', () => {
+        div.remove();
+        updateTotal();
+      });
 
-    optionContainer.appendChild(div);
-    updateTotal();
+      optionContainer.appendChild(div);
+      updateTotal();
+    }
+
+    // 4) 드롭다운 초기화
+    colorSelect.value = '';
+    while (sizeSelect.options.length) sizeSelect.remove(0);
+    const ph = document.createElement('option');
+    ph.value = '';
+    ph.text  = '사이즈 선택';
+    ph.disabled = true;
+    ph.selected = true;
+    sizeSelect.add(ph);
+    sizeSelect.disabled = true;
   });
+
+
+
 });
 </script>
 
@@ -674,21 +935,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+
 	<script>
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   const mainImg = document.getElementById('mainImage');
-  const thumbs  = document.querySelectorAll('.thumbnails .thumb');
-
-  thumbs.forEach(thumb => {
-    thumb.addEventListener('click', () => {
-      // 1) active 클래스 이동
-      thumbs.forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
-
-      // 2) src 스왑
-      const tmp = mainImg.src;
-      mainImg.src = thumb.src;
-      thumb.src   = tmp;
+  document.querySelectorAll('.thumbnails .thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      // 클릭한 썸네일의 data-src 값을 메인 이미지에 적용
+      mainImg.src = this.getAttribute('data-src');
     });
   });
 });
@@ -733,7 +987,23 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-	
+	<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('starRating');
+  if (!el) return;
+
+  const rating = parseInt(el.dataset.rating || '0', 10);
+  const max = 5;
+  let html = '';
+
+  for (let i = 0; i < rating; i++) html += '★';
+  for (let i = rating; i < max; i++) html += '☆';
+
+  el.innerHTML = html;
+});
+</script>
+
+
 
 </body>
 </html>

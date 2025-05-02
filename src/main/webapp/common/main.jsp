@@ -54,7 +54,7 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 	<!-- ✅ 슬라이드 배너 영역 -->
 	<div style="max-width: 920px; margin: 0 auto;">
 <div class="slider-container" data-slider="main"
-	style="position: relative; overflow: hidden; width: 100%; height: 800px;">
+	style="position: relative; overflow: hidden; width: 100%; height: 500px;">
 	<c:forEach var="banner" items="${mainBannerList}" varStatus="status">
 		<a
 			href="${pageContext.request.contextPath}/productDetail?productId=${banner.productId}"
@@ -78,14 +78,17 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 
 
 
-	<!-- ✅ 베스트 컬렉션 (인기상품) -->
-	<div style="text-align: center; margin: 40px 0;">
-    <h2>유신사 인기 컬렉션</h2>
-    <p>
-        많은 사랑을 받은 스테디셀러가 한자리에!<br>
-        고객들이 선택한 베스트 아이템을 만나보세요.
-    </p>
+<!-- ✅ 베스트 컬렉션 (인기상품) -->
+<div style="text-align: center; margin: 40px 0;">
+    <a href="/yousinsa/productList?popular" style="text-decoration: none; color: inherit;">
+        <h2>유신사 인기 컬렉션</h2>
+        <p>
+            많은 사랑을 받은 스테디셀러가 한자리에!<br>
+            고객들이 선택한 베스트 아이템을 만나보세요.
+        </p>
+    </a>
 </div>
+
 
 <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-bottom: 40px;">
     <c:forEach var="product" items="${popularList}">
@@ -109,7 +112,7 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 
 
 	<div class="slider-container" data-slider="sub"
-		style="position: relative; overflow: hidden; width: 100%; height: 800px;">
+		style="position: relative; overflow: hidden; width: 100%; height: 500px;">
 		<c:forEach var="banner" items="${subBannerList}" varStatus="status">
   <a
     href="${pageContext.request.contextPath}/productDetail?productId=${banner.productId}"
@@ -133,13 +136,19 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 	</div>
 
 
-	<!-- ✅ 추천상품 -->
-	<div style="text-align: center; margin: 40px 0;">
+
+<div style="text-align: center; margin: 40px 0;">
+	<a href="/yousinsa/productList?new" style="text-decoration: none; color: inherit;">
 		<h2>유신사 신상품</h2>
 		<p>
-			익숙하면서도 새로운<br>세련되면서도<br>트렌디한 검소하면서도 품위있는<br>그대를 위한 선택.
+			익숙하면서도 새로운<br>
+			세련되면서도<br>
+			트렌디한 검소하면서도 품위있는<br>
+			그대를 위한 선택.
 		</p>
-	</div>
+	</a>
+</div>
+
 
 <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
     <c:forEach var="product" items="${newList}">
@@ -159,39 +168,43 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
     </c:forEach>
 </div>
 
-	<!-- 2 x 2 카드 구성 -->
-	<div
-		style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1500px; margin: 60px auto;">
-		<a href="#"
-			style="text-decoration: none; color: black; position: relative; display: block;">
-			<img src="${pageContext.request.contextPath}/image/img1.jpg"
-			alt="2025 신상 컬렉션" style="width: 100%;">
-			<div style="position: absolute; top: 20px; left: 20px; color: white;">
-				<strong>2025 추천 컬렉션</strong><br> 개성에 대한 관심<br> <span>구매하기</span>
-			</div>
-		</a> <a href="#"
-			style="text-decoration: none; color: black; position: relative; display: block;">
-			<img src="${pageContext.request.contextPath}/image/img1.jpg"
-			alt="현대적인 감성" style="width: 100%;">
-			<div style="position: absolute; top: 20px; left: 20px; color: white;">
-				<strong>현대적인 감성</strong><br> 가방의 새로운 아이콘<br> <span>구매하기</span>
-			</div>
-		</a> <a href="#"
-			style="text-decoration: none; color: black; position: relative; display: block;">
-			<img src="${pageContext.request.contextPath}/image/img1.jpg"
-			alt="과감한 표현" style="width: 100%;">
-			<div style="position: absolute; top: 20px; left: 20px; color: white;">
-				<strong>과감한 표현</strong><br> 새로운 시각의 슈즈<br> <span>구매하기</span>
-			</div>
-		</a> <a href="#"
-			style="text-decoration: none; color: black; position: relative; display: block;">
-			<img src="${pageContext.request.contextPath}/image/img1.jpg"
-			alt="예술성과 혁신" style="width: 100%;">
-			<div style="position: absolute; top: 20px; left: 20px; color: white;">
-				<strong>예술성과 혁신</strong><br> Signs of reality<br> <span>구매하기</span>
-			</div>
-		</a>
-	</div>
+	<!-- 2 x 2 카드 구성 (축소 버전) -->
+<div
+	style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 800px; margin: 50px auto;">
+	<a href="#"
+		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
+		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		alt="2025 신상 컬렉션" style="width: 100%; height: 100%; object-fit: cover;">
+		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
+			<strong>2025 추천 컬렉션</strong><br> 개성에 대한 관심<br> <span>구매하기</span>
+		</div>
+	</a>
+	<a href="#"
+		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
+		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		alt="현대적인 감성" style="width: 100%; height: 100%; object-fit: cover;">
+		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
+			<strong>현대적인 감성</strong><br> 가방의 새로운 아이콘<br> <span>구매하기</span>
+		</div>
+	</a>
+	<a href="#"
+		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
+		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		alt="과감한 표현" style="width: 100%; height: 100%; object-fit: cover;">
+		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
+			<strong>과감한 표현</strong><br> 새로운 시각의 슈즈<br> <span>구매하기</span>
+		</div>
+	</a>
+	<a href="#"
+		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
+		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		alt="예술성과 혁신" style="width: 100%; height: 100%; object-fit: cover;">
+		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
+			<strong>예술성과 혁신</strong><br> Signs of reality<br> <span>구매하기</span>
+		</div>
+	</a>
+</div>
+	
 	</div>
    <%@ include file="../common/footer.jsp" %>
 </body>
