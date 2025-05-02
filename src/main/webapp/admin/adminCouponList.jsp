@@ -141,7 +141,12 @@
               <td>
                 <c:choose>
                   <c:when test="${coupon.type == 'download'}">업로드</c:when>
-                  <c:otherwise>자동</c:otherwise>
+                  <c:when test="${coupon.type == 'couponJoin'}">가입쿠폰</c:when>
+                  <c:when test="${coupon.type == 'couponBirthday'}">생일쿠폰</c:when>
+                  <c:when test="${coupon.type == 'couponOver5'}">5만원이상</c:when>
+                  <c:when test="${coupon.type == 'couponOver10'}">10만원이상</c:when>
+                  <c:when test="${coupon.type == 'couponOver50'}">50만원이상</c:when>
+                  <c:when test="${coupon.type == 'couponOver100'}">100만원이상</c:when>
                 </c:choose>
               </td>
               <td>
