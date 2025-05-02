@@ -324,5 +324,12 @@
            address3_detail = NULL
      WHERE user_id = #{userId}
   </update>
+  
+    <select id="checkPassword" parameterType="map" resultType="int">
+    SELECT COUNT(*) 
+      FROM user 
+     WHERE user_id = #{userId}
+       AND password = #{currentPassword}
+  </select>
 
 </mapper>

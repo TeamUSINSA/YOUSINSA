@@ -9,6 +9,8 @@ import javax.servlet.http.*;
 import dto.product.Category;
 import dto.product.Product;
 import dto.product.SubCategory;
+import service.order.CartService;
+import service.order.CartServiceImpl;
 import service.order.OrderItemService;
 import service.order.OrderItemServiceImpl;
 import service.product.*;
@@ -17,14 +19,15 @@ import service.product.*;
 public class ProductList extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private final CategoryService categoryService = new CategoryServiceImpl();
-    private final ProductService  productService  = new ProductServiceImpl();
-    private final OrderItemService orderItemService = new OrderItemServiceImpl();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+    	 
+    	req.setCharacterEncoding("UTF-8");
+    	CategoryService categoryService = new CategoryServiceImpl();
+        ProductService  productService  = new ProductServiceImpl();
+        OrderItemService orderItemService = new OrderItemServiceImpl();
         try {
             /* ■ 공통 분류 데이터 */
             List<Category>    categoryList    = categoryService.selectCategoryList();

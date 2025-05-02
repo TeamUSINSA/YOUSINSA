@@ -51,6 +51,7 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 </head>
 <body>
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
 	<!-- ✅ 슬라이드 배너 영역 -->
 	<div style="max-width: 920px; margin: 0 auto;">
 <div class="slider-container" data-slider="main"

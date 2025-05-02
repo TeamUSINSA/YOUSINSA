@@ -30,16 +30,17 @@ import service.user.UserServiceImpl;
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private ProductService productService = new ProductServiceImpl();
-	private OrderService orderService = new OrderServiceImpl();
-	private UserService userService = new UserServiceImpl();
-	private OrderListService orderListService = new OrderListServiceImpl();
-	private CartService cartService = new CartServiceImpl(); // CartService 객체 추가
+	
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		HttpSession session = req.getSession(false);
+		ProductService productService = new ProductServiceImpl();
+
+		UserService userService = new UserServiceImpl();
+		OrderListService orderListService = new OrderListServiceImpl();
+
 		String userId = session != null ? (String) session.getAttribute("userId") : null;
 		if (userId == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
@@ -115,6 +116,7 @@ public class OrderServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		HttpSession session = req.getSession();
+		OrderService orderService = new OrderServiceImpl();
 		String userId = (String) session.getAttribute("userId");
 		if (userId == null) {
 			resp.sendRedirect("login");

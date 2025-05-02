@@ -11,13 +11,15 @@ import service.order.CartServiceImpl;
 @WebServlet("/cartDelete")
 public class CartDelete extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private CartService service = new CartServiceImpl();
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
+        CartService service = new CartServiceImpl();
+
         String cartIdParam = request.getParameter("cartId");
 
         try {

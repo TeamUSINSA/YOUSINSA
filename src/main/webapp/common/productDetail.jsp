@@ -267,6 +267,7 @@ body {
 </head>
 <body>
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
 	<div class="container">
 		<section class="grid">
 			<!-- 좌측: 메인 이미지 + 썸네일 -->
@@ -501,6 +502,15 @@ body {
 
 		<section id="review" class="p-4 border mt-4">
 			<h3>후기 (${fn:length(reviewList)}개)</h3>
+			 <c:if test="${not empty sessionScope.userId}">
+    <div style="text-align: right; margin-bottom: 12px;">
+      <a href="<c:url value='myReviewList'/>"
+         class="btn-inquiry"
+         style="padding:6px 12px; font-size:14px;">
+        후기 쓰러 가기
+      </a>
+    </div>
+  </c:if>
 			<c:forEach var="review" items="${reviewList}">
 				<div class="border p-4 mb-4 review-item">
 					<strong>${review.userId}</strong> ⭐ ${review.rating}<br /> <span>${review.content}</span>
@@ -526,11 +536,11 @@ body {
 				style="text-align: right; margin-bottom: 8px;">
 				<c:choose>
 					<c:when test="${sessionScope.isSeller}">
-						<a href="<c:url value='/admin/inquiryList'/>"
+						<a href="<c:url value='adminInquiry'/>"
 							class="btn-inquiry-secondary"> 문의 관리 </a>
 					</c:when>
 					<c:when test="${not empty sessionScope.userId}">
-						<a href="#myInquiry" class="btn-inquiry"
+						<a href="/yousinsa/myInquiryList" class="btn-inquiry"
 							style="margin-right: 4px;"> 내가 쓴 문의 </a>
 					</c:when>
 				</c:choose>
@@ -693,6 +703,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sizeSelect      = document.getElementById('sizeSelect');
   const optionContainer = document.getElementById('optionContainer');
   const totalPriceEl    = document.getElementById('totalPrice');
+  const productId   = '${product.productId}';
+  const userId      = '${sessionScope.userId}';
 
   // 3) 총합 계산 함수
   function updateTotal() {
@@ -710,32 +722,71 @@ document.addEventListener('DOMContentLoaded', () => {
       colorSelect.append(new Option(col, col));
     });
 
-  // 5) 색상 선택 시 사이즈 채우기
+
+// 5) 색상 선택 시 사이즈 채우기
   colorSelect.addEventListener('change', function() {
-    sizeSelect.innerHTML = '<option value="">사이즈 선택</option>';
-    sizeSelect.disabled = true;
+    sizeSelect.innerHTML = '';
+    sizeSelect.disabled  = true;
+    sizeSelect.add(new Option('사이즈 선택',''));
     const c = this.value;
     if (!c) return;
+
     stockList
-      .filter(item => item.color.trim() === c && item.quantity > 0)
-      .forEach(item => {
-        sizeSelect.append(
-          new Option(
-            item.size.trim() + ' - 재고: ' + item.quantity,
-            item.size.trim()
-          )
-        );
+      .filter(i => i.color.trim() === c)
+      .forEach(i => {
+        const sizeVal = i.size.trim();
+        const label   = sizeVal + (i.quantity>0
+          ? ' - 재고: ' + i.quantity
+          : ' - 품절');
+        const opt = new Option(label, sizeVal);
+        // 품절 옵션에만 플래그
+        if (i.quantity === 0) {
+          opt.dataset.soldout = 'true';
+          opt.style.color    = '#999';
+        }
+        sizeSelect.add(opt);
       });
+
     sizeSelect.disabled = false;
   });
   
 //6) 사이즈 선택 시 항목 추가
   sizeSelect.addEventListener('change', function() {
-    // 1) 선택값 얻기
-    const c = colorSelect.value.trim();
-    const rawText = this.options[this.selectedIndex].text;        // ex) "M - 재고: 10"
-    const s = rawText.split(' - ')[0].trim();                      // => "M"
-    if (!c || !s) return;
+	  const sel = this.options[this.selectedIndex];
+	  if (sel.dataset.soldout === 'true') {
+		  if (confirm('해당 옵션은 품절되었습니다. 재입고 알림을 받겠습니까?')) {
+		    fetch('${pageContext.request.contextPath}/restockRequestAdd', {
+		      method: 'POST',
+		      credentials: 'include',
+		      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+		      body:
+		        'productId=' + encodeURIComponent(productId)
+		        + '&userId='   + encodeURIComponent(userId)
+		        + '&color='    + encodeURIComponent(colorSelect.value)
+		        + '&size='     + encodeURIComponent(sel.value)
+		    })
+		    .then(r => {
+		      if (r.status === 401) {
+		        // 로그인 필요
+		        window.location.href = '${pageContext.request.contextPath}/login';
+		      } else if (r.ok) {
+		        alert('재입고 요청이 접수되었습니다.');
+		      } else {
+		        alert('오류가 발생했습니다.');
+		      }
+		    })
+		    .catch(() => alert('네트워크 오류'));
+		  }
+		  this.selectedIndex = 0;
+		  this.disabled      = true;
+		  return;
+		}
+
+
+	    // ─── 재고 있는 옵션 클릭 시: 기존 추가 로직 ───────────
+	    const c = colorSelect.value.trim();
+	    const s = sel.value;
+	    if (!c || !s) return;
 
     // 2) 이미 추가된 항목 있는지 찾기
     const existing = optionContainer.querySelector(

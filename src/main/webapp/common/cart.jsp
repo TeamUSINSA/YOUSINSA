@@ -170,7 +170,7 @@ button:hover {
 
     <div class="cart-bottom-actions">
     <button onclick="deleteSelected()">선택항목 삭제</button>
-      <button id="orderSelectedBtn" class="button" onclick="orderSelected()">선택상품 주문</button>
+      <button id="orderSelectedBtn" class="button">선택상품 주문</button>
       <button id="orderAllBtn" class="button button-black" onclick="orderAll()">전체상품 주문</button>
     </div>
     <div class="cart-total"
@@ -183,7 +183,7 @@ button:hover {
 <c:if test="${empty cartList}">
   <div class="cart-empty" style="text-align:center; margin:60px 0; font-size:18px; color:#000;">
     <p>장바구니에 담긴 상품이 없습니다.</p>
-    <a href="${pageContext.request.contextPath}/productList"
+    <a href="${pageContext.request.contextPath}/productList?popular"
        style="display:inline-block; margin-top:12px; padding:8px 16px; background:#000; color:#fff; text-decoration:none; border-radius:4px;">
       상품 보러 가기
     </a>
@@ -191,254 +191,147 @@ button:hover {
 </c:if>
 	<jsp:include page="/footer" />
 
-	<script>
-	const ctx = '<%=request.getContextPath()%>';
-const contextPath = '<%=request.getContextPath()%>';
 
-function toggleAll(master) {
-  document.querySelectorAll('.itemCheckbox').forEach(cb => cb.checked = master.checked);
+<script>
+/* ------------------------------------------------------------------
+   ★ 서버 URL (컨텍스트 경로 포함) – JSP 가 정확히 생성해 줌
+------------------------------------------------------------------ */
+const URLS = {
+  update : '<c:url value="/cartUpdate"/>',
+  delSel : '<c:url value="/cartSelectDelete"/>',
+  delOne : '<c:url value="/cartDelete"/>',
+  order  : '<c:url value="/order"/>'
+};
+
+/* ------------------------------------------------------------------
+   공통 유틸
+------------------------------------------------------------------ */
+function numberFormat(n){ return new Intl.NumberFormat().format(n); }
+
+/* ------------------------------------------------------------------
+   체크박스 전체‑선택
+------------------------------------------------------------------ */
+function toggleAll(master){
+  document.querySelectorAll('.itemCheckbox')
+          .forEach(cb => cb.checked = master.checked);
+  updateSelectedSum();
 }
 
-function getSelectedIds() {
-  return Array.from(document.querySelectorAll('.itemCheckbox:checked')).map(cb => cb.value);
-}
-
-function deleteSelected() {
-  const selected = getSelectedIds();
-  if (selected.length === 0) return alert("삭제할 항목을 선택해주세요.");
-  if (!confirm("정말 삭제하시겠습니까?")) return;
-
-  const form = document.createElement('form');
-  form.method = 'post';
-  form.action = contextPath + '/cartSelectDelete';
-
-  selected.forEach(id => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'cartIds';
-    input.value = id;
-    form.appendChild(input);
-  });
-
-  document.body.appendChild(form);
-  form.submit();
-}
-
-function orderSelected() {
-    const rows = Array.from(
-      document.querySelectorAll('.itemCheckbox:checked')
-    ).map(cb => cb.closest('tr'));
-    if (rows.length === 0) {
-      return alert('주문할 항목을 선택해주세요.');
+/* ------------------------------------------------------------------
+   선택합계 계산
+------------------------------------------------------------------ */
+function updateSelectedSum(){
+  let sum = 0;
+  document.querySelectorAll('tbody tr').forEach(row=>{
+    const cb = row.querySelector('.itemCheckbox');
+    if(cb && cb.checked){
+      const unit = +row.dataset.unit;
+      const qty  = +row.querySelector('.qty').innerText;
+      sum += unit*qty;
     }
-    submitOrderForm(rows);
-  }
-
-
-function changeQty(btn, delta) {
-	  const row     = btn.closest("tr");
-	  const qtySpan = row.querySelector(".qty");
-	  const priceSpan = row.querySelector(".price");
-
-	  // data‑ 속성에서 읽기
-	  const cartId = row.getAttribute("data-cart-id");
-	  const unit   = parseInt(row.getAttribute("data-unit"), 10);
-
-	  // 화면에 수량·금액 갱신
-	  let qty = Math.max(1, parseInt(qtySpan.innerText, 10) + delta);
-	  qtySpan.innerText = qty;
-	  priceSpan.innerText = new Intl.NumberFormat().format(qty * unit);
-
-	  // 요청 URL과 바디 확인
-	  const url = `${contextPath}/yousinsa/cartUpdate`;
-	  console.log("▶ Request URL →", url);
-	  console.log("▶ Request Body →", `cartId=${cartId}&quantity=${qty}`);
-
-	  // URLSearchParams 로 POST
-	  const params = new URLSearchParams();
-	  params.append("cartId", cartId);
-	  params.append("quantity", qty);
-
-	  fetch(url, {
-	    method: "POST",
-	    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-	    body: params
-	  })
-	  .then(res => {
-	    console.log("▶ Status:", res.status);
-	    return res.text();
-	  })
-	  .then(text => {
-	    console.log("▶ Response Text:", text);
-	    if (text !== "ok") {
-	      alert("수량 변경 실패");
-	      location.reload();
-	    }
-	  })
-	  .catch(err => {
-	    console.error(err);
-	    alert("네트워크 오류");
-	  });
-	}
-
-
-function orderAll() {
-    const rows = Array.from(
-      document.querySelectorAll('.itemCheckbox')
-    ).map(cb => cb.closest('tr'));
-    if (rows.length === 0) {
-      return alert('장바구니에 상품이 없습니다.');
-    }
-    submitOrderForm(rows);
-  }
-  
-function deleteSingle(cartId) {
-  if (!confirm("해당 상품을 삭제하시겠습니까?")) return;
-
-  const form = document.createElement('form');
-  form.method = 'post';
-  form.action = contextPath + '/cartDelete';
-
-  const input = document.createElement('input');
-  input.type = 'hidden';
-  input.name = 'cartId';
-  input.value = cartId;
-
-  form.appendChild(input);
-  document.body.appendChild(form);
-  form.submit();
-}
-</script>
-
-	<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const totalPriceEl    = document.getElementById('selectedSum');
-
-  // 1) 합계 계산 함수
-  function updateSelectedSum() {
-    let sum = 0;
-    document.querySelectorAll('tbody tr').forEach(row => {
-      const cb = row.querySelector('.itemCheckbox');
-      if (cb && cb.checked) {
-        const unit = parseInt(row.getAttribute('data-unit'), 10);
-        const qty  = parseInt(row.querySelector('.qty').innerText, 10);
-        sum += unit * qty;
-      }
-    });
-    totalPriceEl.innerText = new Intl.NumberFormat().format(sum);
-  }
-
-  // 2) 체크박스 개별 바인딩
-  document.querySelectorAll('.itemCheckbox').forEach(cb => {
-    cb.addEventListener('change', updateSelectedSum);
   });
+  document.getElementById('selectedSum').innerText = numberFormat(sum);
+}
 
-  // 3) 전체 선택박스 바인딩
-  const selectAll = document.getElementById('selectAll');
-  if (selectAll) {
-    selectAll.addEventListener('change', function() {
-      document.querySelectorAll('.itemCheckbox')
-              .forEach(cb => cb.checked = this.checked);
-      updateSelectedSum();
-    });
-  }
+/* ------------------------------------------------------------------
+   수량 +/− (inline onclick 에서 호출)
+------------------------------------------------------------------ */
+function changeQty(btn, delta){
+  const row       = btn.closest('tr');
+  const qtySpan   = row.querySelector('.qty');
+  const priceSpan = row.querySelector('.price');
+  const cartId    = row.dataset.cartId;
+  const unit      = +row.dataset.unit;
 
-  // 4) 수량 변경 함수에도 호출 삽입
-  window.changeQty = function(btn, delta) {
-    const row      = btn.closest("tr");
-    const qtySpan  = row.querySelector(".qty");
-    const priceSpan= row.querySelector(".price");
-    const unit     = parseInt(row.getAttribute("data-unit"), 10);
+  const qty = Math.max(1, +qtySpan.innerText + delta);
+  qtySpan.innerText   = qty;
+  priceSpan.innerText = numberFormat(qty*unit) + '원';
+  row.dataset.quantity = qty;
+  updateSelectedSum();
 
-    let qty = Math.max(1, parseInt(qtySpan.innerText, 10) + delta);
-    qtySpan.innerText   = qty;
-    priceSpan.innerText = new Intl.NumberFormat().format(qty * unit);
+  const params = new URLSearchParams({ cartId, quantity: qty });
+  fetch(URLS.update, { method:'POST', body:params })
+      .then(r=>r.text())
+      .then(t=>{ if(t!=='ok'){ alert('수량 변경 실패'); location.reload(); }})
+      .catch(()=>{ alert('네트워크 오류'); location.reload(); });
+}
 
-    // (기존 fetch 로직 생략)
-    updateSelectedSum();
-  };
+/* ------------------------------------------------------------------
+   선택 삭제 (버튼 onclick)
+------------------------------------------------------------------ */
+function deleteSelected(){
+  const ids = Array.from(document.querySelectorAll('.itemCheckbox:checked'))
+                    .map(cb=>cb.value);
+  if(!ids.length){ alert('삭제할 항목을 선택해주세요.'); return; }
+  if(!confirm('정말 삭제하시겠습니까?')) return;
 
-  // 5) 페이지 로드 직후 초기 계산
+  const f = document.createElement('form');
+  f.method='post'; f.action = URLS.delSel;
+  ids.forEach(id=>{
+    const i=document.createElement('input');
+    i.type='hidden'; i.name='cartIds'; i.value=id; f.appendChild(i);
+  });
+  document.body.appendChild(f); f.submit();
+}
+
+/* ------------------------------------------------------------------
+   개별 삭제 (inline onclick 에서 호출)
+------------------------------------------------------------------ */
+function deleteSingle(cartId){
+  if(!confirm('해당 상품을 삭제하시겠습니까?')) return;
+  const f=document.createElement('form');
+  f.method='post'; f.action=URLS.delOne;
+  const i=document.createElement('input');
+  i.type='hidden'; i.name='cartId'; i.value=cartId; f.appendChild(i);
+  document.body.appendChild(f); f.submit();
+}
+
+/* ------------------------------------------------------------------
+   주문 (선택/전체)
+------------------------------------------------------------------ */
+function orderSelected(){
+  const rows = Array.from(
+      document.querySelectorAll('.itemCheckbox:checked'))
+      .map(cb=>cb.closest('tr'));
+  if(!rows.length){ alert('주문할 항목을 선택해주세요.'); return; }
+  submitOrderForm(rows);
+}
+
+function orderAll(){
+  const rows = Array.from(
+      document.querySelectorAll('.itemCheckbox'))
+      .map(cb=>cb.closest('tr'));
+  if(!rows.length){ alert('장바구니에 상품이 없습니다.'); return; }
+  submitOrderForm(rows);
+}
+
+function submitOrderForm(rows){
+  const f=document.createElement('form');
+  f.method='get'; f.action = URLS.order;
+  rows.forEach(r=>{
+    ['productId','color','size','quantity','cartId']
+      .forEach(n=>{
+        const i=document.createElement('input');
+        i.type='hidden'; i.name=n; i.value=r.dataset[n]; f.appendChild(i);
+      });
+  });
+  document.body.appendChild(f); f.submit();
+}
+
+/* ------------------------------------------------------------------
+   초기 바인딩
+------------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('selectAll')
+          ?.addEventListener('change',e=>toggleAll(e.target));
+  document.querySelectorAll('.itemCheckbox')
+          .forEach(cb=>cb.addEventListener('change', updateSelectedSum));
+  document.getElementById('orderSelectedBtn')
+          ?.addEventListener('click', orderSelected);
+  document.getElementById('orderAllBtn')
+          ?.addEventListener('click', orderAll);
   updateSelectedSum();
 });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const buyBtn = document.getElementById('buyNowBtn');
-  if (!buyBtn) return;
-
-  buyBtn.addEventListener('click', () => {
-    // 1) 선택된 옵션 수집
-    const items = Array.from(
-      document.querySelectorAll('.selected-item')
-    ).map(div => ({
-      cartId:    div.dataset.cartId,
-      productId: '<c:out value="${product.productId}"/>',
-      color:     div.dataset.color,
-      size:      div.dataset.size,
-      quantity:  parseInt(div.querySelector('.count').textContent, 10)
-    }));
-
-    if (items.length === 0) {
-      alert('옵션을 하나 이상 선택해주세요.');
-      return;
-    }
-
-    // 2) GET 폼 생성
-    const form = document.createElement('form');
-    form.method = 'get';
-    form.action = '<c:url value="/order" />';
-
-    // 3) hidden inputs 추가
-    items.forEach(it => {
-  ['cartId','productId','color','size','quantity'].forEach(name => {
-    const input = document.createElement('input');
-    input.type  = 'hidden';
-    input.name  = name;
-    input.value = it[name];
-    form.appendChild(input);
-  });
-});
-
-    // 4) 전송
-    document.body.appendChild(form);
-    form.submit();
-  });
-});
-
-function submitOrderForm(rows) {
-    const form = document.createElement('form');
-    form.method = 'get';
-    form.action = ctx + '/order';
-
-    rows.forEach(row => {
-      // 1) 상품 정보
-      ['productId','color','size','quantity'].forEach(name => {
-        const input = document.createElement('input');
-        input.type  = 'hidden';
-        input.name  = name;
-        input.value = row.dataset[name];
-        form.appendChild(input);
-      });
-      // 2) (선택 주문이라면) cartId도 함께 넘겨서 주문 후 삭제할 수 있게
-      const cartInput = document.createElement('input');
-      cartInput.type  = 'hidden';
-      cartInput.name  = 'cartId';
-      cartInput.value = row.dataset.cartId;
-      form.appendChild(cartInput);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-  }
-
-  // 버튼에 이벤트 걸기
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('orderSelectedBtn')
-            .addEventListener('click', orderSelected);
-    document.getElementById('orderAllBtn')
-            .addEventListener('click', orderAll);
-  });
 </script>
 
 

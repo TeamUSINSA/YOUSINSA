@@ -127,5 +127,12 @@ public class UserDAOImpl implements UserDAO {
 		    sqlSession.insert("mapper.user.insertKakaoUser", user);
 		    sqlSession.commit();
 		}
+		@Override
+		public int checkPassword(String userId, String currentPassword) throws Exception {
+		    Map<String, String> params = new HashMap<>();
+		    params.put("userId", userId);
+		    params.put("currentPassword", currentPassword);
+		    return sqlSession.selectOne("mapper.user.checkPassword", params);
+		}
 	
 }

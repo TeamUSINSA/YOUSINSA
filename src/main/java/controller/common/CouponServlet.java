@@ -1,6 +1,9 @@
 package controller.common;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -18,13 +21,14 @@ import service.order.CouponServiceImpl;
 @WebServlet("/coupon")
 public class CouponServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    
-    private CouponService couponService = new CouponServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // 세션에서 userId 읽기
+    	request.setCharacterEncoding("UTF-8");
+    	CouponService couponService = new CouponServiceImpl();
+
         HttpSession session = request.getSession(false);
         String userId = (session != null) ? (String) session.getAttribute("userId") : null;
 
@@ -49,26 +53,36 @@ public class CouponServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 다운로드 요청 처리
+        request.setCharacterEncoding("UTF-8");
+        CouponService couponService = new CouponServiceImpl();
         HttpSession session = request.getSession(false);
         String userId = (session != null) ? (String) session.getAttribute("userId") : null;
-
         if (userId == null) {
-            // 로그인 안된 상태 → 로그인 페이지로 리디렉트
-            response.sendRedirect("/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        String couponIdParam = request.getParameter("coupon_id");
         try {
-            int couponId = Integer.parseInt(couponIdParam);
-            couponService.downloadCoupon(couponId, userId);
-            // 다운로드 후 목록 새로고침
+            int couponId = Integer.parseInt(request.getParameter("coupon_id"));
+
+            // 쿠폰 정보 조회
+            Coupon coupon = couponService.getCouponById(couponId);
+            if (coupon == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "존재하지 않는 쿠폰입니다.");
+                return;
+            }
+
+            // 발행일·만료일 계산
+            LocalDate issueDate = LocalDate.now();
+            LocalDate expireDate = issueDate.plusDays(coupon.getPeriod());
+
+            couponService.downloadCoupon(couponId, userId, issueDate, expireDate);
+
             response.sendRedirect(request.getContextPath() + "/coupon");
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 쿠폰 ID");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 쿠폰 ID입니다.");
         } catch (Exception e) {
             throw new ServletException("쿠폰 다운로드 처리 중 오류 발생", e);
         }
     }
-} 
+}

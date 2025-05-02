@@ -91,7 +91,7 @@
         <h3>고객센터 1234-1234</h3>
         <p>운영시간: 평일 09:00 ~ 18:00 (점심시간 12:00 ~ 13:00 제외)</p>
         <a href="${pageContext.request.contextPath}/notice" class="footer-btn">Notice</a>
-        <a href="${pageContext.request.contextPath}/myQna" class="footer-btn">Q&A 문의</a>
+        <a href="${pageContext.request.contextPath}/myQnAList" class="footer-btn">Q&A 문의</a>
       </div>
       <div class="footer-links">
         <a href="#">개인정보처리방침</a> |
