@@ -33,6 +33,12 @@ public class AdminCategoryAdd extends HttpServlet {
 			CategoryService service = new CategoryServiceImpl();
 			request.setCharacterEncoding("UTF-8");
 			response.setContentType("text/plain; charset=UTF-8");
+			
+			
+			// ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories(); // 이름은 너가 실제 쓰는 걸로 맞춰줘
+            request.setAttribute("categoryList", categoryList);
 
 			String name = request.getParameter("categoryName");
 

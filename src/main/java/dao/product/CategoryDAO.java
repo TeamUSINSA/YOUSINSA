@@ -24,4 +24,6 @@ public interface CategoryDAO {
 
 	SubCategory selectSubCategoryById(int subCategoryId) throws Exception;
 
+	List<Category> selectAllCategories() throws Exception;
+
 }

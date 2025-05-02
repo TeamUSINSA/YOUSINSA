@@ -2,6 +2,7 @@ package controller.admin;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,6 +64,11 @@ public class AdminExchangeDetail extends HttpServlet {
             request.setAttribute("product", product);
             request.setAttribute("user", user);
 
+            // ✅ 여기 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+            
             request.getRequestDispatcher("/admin/adminExchangeDetail.jsp").forward(request, response);
 
         } catch (Exception e) {

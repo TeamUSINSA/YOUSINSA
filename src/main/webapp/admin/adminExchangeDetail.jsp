@@ -6,6 +6,7 @@
 <meta charset="UTF-8" />
 <title>교환 접수 - 상세</title>
 <jsp:include page="../common/header.jsp" />
+<jsp:include page="adminSideBarStyle.jsp" />
 <style>
 body {
   font-family: 'Pretendard', sans-serif;
@@ -154,9 +155,9 @@ window.addEventListener('DOMContentLoaded', () => {
 <body>
 <div class="content-wrapper">
   
-  <div class="sidebar">
+
     <jsp:include page="adminSideBar.jsp" />
-  </div>
+  
 
   <div class="container">
     <h2>교환 접수 - 상세</h2>

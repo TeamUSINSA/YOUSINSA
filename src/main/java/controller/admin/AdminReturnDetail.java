@@ -1,6 +1,7 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +13,13 @@ import dto.order.OrderItem;
 import dto.order.OrderList;
 import dto.order.Return;
 import dto.product.Product;
+import dto.user.User;
 import service.order.OrderService;
 import service.order.OrderServiceImpl;
 import service.order.ReturnService;
 import service.order.ReturnServiceImpl;
+import service.user.UserService;
+import service.user.UserServiceImpl;
 
 @WebServlet("/adminReturnDetail")
 public class AdminReturnDetail extends HttpServlet {
@@ -34,6 +38,7 @@ public class AdminReturnDetail extends HttpServlet {
             // 2. 서비스 객체 생성
             ReturnService returnService = new ReturnServiceImpl();
             OrderService orderService = new OrderServiceImpl();
+            UserService userService = new UserServiceImpl();
 
             // 3. 반품 정보 조회
             Return refund = returnService.getAllReturns()    // 전체 리스트에서 찾아야 함
@@ -49,6 +54,8 @@ public class AdminReturnDetail extends HttpServlet {
             OrderItem orderItem = orderService.findOrderItemById(refund.getOrderItemId());
             OrderList order = orderService.findOrderListById(orderItem.getOrderId());
             Product product = orderService.findProductById(orderItem.getProductId());
+            User user = userService.findUserById(refund.getUserId());
+            request.setAttribute("userName", user.getName());
 
             // ❗❗ User는 지금 orderService에 메소드 없음
             // → 일단 넘어가거나, userId만 뿌릴거면 user 없이 진행해도 됨
@@ -60,6 +67,11 @@ public class AdminReturnDetail extends HttpServlet {
             request.setAttribute("order", order);
             request.setAttribute("product", product);
             request.setAttribute("userId", refund.getUserId()); // 임시 대체
+            
+            // ✅ 여기 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
 
             // 5. JSP로 포워딩
             request.getRequestDispatcher("/admin/adminReturnDetail.jsp").forward(request, response);

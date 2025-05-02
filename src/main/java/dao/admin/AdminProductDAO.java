@@ -49,4 +49,10 @@ public interface AdminProductDAO {
 
 	// 재고 새로 삽입
 	void insertProductStock(ProductStock stock, SqlSession session) throws Exception;
+	
+	// 페이징 처리된 상품 목록 조회
+	List<Product> selectProductListWithPaging(String searchType, String keyword, int offset, int limit) throws Exception;
+
+	// 총 상품 개수 조회
+	int countProductList(String searchType, String keyword) throws Exception;
 }

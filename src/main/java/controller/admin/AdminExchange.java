@@ -36,7 +36,11 @@ public class AdminExchange extends HttpServlet {
             } else {
                 exchangeList = service.getAllExchanges();
             }
-
+            
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+            
             request.setAttribute("exchangeList", exchangeList);
             request.setAttribute("totalPages", service.getTotalPages());
             request.getRequestDispatcher("/admin/adminExchange.jsp").forward(request, response);

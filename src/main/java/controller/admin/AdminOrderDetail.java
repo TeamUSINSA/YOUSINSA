@@ -1,6 +1,8 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -40,6 +42,13 @@ public class AdminOrderDetail extends HttpServlet {
             } else {
                 request.setAttribute("error", "해당 주문 정보를 찾을 수 없습니다.");
             }
+            
+            
+            // ✅ 여기 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+
 
             // ✅ forward는 한 번만 호출
             request.getRequestDispatcher("/admin/adminOrderDetail.jsp").forward(request, response);

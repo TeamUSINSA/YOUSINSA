@@ -29,14 +29,20 @@ public class AdminInquiry extends HttpServlet {
             } else {
                 String status = "";
                 if (filter.equals("done")) {
-                    status = "답변완료"; // ❗띄어쓰기 없이
+                    status = "답변완료";
                 } else if (filter.equals("waiting")) {
-                    status = "답변대기"; // ❗띄어쓰기 없이 수정
+                    status = "답변대기";
                 }
                 inquiryList = dao.selectByStatus(status);
             }
 
             request.setAttribute("inquiryList", inquiryList);
+
+            // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "문의 목록 조회 실패");

@@ -308,4 +308,14 @@ public class ProductServiceImpl implements ProductService {
 	public Product findProductById(int productId) throws Exception {
 		return productDAO.selectProductById(productId);
 	}
+	
+	@Override
+	public List<Product> searchProduct(String searchType, String keyword, int offset, int limit) throws Exception {
+	    return productDAO.selectProductListWithPaging(searchType, keyword, offset, limit);
+	}
+	
+	@Override
+	public int countProduct(String searchType, String keyword) throws Exception {
+	    return productDAO.countProductList(searchType, keyword);
+	}
 }

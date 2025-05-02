@@ -2,6 +2,7 @@ package controller.admin;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,6 +31,11 @@ public class AdminCouponDelete extends HttpServlet {
             CouponDAO dao = new CouponDAOImpl();
             dao.deleteCouponById(couponId);
 
+         // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+            
             // 삭제 후 목록으로 리다이렉트
             response.sendRedirect(request.getContextPath() + "/admincouponlist");
 

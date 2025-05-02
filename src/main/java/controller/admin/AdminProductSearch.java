@@ -31,30 +31,65 @@ public class AdminProductSearch extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		request.getRequestDispatcher("admin/adminProductSearch.jsp").forward(request, response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("categoryList", null);
+        }
+
+        request.getRequestDispatcher("admin/adminProductSearch.jsp").forward(request, response);
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		String searchType = request.getParameter("searchType");
-		String keyword = request.getParameter("keyword");
-		
-		try {
-			ProductService service = new ProductServiceImpl();
-			List<Product> productList = service.searchProduct(searchType, keyword);
-			request.setAttribute("searchType", searchType);
-			request.setAttribute("keyword", keyword);
-			request.setAttribute("productList", productList);
-			request.getRequestDispatcher("/admin/adminProductSearch.jsp").forward(request, response);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
+	    request.setCharacterEncoding("utf-8");
+	    String searchType = request.getParameter("searchType");
+	    String keyword = request.getParameter("keyword");
+
+	    // 1. 페이지 파라미터 처리
+	    int currentPage = 1;
+	    String pageParam = request.getParameter("page");
+	    if (pageParam != null) {
+	        currentPage = Integer.parseInt(pageParam);
+	    }
+
+	    int itemsPerPage = 10;  // 한 페이지당 보여줄 항목 수
+	    int offset = (currentPage - 1) * itemsPerPage;
+
+	    try {
+	        ProductService service = new ProductServiceImpl();
+
+	        // 2. 페이징 적용된 목록 조회
+	        List<Product> productList = service.searchProduct(searchType, keyword, offset, itemsPerPage);
+
+	        // 3. 총 개수 조회해서 페이지 수 계산
+	        int totalCount = service.countProduct(searchType, keyword);
+	        int totalPages = (int) Math.ceil((double) totalCount / itemsPerPage);
+	        
+	     // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories(); // 이름은 너가 실제 쓰는 걸로 맞춰줘
+            request.setAttribute("categoryList", categoryList);
+	        
+
+	        // 4. JSP로 전달
+	        request.setAttribute("searchType", searchType);
+	        request.setAttribute("keyword", keyword);
+	        request.setAttribute("productList", productList);
+	        request.setAttribute("currentPage", currentPage);
+	        request.setAttribute("totalPages", totalPages);
+
+	        request.getRequestDispatcher("/admin/adminProductSearch.jsp").forward(request, response);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+
 
 }

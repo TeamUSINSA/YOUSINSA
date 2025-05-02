@@ -34,4 +34,8 @@ public interface ProductService {
 
 	Product findProductById(int productId) throws Exception;
 
+	List<Product> searchProduct(String searchType, String keyword, int offset, int limit) throws Exception;
+
+	int countProduct(String searchType, String keyword) throws Exception;
+
 }

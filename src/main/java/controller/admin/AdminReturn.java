@@ -41,6 +41,13 @@ public class AdminReturn extends HttpServlet {
 
             request.setAttribute("refundList", returnList); // ← JSP에서 사용하는 이름에 맞춰야 해!
             request.setAttribute("totalPages", service.getTotalPages());
+            
+         // ✅ 여기 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+
+            
 
             request.getRequestDispatcher("/admin/adminReturn.jsp").forward(request, response);
         } catch (Exception e) {

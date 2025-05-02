@@ -46,6 +46,12 @@ public class AdminSearchMember extends HttpServlet {
 
                 request.setAttribute("userOrderMap", userOrderMap);
             }
+            
+            // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories(); // 이름은 너가 실제 쓰는 걸로 맞춰줘
+            request.setAttribute("categoryList", categoryList);
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

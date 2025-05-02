@@ -123,4 +123,24 @@ public class AdminProductDAOImpl implements AdminProductDAO {
         session.insert("mapper.admin.product.insertProductStock", stock);
         session.commit();
     }
+    
+    @Override
+    public List<Product> selectProductListWithPaging(String searchType, String keyword, int offset, int limit) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("type", searchType);
+        param.put("keyword", keyword);
+        param.put("offset", offset);
+        param.put("limit", limit);
+        return sqlSession.selectList("mapper.admin.product.selectProductListWithPaging", param);
+    }
+    
+    @Override
+    public int countProductList(String searchType, String keyword) throws Exception {
+        Map<String, Object> param = new HashMap<>();
+        param.put("type", searchType);
+        param.put("keyword", keyword);
+        return sqlSession.selectOne("mapper.admin.product.countProductList", param);
+    }
+    
+    
 }

@@ -2,6 +2,7 @@ package controller.admin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +22,15 @@ public class AdminBannerAdd extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("categoryList", null); // 혹시 예외 발생해도 JSP 에러 방지용
+        }
+
         request.getRequestDispatcher("/admin/adminBannerAdd.jsp").forward(request, response);
     }
 
@@ -58,6 +68,12 @@ public class AdminBannerAdd extends HttpServlet {
 
             // 성공 메시지를 session에 저장
             request.getSession().setAttribute("msg", "배너가 성공적으로 등록되었습니다!");
+            
+         // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories(); // 이름은 너가 실제 쓰는 걸로 맞춰줘
+            request.setAttribute("categoryList", categoryList);
+            
             // 배너 목록 페이지로 리다이렉트
             response.sendRedirect(request.getContextPath() + "/adminBanner");
         } catch (Exception e) {

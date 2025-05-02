@@ -49,6 +49,9 @@ public class AdminProductModify extends HttpServlet {
 
             List<Category> categoryList = categoryService.selectCategoryList();
             List<SubCategory> subCategoryList = categoryService.selectSubCategoriesByCategoryId(categoryId); // ✅ 여기 타입도 정확히
+            
+            
+            
 
             request.setAttribute("categoryList", categoryList);
             request.setAttribute("subCategoryList", subCategoryList);
