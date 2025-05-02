@@ -53,6 +53,7 @@
       , coupon_id
       , color
       , size
+      , status
       )
     VALUES
       ( #{orderId}
@@ -61,6 +62,7 @@
       , #{couponId}
       , #{color}
       , #{size}
+      , '베송준비중'
       )
   </insert>
   
