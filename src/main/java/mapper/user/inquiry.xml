@@ -52,4 +52,65 @@
             (#{title}, #{content}, #{image}, #{userId}, #{productId}, NOW(), #{status}, #{type})
     </insert>
 
+<!-- 사용자 쿼리 -->
+	<!-- 사용자 1:1 문의 목록 조회 -->
+	 <select id="selectByUserId"
+          parameterType="map"
+          resultType="inquiry">
+     SELECT 
+      inquiry_id    AS inquiryId,
+      title,
+      content,
+      answer,
+      image,
+      user_id       AS userId,
+      type,
+      status,
+      question_date AS questionDate,
+      product_id    AS productId
+    FROM inquiry
+   WHERE user_id = #{userId}
+   ORDER BY question_date DESC
+   LIMIT #{limit} OFFSET #{offset}
+  </select>
+  
+  <!-- 전체 건수 조회 (페이징 계산용) -->
+  <select id="countByUserId" parameterType="string" resultType="int">
+    SELECT COUNT(*) FROM inquiry
+     WHERE user_id = #{userId}
+  </select>
+  
+  <!-- 단건 조회 (수정 폼용) -->
+  <select id="selectById" parameterType="map" resultType="inquiry">
+    SELECT
+      inquiry_id    AS inquiryId,
+      title,
+      content,
+      answer,
+      image,
+      user_id       AS userId,
+      type,
+      status,
+      question_date AS questionDate,
+      product_id    AS productId
+    FROM inquiry
+    WHERE inquiry_id = #{inquiryId}
+      AND user_id = #{userId}
+  </select>
+  
+  <!-- 1-2. 사용자문의 수정 -->
+  <update id="updateByUser" parameterType="inquiry">
+    UPDATE inquiry
+    SET title   = #{title},
+        content = #{content}
+    WHERE inquiry_id = #{inquiryId}
+      AND user_id    = #{userId}
+  </update>
+
+  <!-- 1-3. 사용자문의 삭제 -->
+  <delete id="deleteByUser" parameterType="map">
+    DELETE FROM inquiry
+    WHERE inquiry_id = #{inquiryId}
+      AND user_id    = #{userId}
+  </delete>
 </mapper>

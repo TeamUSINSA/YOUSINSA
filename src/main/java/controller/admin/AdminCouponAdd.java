@@ -67,6 +67,11 @@ public class AdminCouponAdd extends HttpServlet {
             CouponDAO dao = new CouponDAOImpl();
             dao.insertCoupon(coupon);
 
+         // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+            
             // 등록 성공 시 쿠폰 목록으로 이동
 
             List<Coupon> couponList = dao.selectAllCoupons();
@@ -83,7 +88,15 @@ public class AdminCouponAdd extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // GET 요청 시 폼 보여주기
+        try {
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("categoryList", null); // 안전장치
+        }
+
         request.getRequestDispatcher("/admin/adminCouponAdd.jsp").forward(request, response);
     }
 }

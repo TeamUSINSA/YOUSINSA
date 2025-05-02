@@ -21,7 +21,7 @@
     <div class="menu-item"><a href="myReviewList">나의 후기</a></div>
     <div class="menu-item"><a href="myAlarm">나의 알림</a></div>
     <div class="menu-item"><a href="myInquiryList">나의 1:1 문의</a></div>
-    <div class="menu-item"><a href="myQna">Q&A</a></div>
+    <div class="menu-item"><a href="myQnAList">Q&A</a></div>
     <hr>
   </div>
 </div>

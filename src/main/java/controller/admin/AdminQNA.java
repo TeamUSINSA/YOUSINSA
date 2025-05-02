@@ -30,6 +30,12 @@ public class AdminQNA extends HttpServlet {
             List<QnA> qnaList = qnaService.getQnAByFilter(filter); // ✅ 필터에 맞게 가져오기
 
             request.setAttribute("qnaList", qnaList);   
+            
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectCategoryWithSubList(); // 또는 selectAllCategories()
+            request.setAttribute("categoryList", categoryList);
+
+            
             request.getRequestDispatcher("/admin/adminQNA.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

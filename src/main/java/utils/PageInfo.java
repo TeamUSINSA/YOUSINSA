@@ -44,4 +44,5 @@ public class PageInfo {
 	public void setEndPage(Integer endPage) {
 		this.endPage = endPage;
 	}
+	
 }

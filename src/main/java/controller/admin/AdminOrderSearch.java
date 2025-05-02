@@ -23,35 +23,43 @@ public class AdminOrderSearch extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // 파라미터 받기
+            // 1. 파라미터 받기
             String userId = request.getParameter("userId");
             String status = request.getParameter("status");
             String period = request.getParameter("period");
+            String pageParam = request.getParameter("page");
 
-            // null 또는 'all' 값 처리
-            if (userId == null || userId.trim().isEmpty()) {
-                userId = "";
-            }
-            if (status == null || status.equals("all")) {
-                status = "";
-            }
-            if (period == null || period.equals("all")) {
-                period = "";
-            }
+            if (userId == null || userId.trim().isEmpty()) userId = "";
+            if (status == null || status.equals("all")) status = "";
+            if (period == null || period.equals("all")) period = "";
 
-            // 서비스 호출
+            // 2. 페이징 계산
+            int currentPage = 1;
+            if (pageParam != null && !pageParam.isEmpty()) {
+                currentPage = Integer.parseInt(pageParam);
+            }
+            int itemsPerPage = 10;
+            int offset = (currentPage - 1) * itemsPerPage;
+
+            // 3. 서비스 호출
             OrderService service = new OrderServiceImpl();
-            List<OrderList> orderList = service.getFilteredOrders(userId, status, period);
-            int totalPages = service.getTotalPages();
+            List<OrderList> orderList = service.getFilteredOrders(userId, status, period, offset, itemsPerPage);
+            int totalCount = service.getFilteredOrderCount(userId, status, period);
+            int totalPages = (int) Math.ceil((double) totalCount / itemsPerPage);
 
-            // JSP로 전달
+            // 4. JSP로 전달
             request.setAttribute("orderList", orderList);
             request.setAttribute("totalPages", totalPages);
-            request.setAttribute("userId", userId);       // JSP에 필터 유지용
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("userId", userId);
             request.setAttribute("status", status);
             request.setAttribute("period", period);
+            
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
 
-            // 포워딩
+            // 5. 포워딩
             request.getRequestDispatcher("/admin/adminOrderSearch.jsp").forward(request, response);
 
         } catch (Exception e) {

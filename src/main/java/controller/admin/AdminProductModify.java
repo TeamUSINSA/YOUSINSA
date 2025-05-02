@@ -37,38 +37,30 @@ public class AdminProductModify extends HttpServlet {
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
-
+        Integer productId = Integer.parseInt(request.getParameter("productId"));
+        ProductService productService = new ProductServiceImpl();
+        CategoryService categoryService = new CategoryServiceImpl();
         try {
-            Integer productId = Integer.parseInt(request.getParameter("productId"));
-            CategoryService categoryService = new CategoryServiceImpl();
-            ProductService productService = new ProductServiceImpl();
-
             ProductAndOption pao = productService.getProductAndOption(productId);
+            System.out.println(pao);
+            int subCategoryId = pao.getProduct().getSubCategoryId();
+            SubCategory subCategory = categoryService.selectSubCategoryById(subCategoryId); // ✅ 수정
+            int categoryId = subCategory.getCategoryId();
 
-            if (pao == null || pao.getProduct() == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "상품을 찾을 수 없습니다.");
-                return;
-            }
-
-            Integer subCategoryId = pao.getProduct().getSubCategoryId();
             List<Category> categoryList = categoryService.selectCategoryList();
-            List<SubCategory> subCategoryList = (subCategoryId != null)
-                    ? categoryService.selectSubCategoriesByCategoryId(subCategoryId)
-                    : null;
+            List<SubCategory> subCategoryList = categoryService.selectSubCategoriesByCategoryId(categoryId); // ✅ 여기 타입도 정확히
+            
+            
+            
 
             request.setAttribute("categoryList", categoryList);
             request.setAttribute("subCategoryList", subCategoryList);
             request.setAttribute("pao", pao);
             request.getRequestDispatcher("admin/adminProductModify.jsp").forward(request, response);
-
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "상품 ID가 잘못되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException(e);
         }
     }
-
 
 
 	/**
@@ -80,7 +72,8 @@ public class AdminProductModify extends HttpServlet {
 	    	ProductService service = new ProductServiceImpl();
 	    	Integer productId = service.modifyProduct(request);
 	    	request.setAttribute("productId", productId);
-	    	request.getRequestDispatcher("productDetail").forward(request, response);
+	    	request.getRequestDispatcher("/adminProductSearch").forward(request, response);
+
 			
 		} catch(Exception e) {
 			e.printStackTrace();

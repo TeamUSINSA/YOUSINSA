@@ -40,6 +40,11 @@ public class AdminCouponList extends HttpServlet {
             List<Coupon> couponList = dao.selectCouponPage(params);
             int totalCount = dao.getCouponCount();
             int totalPages = (int) Math.ceil((double) totalCount / PAGE_SIZE);
+            
+         // ✅ 카테고리 목록 추가
+            dao.product.CategoryDAO categoryDAO = new dao.product.CategoryDAOImpl();
+            List<dto.product.Category> categoryList = categoryDAO.selectAllCategories();
+            request.setAttribute("categoryList", categoryList);
 
             request.setAttribute("couponList", couponList);
             request.setAttribute("currentPage", page);

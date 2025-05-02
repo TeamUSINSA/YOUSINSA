@@ -5,6 +5,7 @@
 <c:set var="imageIcon" value="${contextPath}/image/cloths.jpg" />
 <html>
 <head>
+<jsp:include page="adminSideBarStyle.jsp" />
 <meta charset="UTF-8">
 <title>상품 수정</title>
 <style>
@@ -344,8 +345,12 @@ span, td, input {
 
 <body>
 	<jsp:include page="../common/header.jsp" />
-	<div style="width: 1500px;">
-		<jsp:include page="adminSideBar.jsp" />
+	<div style="width: 1500px; display: flex;">
+
+		<div style="width: 320px;">
+			<jsp:include page="adminSideBar.jsp" />
+		</div>
+
 		<div class="content">
 			<h2>상품수정</h2>
 			<form action="adminProductModify" method="post"
@@ -406,19 +411,11 @@ span, td, input {
 					<div class="right">
 						<div class="form-box">
 							<div class="category-row">
-								<span class="pspan">카테고리</span> <select id="categorySelect"
-									name="category" class="cselect">
-									<c:forEach items="${categoryList}" var="category">
-										<option value="${category.categoryId}"
-											<c:if test="${category.categoryId eq pao.product.category1}">selected</c:if>>
-											${category.categoryName}</option>
-									</c:forEach>
-								</select> <select id="subCategorySelect" name="subCategory"
-									class="cselect">
-									<c:forEach items="${subCategoryList}" var="subCategory">
-										<option value="${subCategory.subCategoryId}"
-											<c:if test="${subCategory.subCategoryId eq pao.product.subCategoryId}">selected</c:if>>
-											${subCategory.subCategoryName}</option>
+								<span class="pspan">카테고리</span> <select id="subCategorySelect"
+									name="subCategory" class="cselect">
+									<c:forEach items="${subCategoryList }" var="subCategory">
+										<option value="${subCategory.subCategoryId }"
+											${subCategory.subCategoryId eq pao.product.subCategoryId ? 'selected' : ''}>${subCategory.subCategoryName }</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -449,7 +446,6 @@ span, td, input {
 									value=${pao.product.discount }>
 							</div>
 						</div>
-
 						<input type='radio' value='F' name="sizeType"
 							onclick="$('#options-container').empty()"
 							${pao.product.sizeType eq 'F'? 'checked':'' }><span>Free

@@ -2,6 +2,8 @@ package dao.admin;
 
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import dto.product.Product;
 import dto.product.ProductQuantity;
 import dto.product.ProductStock;
@@ -34,4 +36,23 @@ public interface AdminProductDAO {
 	List<ProductQuantity> selectStockByColor(Integer productId, String color) throws Exception;
  
 	void deleteStockByProductId(Integer productId) throws Exception;
+	
+	void deleteStockByProductId(Integer productId, SqlSession session) throws Exception;
+	void updateProduct(Product product, SqlSession session) throws Exception;
+	void insertProductStockList(List<ProductStock> stockList, SqlSession session) throws Exception;
+	
+	// 재고 존재 여부 확인
+	int countStockByProductIdColorSize(int productId, String color, String size, SqlSession session) throws Exception;
+
+	// 재고 수량 업데이트
+	void updateStockQuantity(ProductStock stock, SqlSession session) throws Exception;
+
+	// 재고 새로 삽입
+	void insertProductStock(ProductStock stock, SqlSession session) throws Exception;
+	
+	// 페이징 처리된 상품 목록 조회
+	List<Product> selectProductListWithPaging(String searchType, String keyword, int offset, int limit) throws Exception;
+
+	// 총 상품 개수 조회
+	int countProductList(String searchType, String keyword) throws Exception;
 }

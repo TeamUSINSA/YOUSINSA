@@ -17,4 +17,9 @@ public class ProductAndOption {
 	public List<ProductOption> getOptionList() {
 		return optionList;
 	}
+	@Override
+	public String toString() {
+		return "ProductAndOption [product=" + product + ", optionList=" + optionList + "]";
+	}
+	
 }

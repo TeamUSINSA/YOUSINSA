@@ -11,7 +11,6 @@ public class Product {
 	private int price;
 	private int discount;
 	private int subCategoryId;
-	//private int CategoryId;
 	private String type;
 	private Date regDate;
 	private String description1;
@@ -372,4 +371,18 @@ public class Product {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", name=" + name + ", cost=" + cost + ", price=" + price
+				+ ", discount=" + discount + ", subCategoryId=" + subCategoryId + ", type=" + type + ", regDate="
+				+ regDate + ", description1=" + description1 + ", description2=" + description2 + ", mainImage1="
+				+ mainImage1 + ", mainImage2=" + mainImage2 + ", mainImage3=" + mainImage3 + ", mainImage4="
+				+ mainImage4 + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3 + ", image4=" + image4
+				+ ", image5=" + image5 + ", image6=" + image6 + ", image7=" + image7 + ", image8=" + image8
+				+ ", image9=" + image9 + ", image10=" + image10 + ", sizeChart=" + sizeChart + ", sizeType=" + sizeType
+				+ ", category1=" + category1 + ", category2=" + category2 + ", code=" + code + ", sizeImage="
+				+ sizeImage + ", quantity=" + quantity + ", sales=" + sales + "]";
+	}
+	
 }

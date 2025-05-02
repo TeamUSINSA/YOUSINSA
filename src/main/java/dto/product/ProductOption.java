@@ -22,4 +22,8 @@ public class ProductOption {
 	public void setSizeQuanity(List<ProductQuantity> sizeQuanity) {
 		this.sizeQuanity = sizeQuanity;
 	}
+	@Override
+	public String toString() {
+		return "ProductOption [color=" + color + ", sizeQuanity=" + sizeQuanity + "]";
+	}
 }

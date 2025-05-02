@@ -154,10 +154,12 @@
         <input type="hidden" name="returnId" value="${refund.returnId}" />
 
         <label>아이디</label>
-        <input type="text" value="${user.userId}" readonly />
+        
+        <input type="text" value="${userId}" readonly />
+
 
         <label>회원이름</label>
-        <input type="text" value="${user.name}" readonly />
+        <input type="text" value="${userName}" readonly />
 
         <table>
           <tr>

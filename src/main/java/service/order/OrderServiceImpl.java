@@ -3,6 +3,8 @@ package service.order;
 import java.sql.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+
 import dao.order.CartDAO;
 import dao.order.CartDAOImpl;
 import dao.order.OrderDAO;
@@ -14,6 +16,7 @@ import dto.order.Order;
 import dto.order.OrderItem;
 import dto.order.OrderList;
 import dto.product.Product;
+import utils.MybatisSqlSessionFactory;
 
 public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO = new OrderDAOImpl();
@@ -30,10 +33,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderList> getFilteredOrders(String userId, String status, String period) throws Exception {
-		return orderDAO.selectFilteredOrders(userId, status, period);
+	public List<OrderList> getFilteredOrders(String userId, String status, String period, int offset, int limit) throws Exception {
+	    return orderDAO.selectFilteredOrders(userId, status, period, offset, limit);
 	}
 
+	@Override
+	public int getFilteredOrderCount(String userId, String status, String period) throws Exception {
+	    return orderDAO.countFilteredOrders(userId, status, period);
+	}
     @Override
     public List<OrderList> selectOrderListByUser(String userId) throws Exception {
         return orderDAO.selectOrderListByUser(userId);
@@ -121,5 +128,33 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderList> findOrdersByUserId(String userId) throws Exception {
         return orderDAO.findOrdersByUserId(userId);
+    }
+    
+    @Override
+    public void updateDeliveryStatus(int orderId, String deliveryStatus) throws Exception {
+        orderDAO.updateDeliveryStatus(orderId, deliveryStatus);
+        // ✅ orderitem 테이블도 같이 업데이트
+        orderDAO.updateOrderItemStatuses(orderId, deliveryStatus);
+    }
+
+    @Override
+    public void updateOrderItemStatuses(int orderId, String deliveryStatus) throws Exception {
+        orderDAO.updateOrderItemStatuses(orderId, deliveryStatus);
+    }
+    
+    @Override
+    public void insertOrderWithItems(Order order) throws Exception {
+        SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(false); // 수동 커밋
+
+        try {
+            orderDAO.insertOrderList(order, session);  // 주문 테이블
+            orderDAO.insertOrderItem(order, session);  // 아이템 테이블
+            session.commit();
+        } catch (Exception e) {
+            session.rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 }

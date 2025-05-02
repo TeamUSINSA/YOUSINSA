@@ -13,7 +13,7 @@ import service.order.CartServiceImpl;
 @WebServlet("/cartAdd")
 public class CartAdd extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CartService service = new CartServiceImpl();
+	
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -24,6 +24,7 @@ public class CartAdd extends HttpServlet {
 		// 로그인된 사용자 세션에서 ID 확인
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("userId");
+		CartService service = new CartServiceImpl();
 
 		if (userId == null) {
 			response.sendRedirect(request.getContextPath() + "/common/login.jsp");

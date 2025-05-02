@@ -34,12 +34,23 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<OrderList> selectFilteredOrders(String userId, String status, String period) throws Exception {
+    public List<OrderList> selectFilteredOrders(String userId, String status, String period, int offset, int limit) throws Exception {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("userId", userId);
         paramMap.put("status", status);
         paramMap.put("period", period);
-        return sqlSession.selectList("mapper.order.selectFilteredOrders", paramMap);
+        paramMap.put("offset", offset);
+        paramMap.put("limit", limit);
+        return sqlSession.selectList("mapper.order.selectFilteredOrdersWithPaging", paramMap);
+    }
+    
+    @Override
+    public int countFilteredOrders(String userId, String status, String period) throws Exception {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("userId", userId);
+        paramMap.put("status", status);
+        paramMap.put("period", period);
+        return sqlSession.selectOne("mapper.order.countFilteredOrders", paramMap);
     }
 
     @Override
@@ -52,15 +63,7 @@ public class OrderDAOImpl implements OrderDAO {
         return sqlSession.selectOne("mapper.order.findOrderListById", orderId);
     }
 
-    @Override
-    public void insertOrderList(Order order) throws Exception {
-        sqlSession.insert("mapper.orderproduct.insertOrderList", order);
-    }
 
-    @Override
-    public void insertOrderItem(Order order) throws Exception {
-        sqlSession.insert("mapper.orderproduct.insertOrderItem", order);
-    }
 
     @Override
     public List<Order> selectOrdersByUser(String userId) throws Exception {
@@ -124,4 +127,49 @@ public class OrderDAOImpl implements OrderDAO {
     public List<OrderList> selectOrderListByUser(String userId) throws Exception {
         return sqlSession.selectList("mapper.order.selectOrderListByUser", userId);
     }
+    
+    @Override
+    public void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderId", orderId);
+        params.put("deliveryStatus", deliveryStatus);
+        sqlSession.update("mapper.orderlist.updateDeliveryStatus", params);
+    }
+    
+    @Override
+    public void updateOrderItemStatuses(int orderId, String deliveryStatus) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("orderId", orderId);
+        params.put("status", deliveryStatus);
+        sqlSession.update("mapper.order.updateOrderItemStatuses", params);
+    }
+    
+    public void insertOrderList(Order order, SqlSession session) throws Exception {
+        session.insert("mapper.orderproduct.insertOrderList", order);
+    }
+
+    public void insertOrderItem(Order order, SqlSession session) throws Exception {
+        session.insert("mapper.orderproduct.insertOrderItem", order);
+    }
+
+    @Override
+    public void insertOrderList(Order order) throws Exception {
+        SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(true); // auto-commit
+        try {
+            session.insert("mapper.orderproduct.insertOrderList", order);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void insertOrderItem(Order order) throws Exception {
+        SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession(true); // auto-commit
+        try {
+            session.insert("mapper.orderproduct.insertOrderItem", order);
+        } finally {
+            session.close();
+        }
+    }
+
 }

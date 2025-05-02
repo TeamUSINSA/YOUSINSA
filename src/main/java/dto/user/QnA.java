@@ -106,5 +106,4 @@ public class QnA {
 		this.questionDate = questionDate;
 	}
     
-    
 }

@@ -2,6 +2,9 @@ package dao.order;
 
 import java.sql.Date;
 import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
 import dto.order.Coupon;
 import dto.order.Order;
 import dto.order.OrderItem;
@@ -14,15 +17,13 @@ public interface OrderDAO {
 
     int getTotalOrderPages() throws Exception;
 
-    List<OrderList> selectFilteredOrders(String userId, String status, String period) throws Exception;
 
     List<OrderList> findOrdersByUserId(String userId) throws Exception;
 
     OrderList findOrderListById(int orderId) throws Exception;
 
-    void insertOrderList(Order order) throws Exception;
-
-    void insertOrderItem(Order order) throws Exception;
+    void insertOrderList(Order order, SqlSession session) throws Exception;
+    void insertOrderItem(Order order, SqlSession session) throws Exception;
 
     List<Order> selectOrdersByUser(String userId) throws Exception;
 
@@ -45,4 +46,19 @@ public interface OrderDAO {
     OrderList getOrderDetailById(int orderId) throws Exception;
 
     List<OrderList> selectOrderListByUser(String userId) throws Exception;
+    
+    void updateDeliveryStatus(Integer orderId, String deliveryStatus) throws Exception;
+    
+ // ✅ 페이징 적용된 주문 목록 조회
+    List<OrderList> selectFilteredOrders(String userId, String status, String period, int offset, int limit) throws Exception;
+
+    // ✅ 필터된 전체 주문 수 조회
+    int countFilteredOrders(String userId, String status, String period) throws Exception;
+    
+    void updateOrderItemStatuses(int orderId, String deliveryStatus) throws Exception;
+
+	void insertOrderList(Order order) throws Exception;
+
+	void insertOrderItem(Order order) throws Exception;
+
 }
