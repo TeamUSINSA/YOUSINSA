@@ -91,7 +91,6 @@
 		price,
 		discount,
 		sub_category_id,
-		type,
 		size_type,
 		reg_date,
 		description1,

@@ -42,7 +42,6 @@ public class AdminProductModify extends HttpServlet {
         CategoryService categoryService = new CategoryServiceImpl();
         try {
             ProductAndOption pao = productService.getProductAndOption(productId);
-            System.out.println(pao);
             int subCategoryId = pao.getProduct().getSubCategoryId();
             SubCategory subCategory = categoryService.selectSubCategoryById(subCategoryId); // ✅ 수정
             int categoryId = subCategory.getCategoryId();
@@ -68,9 +67,11 @@ public class AdminProductModify extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		System.out.println("🔥 [AdminProductModify] doPost 진입 확인");
 		try {
 	    	ProductService service = new ProductServiceImpl();
 	    	Integer productId = service.modifyProduct(request);
+	    	System.out.println("프로덕트아이디:"+productId);
 	    	request.setAttribute("productId", productId);
 	    	request.getRequestDispatcher("/adminProductSearch").forward(request, response);
 

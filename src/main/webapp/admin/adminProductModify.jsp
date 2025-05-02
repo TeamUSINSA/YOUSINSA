@@ -451,7 +451,7 @@ span, td, input {
 							${pao.product.sizeType eq 'F'? 'checked':'' }><span>Free
 							Size</span> <input type='radio' value='M' name="sizeType"
 							onclick="$('#options-container').empty()"
-							${pao.product.sizeType eq 'M'? 'checked':'' }><span>Multi
+							${pao.product.sizeType eq 'M'? 'checked':'' } checked><span>Multi
 							Size</span>
 
 						<div class="dynamic-options">
@@ -472,11 +472,13 @@ span, td, input {
 											</tr>
 											<c:forEach items="${option.sizeQuanity }" var="sq">
 												<tr>
-													<td>${sq.size }</td>
-													<td><input type="number" name="${sq.size}"
-														value="${sq.quantity }"></td>
+													<td>${sq.size}</td>
+													<td><input type="number"
+														name="${option.color}_${sq.size}" value="${sq.quantity}">
+													</td>
 												</tr>
 											</c:forEach>
+
 										</table>
 									</div>
 								</c:forEach>
@@ -703,6 +705,25 @@ span, td, input {
 			}
 		})
 	})
+	
+	function toggleOptionsBySizeType() {
+	const selected = $("input[name='sizeType']:checked").val();
+	if (selected === 'F') {
+		$("#options-container").hide();
+	} else {
+		$("#options-container").show();
+	}
+}
+
+// 페이지 로딩 시에도 체크된 값에 따라 보이기/숨기기 초기 설정
+$(document).ready(function () {
+	toggleOptionsBySizeType();
+});
+
+// 라디오 버튼이 바뀔 때마다 실행
+$("input[name='sizeType']").on("change", function () {
+	toggleOptionsBySizeType();
+});
 	
 </script>
 </body>

@@ -166,8 +166,10 @@
 				1 = 1
 			</otherwise>
 		</choose>
-		ORDER BY reg_date DESC
+		ORDER BY product_id DESC
+		<!-- 
 		LIMIT #{offset}, #{limit}
+		 -->
 	</select>
 
 	<select id="countProductList" parameterType="map"

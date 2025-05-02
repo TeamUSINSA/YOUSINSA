@@ -81,36 +81,21 @@ public class ProductServiceImpl implements ProductService {
 	    try {
 	        MultipartRequest multi = new MultipartRequest(request, path, size, "utf-8", new DefaultFileRenamePolicy());
 
-	        System.out.println("multi = " + multi);
-	        System.out.println("multi.getParameter(productId) = " + multi.getParameter("productId"));
-
 	        String productIdStr = multi.getParameter("productId");
 	        Integer productId = (productIdStr == null || productIdStr.isEmpty()) ? null : Integer.parseInt(productIdStr);
 
 	        String name = multi.getParameter("name");
-
-	        String costStr = multi.getParameter("cost");
-	        Integer cost = (costStr == null || costStr.trim().isEmpty()) ? 0 : Integer.parseInt(costStr);
-
-	        String priceStr = multi.getParameter("price");
-	        Integer price = (priceStr == null || priceStr.trim().isEmpty()) ? 0 : Integer.parseInt(priceStr);
-
-	        String discountStr = multi.getParameter("discount");
-	        Integer discount = (discountStr == null || discountStr.trim().isEmpty()) ? 0 : Integer.parseInt(discountStr);
+	        Integer cost = Integer.parseInt(multi.getParameter("cost"));
+	        Integer price = Integer.parseInt(multi.getParameter("price"));
+	        Integer discount = Integer.parseInt(multi.getParameter("discount"));
 
 	        String subCategoryStr = multi.getParameter("subCategory");
-	        Integer subCategory = null;
-	        if (subCategoryStr != null && !subCategoryStr.isEmpty()) {
-	            subCategory = Integer.parseInt(subCategoryStr);
-	            if (subCategory == 0) {
-	                throw new IllegalArgumentException("서브카테고리를 선택해야 합니다.");
-	            }
-	        } else {
+	        Integer subCategory = (subCategoryStr != null && !subCategoryStr.isEmpty()) ? Integer.parseInt(subCategoryStr) : null;
+	        if (subCategory == null || subCategory == 0) {
 	            throw new IllegalArgumentException("서브카테고리를 선택해야 합니다.");
 	        }
 
 	        String description1 = multi.getParameter("description1");
-
 	        String sizeType = multi.getParameter("sizeType");
 	        if (sizeType == null || sizeType.trim().isEmpty()) {
 	            sizeType = "F";
@@ -128,36 +113,59 @@ public class ProductServiceImpl implements ProductService {
 
 	        restoreImages(multi, product);
 
-	        List<ProductStock> stockList = parseStockList(multi, productId, sizeType);
-	        System.out.println(stockList);
+	        List<ProductStock> stockList = new ArrayList<>();
+	        String[] colors = multi.getParameterValues("color");
+	        String[] sizeTypes = sizeType.equals("F") ? new String[]{"F"} : new String[]{"XS", "S", "M", "L", "XL"};
+	        for(int i=0; i<colors.length;i++) {
+	        	System.out.println(colors[i]);
+	        }
+	        
+	        for(int i=0; i<sizeTypes.length;i++) {
+	        	System.out.println(sizeTypes[i]);
+	        }
+
+	        if (colors != null) {
+	            for (String color : colors) {
+	                for (String s : sizeTypes) {
+	                    String paramName = color + "_" + s;
+	                    String quantityStr = multi.getParameter(paramName);
+	                    if (quantityStr != null && !quantityStr.isBlank()) {
+	                        try {
+	                            int quantity = Integer.parseInt(quantityStr.trim());
+	                            if (quantity >= 0) {
+	                                stockList.add(new ProductStock(productId, color, s, quantity));
+	                            }
+	                        } catch (NumberFormatException e) {
+	                            System.out.println("재고 숫자 파싱 실패: " + paramName + "=" + quantityStr);
+	                        }
+	                    }
+	                }
+	            }
+	        }
 
 	        for (ProductStock ps : stockList) {
+	        	
 	            if (ps.getColor() == null || ps.getColor().isBlank()
 	                    || ps.getSize() == null || ps.getSize().isBlank()
-	                    || ps.getQuantity() <= 0 ){
-	                throw new IllegalArgumentException("색상, 사이즈, 수량을 모두 입력해야 합니다.");
+	                    || ps.getQuantity() < 0) {
+	                throw new IllegalArgumentException("색상, 사이즈, 수량을 모두 정확히 입력해야 합니다.");
 	            }
 	        }
 
 	        productDAO.updateProduct(product, session);
 
 	        for (ProductStock ps : stockList) {
-	            int count = productDAO.countStockByProductIdColorSize(
-	                ps.getProductId(), ps.getColor(), ps.getSize(), session);
+	            int count = productDAO.countStockByProductIdColorSize(ps.getProductId(), ps.getColor(), ps.getSize(), session);
+	            System.out.println("count = " + count + ", ps = " + ps); // ✅ 이거 꼭 넣어봐
 
-	            System.out.println(productId);
-	            System.out.println(ps.getColor());
-	            System.out.println(ps.getSize());
-	            System.out.println(count);
-	            System.out.println("====================================================================");
-	            
 	            if (count > 0) {
+	                System.out.println("업데이트 대상 발견: " + ps); // ✅ 이게 안 찍히면 update 안 들어가는 거임
 	                productDAO.updateStockQuantity(ps, session);
 	            } else {
+	                System.out.println("신규 insert 대상: " + ps); // ✅ 이쪽만 찍히면 update는 안 되는 거야
 	                productDAO.insertProductStock(ps, session);
 	            }
-	        }
-
+	        }	
 
 	        session.commit();
 	        return productId;
@@ -169,7 +177,6 @@ public class ProductServiceImpl implements ProductService {
 	        session.close();
 	    }
 	}
-
 
 	private void restoreImages(MultipartRequest multi, Product product) {
 		String[] imageFields = { "mainImage1", "mainImage2", "mainImage3", "mainImage4", "image1", "image2", "image3",
@@ -227,33 +234,30 @@ public class ProductServiceImpl implements ProductService {
 
 	private List<ProductStock> parseStockList(MultipartRequest multi, int productId, String sizeType) {
 	    List<ProductStock> stockList = new ArrayList<>();
-	    
-	    String[] colorList = multi.getParameterValues("color");
 
-	    // 🔥 colorList가 null이면 아예 재고 리스트 없이 끝내기
-	    if (colorList == null || colorList.length == 0) {
-	        return stockList;
+	    String[] colorList = multi.getParameterValues("color");
+	    if (colorList == null || colorList.length == 0) return stockList;
+
+	    // 사이즈 종류 설정
+	    String[] sizeNames;
+	    if ("F".equals(sizeType)) {
+	        sizeNames = new String[]{"F"};
+	    } else {
+	        sizeNames = new String[]{"XS", "S", "M", "L", "XL"};
 	    }
 
-	    if ("F".equals(sizeType)) {
-	        String[] fSizeList = multi.getParameterValues("F");
-	        for (int i = 0; i < colorList.length; i++) {
-	            // 🔥🔥 fSizeList도 null 체크
-	            if (fSizeList != null && fSizeList.length > i && fSizeList[i] != null && !fSizeList[i].trim().isEmpty()) {
-	                Integer quantity = Integer.parseInt(fSizeList[i]);
-	                ProductStock stock = new ProductStock(productId, colorList[i], "F", quantity);
-	                stockList.add(stock);
-	            }
-	        }
-	    } else {
-	        String[] sizeNames = {"XS", "S", "M", "L", "XL"};
-	        for (int i = 0; i < colorList.length; i++) {
-	            for (String sizeName : sizeNames) {
-	                String[] sizeArray = multi.getParameterValues(sizeName);
-	                if (sizeArray != null && sizeArray.length > i && sizeArray[i] != null && !sizeArray[i].trim().isEmpty()) {
-	                    Integer quantity = Integer.parseInt(sizeArray[i]);
-	                    ProductStock stock = new ProductStock(productId, colorList[i], sizeName, quantity);
-	                    stockList.add(stock);
+	    // 색상 + 사이즈 조합 기반으로 수량 파싱
+	    for (String color : colorList) {
+	        for (String size : sizeNames) {
+	            String key = color + "_" + size; // input name="Red_M"
+	            String quantityStr = multi.getParameter(key);
+
+	            if (quantityStr != null && !quantityStr.isBlank()) {
+	                try {
+	                    int quantity = Integer.parseInt(quantityStr.trim());
+	                    stockList.add(new ProductStock(productId, color, size, quantity));
+	                } catch (NumberFormatException e) {
+	                    System.out.println("🚨 수량 파싱 실패: " + key + " = " + quantityStr);
 	                }
 	            }
 	        }
@@ -261,6 +265,7 @@ public class ProductServiceImpl implements ProductService {
 
 	    return stockList;
 	}
+
 
 
 	@Override
