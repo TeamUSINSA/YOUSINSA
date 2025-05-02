@@ -44,7 +44,7 @@ h2 {
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 	flex-grow: 1;
 	min-height: 600px;
-	/* ✅ margin: 20px; <<== 이거 없애야 해!! */
+
 }
 
 .section {
