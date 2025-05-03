@@ -2,6 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 <style>
 /* 초기화 */
 * {
@@ -278,6 +280,7 @@ body {
           <span class="badge">${alertCount}</span>
         </c:if>
       </a>
+      
     </c:when>
     <c:otherwise>
       <a href="${pageContext.request.contextPath}/login">알림</a>
@@ -365,19 +368,75 @@ body {
 </div>
 
 <script>
-  // 버튼 클릭
-  document.getElementById('searchBtn').addEventListener('click', doSearch);
+  // 1. Firebase 초기화
+  const firebaseConfig = {
+    apiKey: "AIzaSyChh1pWhBBB1jFsI_YHR4id1PjM8htrFwU",
+    authDomain: "yousinsa-c83ae.firebaseapp.com",
+    projectId: "yousinsa-c83ae",
+    messagingSenderId: "372484059502",
+    appId: "1:372484059502:web:0d322309f20c8c7c79d17f"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+  messaging.onMessage(payload => {
+	    console.log('📥 포그라운드 메시지 수신:', payload);
 
-  // Enter 키
+	    const { title, body } = payload.notification ?? payload.data;
+	    if (title && body) {
+	      new Notification(title, {
+	        body: body,
+	        icon: '/favicon.ico'
+	      });
+	    }
+	  });
+</script>
+
+<c:if test="${not empty sessionScope.userId}">
+  <script>
+    // 2. 서비스워커 등록 및 토큰 저장
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/yousinsa/firebase-messaging-sw.js')
+    .then(function(registration) {
+      console.log('✅ Service Worker 등록 성공:', registration.scope);
+
+      return Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          return messaging.getToken({ serviceWorkerRegistration: registration });
+        } else {
+          throw new Error('❌ 알림 권한 거부됨');
+        }
+      });
+    })
+    .then(token => {
+      console.log('🎯 토큰:', token);
+      return fetch('/yousinsa/saveFcmToken', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      });
+    })
+    .catch(err => {
+      console.error('❌ 최종 오류:', err);
+    });
+}
+
+
+
+  </script>
+</c:if>
+
+<script>
+  // 🔍 검색 기능
+  document.getElementById('searchBtn').addEventListener('click', doSearch);
   document.getElementById('inp').addEventListener('keyup', e => {
     if (e.key === 'Enter') doSearch();
   });
 
   function doSearch() {
     const raw = document.getElementById('inp').value.trim();
-    const keyword = raw.replace(/\s/g, '');   // 공백 제거
+    const keyword = raw.replace(/\s/g, '');
 
-    if (keyword.length < 2) {                 // 두 글자 미만이면 취소
+    if (keyword.length < 2) {
       alert('검색어를 두 글자 이상 입력해 주세요.');
       return;
     }
@@ -385,6 +444,7 @@ body {
     location.href = '/yousinsa/productList?name=' + encodeURIComponent(raw);
   }
 </script>
+
 
 	</div>
 </div>

@@ -4,7 +4,7 @@ public class Alert {
     private int alertId;
     private String content;
     private boolean checked;
-    private int senderId;
+    private String senderId;
     private String senderName;
     private String userId;
     private String title;
@@ -44,12 +44,12 @@ public class Alert {
 	}
 
 
-	public int getSenderId() {
+	public String getSenderId() {
 		return senderId;
 	}
 
 
-	public void setSenderId(int senderId) {
+	public void setSenderId(String senderId) {
 		this.senderId = senderId;
 	}
 

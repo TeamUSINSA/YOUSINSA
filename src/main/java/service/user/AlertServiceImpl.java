@@ -23,4 +23,9 @@ public class AlertServiceImpl implements AlertService {
 		dao.markAsChecked(alertId);
 		
 	}
+	
+	@Override
+	public int insertAlert(Alert alert) throws Exception {
+	    return dao.insertAlert(alert);
+	}
 }

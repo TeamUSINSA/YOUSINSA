@@ -88,6 +88,19 @@ public class CouponDAOImpl implements CouponDAO {
     public int expireCouponsByUser(String userId) throws Exception {
         return sqlSession.update("mapper.coupon.expireCouponsByUser", userId);
     }
+    
+    @Override
+    public List<Coupon> selectValidCouponsByType(String type) throws Exception {
+        return sqlSession.selectList("mapper.coupon.selectValidCouponsByType", type);
+    }
+    
+    @Override
+    public int countUserCoupon(String userId, int couponId) throws Exception {
+        Map<String,Object> p = new HashMap<>();
+        p.put("userId",   userId);
+        p.put("couponId", couponId);
+        return sqlSession.selectOne("mapper.coupon.countUserCoupon", p);
+    }
 
 }
 

@@ -18,4 +18,6 @@ public interface CouponService {
     void downloadCoupon(int couponId, String userId,
                         LocalDate issueDate, LocalDate expireDate) throws Exception;
 	void expireUserCoupons(String userId) throws Exception;
+	List<Coupon> selectValidCouponsByType(String type) throws Exception;
+	boolean hasUserCoupon(String userId, int couponId) throws Exception;
 }

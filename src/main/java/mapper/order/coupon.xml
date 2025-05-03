@@ -58,5 +58,20 @@
 ]]></update>
 
 
+<select id="selectValidCouponsByType" parameterType="string" resultType="coupon">
+  SELECT coupon_id, period, start_date, end_date, type, active, name
+  FROM coupon
+  WHERE active = 1
+    AND type = #{type}
+    AND CURDATE() BETWEEN start_date AND end_date
+</select>
+
+<select id="countUserCoupon" parameterType="map" resultType="int">
+  SELECT COUNT(*)
+    FROM usercoupon
+   WHERE user_id   = #{userId}
+     AND coupon_id = #{couponId}
+</select>
+
 </mapper>
 

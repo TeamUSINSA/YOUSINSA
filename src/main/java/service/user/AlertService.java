@@ -16,4 +16,5 @@ public interface AlertService {
     List<Alert> getAlertsByUser(String userId) throws Exception;
     
     void markAsChecked(int alertId) throws Exception;
+	int insertAlert(Alert alert) throws Exception;
 }

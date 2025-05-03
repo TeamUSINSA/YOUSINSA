@@ -54,4 +54,14 @@ public class CouponServiceImpl implements CouponService {
     public void expireUserCoupons(String userId) throws Exception {
         couponDAO.expireCouponsByUser(userId);
     }
+    
+    @Override
+    public List<Coupon> selectValidCouponsByType(String type) throws Exception {
+        return couponDAO.selectValidCouponsByType(type);
+    }
+    
+    @Override
+    public boolean hasUserCoupon(String userId, int couponId) throws Exception {
+        return couponDAO.countUserCoupon(userId, couponId) > 0;
+    }
 }

@@ -39,5 +39,14 @@ public class AlertDAOImpl implements AlertDAO {
             session.commit();
         }
 	}
-
+	
+	@Override
+	public int insertAlert(Alert alert) throws Exception {
+	    try (SqlSession session = sqlSessionFactory.openSession()) {
+	        int result = session.insert("mapper.alert.insertAlert", alert);
+	        session.commit();
+	        return result;
+	    }
+	}
+	
 }

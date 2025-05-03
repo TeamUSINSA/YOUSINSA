@@ -34,5 +34,12 @@
     SET checked = 1
     WHERE alert_id = #{alertId}
     </update>
+    
+    <insert id="insertAlert" parameterType="alert">
+  INSERT INTO alert
+    (content, checked, sender_id, sender_name, user_id, title, type)
+  VALUES
+    (#{content}, #{checked}, #{senderId}, #{senderName}, #{userId}, #{title}, #{type})
+</insert>
 
 </mapper>

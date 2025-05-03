@@ -134,5 +134,14 @@ public class UserDAOImpl implements UserDAO {
 		    params.put("currentPassword", currentPassword);
 		    return sqlSession.selectOne("mapper.user.checkPassword", params);
 		}
+		
+		@Override
+		public void updateFcmToken(String userId, String token) throws Exception {
+		        Map<String, Object> params = new HashMap<>();
+		        params.put("userId", userId);
+		        params.put("token", token);
+		        sqlSession.update("mapper.user.updateFcmToken", params);
+		        sqlSession.commit();
+		}
 	
 }

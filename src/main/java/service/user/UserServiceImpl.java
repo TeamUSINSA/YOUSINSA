@@ -106,4 +106,9 @@ public class UserServiceImpl implements UserService{
 	 public boolean checkPassword(String userId, String currentPassword) throws Exception {
 	     return userDao.checkPassword(userId, currentPassword) > 0;
 	 }
+	 
+	 @Override
+	 public void updateFcmToken(String userId, String token) throws Exception {
+		 userDao.updateFcmToken(userId, token);
+	 }
 }
