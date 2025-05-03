@@ -104,6 +104,7 @@ button:hover {
 </head>
 <body>
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
 	<c:if test="${not empty cartList}">
   <div class="cart-container">
 
@@ -189,7 +190,7 @@ button:hover {
     </a>
   </div>
 </c:if>
-	<jsp:include page="/footer" />
+	<jsp:include page="footer.jsp"/>
 
 
 <script>

@@ -83,6 +83,7 @@
 </head>
 <body>
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
   <main class="container">
     <h2>쿠폰 다운로드</h2>
     <p>다운로드 가능한 쿠폰 목록입니다.</p>
@@ -142,6 +143,6 @@
       </div>
     </c:forEach>
   </main>
-  <jsp:include page="/footer" />
+  <jsp:include page="footer.jsp"/>
 </body>
 </html>

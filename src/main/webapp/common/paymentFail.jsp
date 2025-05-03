@@ -72,6 +72,7 @@
 </head>
 <body>
   <jsp:include page="/header" />
+  <%@ include file="scrollTop.jsp" %>
   <div class="container">
     <h2>결제에 실패했습니다</h2>
     <div class="info">
@@ -87,6 +88,6 @@
          class="btn btn-home">메인으로</a>
     </div>
   </div>
-    <jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

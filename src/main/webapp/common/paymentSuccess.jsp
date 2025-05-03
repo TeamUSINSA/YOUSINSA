@@ -78,6 +78,7 @@
 </head>
 <body>
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
     <div class="container">
 
 
@@ -96,6 +97,6 @@
             <a href="${pageContext.request.contextPath}/myOrders" class="button">주문/배송 조회</a>
         </div>
     </div>
-    	<jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

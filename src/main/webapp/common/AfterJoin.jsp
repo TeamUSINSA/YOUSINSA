@@ -18,7 +18,7 @@
   </style>
 </head>
 <body class="bg-white text-sm text-gray-700">
-<jsp:include page="header.jsp"/>
+<jsp:include page="/header" />
 
   <!-- ✅ 회원가입 완료 메인 콘텐츠 -->
   <main class="flex flex-col items-center justify-center py-24 px-4">

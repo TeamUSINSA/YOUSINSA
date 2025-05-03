@@ -137,6 +137,7 @@ body {
 </head>
 <body>
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
 
 
 <!-- 1) 선택된 상위 카테고리 한 개만 또는 특수 목록 -->
@@ -305,7 +306,7 @@ body {
 	
 	
 
-   <%@ include file="../common/footer.jsp" %>
+  <jsp:include page="footer.jsp"/>
    
 <script>
   document.addEventListener('DOMContentLoaded', function() {

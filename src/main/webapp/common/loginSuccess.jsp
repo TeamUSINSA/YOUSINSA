@@ -18,6 +18,7 @@
 <body class="bg-white text-sm text-gray-700">
 
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
 
 <main class="flex flex-col items-center justify-center py-24 px-4">
   <div class="border rounded-lg px-6 py-10 w-full max-w-lg shadow-sm text-center">
@@ -50,7 +51,7 @@
   </div>
 </main>
 
-<jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 
 </body>
 </html>

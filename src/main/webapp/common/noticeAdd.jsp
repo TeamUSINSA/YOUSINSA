@@ -35,6 +35,7 @@
 </head>
 <body>
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
   <div class="container">
     <h2>공지사항 등록</h2>
     <form action="${pageContext.request.contextPath}/noticeAdd" method="post" enctype="multipart/form-data">
@@ -59,7 +60,7 @@
       </div>
     </form>
   </div>
-<jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
   <script>
     function previewImage(evt) {
       const file = evt.target.files[0], p = document.getElementById('preview');

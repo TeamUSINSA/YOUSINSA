@@ -21,6 +21,7 @@ String username = (String) session.getAttribute("username");
 </head>
 <body class="bg-white text-sm text-gray-700">
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
 
 <main class="flex flex-col items-center justify-center py-24">
   <%
@@ -171,6 +172,6 @@ String username = (String) session.getAttribute("username");
   </script>
 </main>
 
-<jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>
