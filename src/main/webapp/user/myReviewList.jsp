@@ -121,7 +121,7 @@
           <tr>
             <td>
               <div class="product-info">
-                <img src="/yousinsa/image/${review.image}" alt="리뷰 이미지">
+                <img src="/yousinsa/upload/${review.image}" alt="리뷰 이미지">
                 <div class="product-details">
                   <div><strong>${review.productName}</strong></div>
                   <div>색상 : ${review.color}</div>
