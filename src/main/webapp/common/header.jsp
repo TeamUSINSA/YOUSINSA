@@ -394,32 +394,61 @@ body {
 <c:if test="${not empty sessionScope.userId}">
   <script>
     // 2. 서비스워커 등록 및 토큰 저장
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/yousinsa/firebase-messaging-sw.js')
-    .then(function(registration) {
-      console.log('✅ Service Worker 등록 성공:', registration.scope);
+    if ('serviceWorker' in navigator && sessionStorage.getItem('fcmSaved') !== 'true') {
+      navigator.serviceWorker.register('/yousinsa/firebase-messaging-sw.js')
+        .then(function(registration) {
+          console.log('✅ Service Worker 등록 성공:', registration.scope);
 
-      return Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          return messaging.getToken({ serviceWorkerRegistration: registration });
-        } else {
-          throw new Error('❌ 알림 권한 거부됨');
-        }
-      });
-    })
-    .then(token => {
-      console.log('🎯 토큰:', token);
-      return fetch('/yousinsa/saveFcmToken', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token })
-      });
-    })
-    .catch(err => {
-      console.error('❌ 최종 오류:', err);
-    });
-}
+          return Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              return messaging.getToken({ serviceWorkerRegistration: registration });
+            } else {
+              throw new Error('❌ 알림 권한 거부됨');
+            }
+          });
+        })
+        .then(token => {
+          console.log('🎯 토큰:', token);
+          return fetch('/yousinsa/saveFcmToken', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+          });
+        })
+        .then(() => {
+          sessionStorage.setItem('fcmSaved', 'true');  // 중복 방지
+        })
+        .catch(err => {
+          console.error('❌ 최종 오류:', err);
+        });
+    }
+messaging.onMessage(payload => {
+	  const { title, body } = payload.notification ?? payload.data;
 
+	  if (title && body) {
+	    new Notification(title, {
+	      body: body,
+	      icon: '/favicon.ico'
+	    });
+
+	    // 🔄 알림 수 새로고침
+	    fetch('/yousinsa/alertCount')
+	      .then(res => res.json())
+	      .then(data => {
+	        const badge = document.querySelector('.top-menu .badge');
+	        const alertLink = document.querySelector('.top-menu a[href$="myAlarm"]');
+
+	        if (badge) {
+	          badge.textContent = data.count;
+	        } else if (data.count > 0 && alertLink) {
+	          const span = document.createElement('span');
+	          span.className = 'badge';
+	          span.textContent = data.count;
+	          alertLink.appendChild(span);
+	        }
+	      });
+	  }
+	});
 
 
   </script>

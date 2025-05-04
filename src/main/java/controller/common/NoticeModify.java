@@ -20,17 +20,15 @@ import service.user.NoticeServiceImpl;
 )
 public class NoticeModify extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private NoticeService noticeService;
-
-    @Override
-    public void init() throws ServletException {
-        noticeService = new NoticeServiceImpl();
-    }
 
     // 수정 폼 열기 (GET)
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+    	
+    	req.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
+        
         String idParam = req.getParameter("noticeId");
         if (idParam == null || !idParam.matches("\\d+")) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 공지 ID입니다.");
@@ -59,6 +57,7 @@ public class NoticeModify extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
         try {
             String idParam = req.getParameter("noticeId");
             if (idParam == null || !idParam.matches("\\d+")) {

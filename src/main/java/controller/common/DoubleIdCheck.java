@@ -18,11 +18,13 @@ import service.user.UserServiceImpl;
 public class DoubleIdCheck extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private UserService userService = new UserServiceImpl();
+	
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		UserService userService = new UserServiceImpl();
 		String userId = request.getParameter("userId");
 		boolean isDuplicate = false;
 

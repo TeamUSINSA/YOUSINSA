@@ -12,13 +12,6 @@ import java.io.IOException;
 public class FindId extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private UserService userService;
-
-	@Override
-	public void init() throws ServletException {
-		userService = new UserServiceImpl();
-	}
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -30,7 +23,7 @@ public class FindId extends HttpServlet {
 			throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-
+		UserService userService = new UserServiceImpl();
 		String name = request.getParameter("name");
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");

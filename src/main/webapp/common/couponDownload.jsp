@@ -85,7 +85,13 @@
 <jsp:include page="/header" />
 <%@ include file="scrollTop.jsp" %>
   <main class="container">
-    <h2>쿠폰 다운로드</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+  <h2 style="margin: 0;">쿠폰 다운로드</h2>
+  <a href="${pageContext.request.contextPath}/myCouponList"
+     style="padding: 6px 12px; font-size: 12px; border: 1px solid #333; border-radius: 4px; text-decoration: none; color: #FFF; background-color: #303030">
+    내 쿠폰 보러가기
+  </a>
+</div>
     <p>다운로드 가능한 쿠폰 목록입니다.</p>
 
     <c:forEach var="coupon" items="${couponList}">
@@ -142,6 +148,13 @@
         </div>
       </div>
     </c:forEach>
+<c:if test="${empty couponList}">
+  <div style="text-align:center; padding: 80px 20px; font-size: 18px; color: #999; border-radius: 8px; margin:100px">
+    현재 다운로드 가능한 쿠폰이 없습니다.
+  </div>
+</c:if>
+
+    
   </main>
   <jsp:include page="footer.jsp"/>
 </body>

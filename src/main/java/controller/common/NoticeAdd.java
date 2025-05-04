@@ -19,16 +19,13 @@ import service.user.NoticeServiceImpl;
 )
 public class NoticeAdd extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private NoticeService noticeService;
 
-    @Override
-    public void init() throws ServletException {
-        noticeService = new NoticeServiceImpl();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	request.setCharacterEncoding("UTF-8");
         request.setAttribute("notice", new Notice());
         request.getRequestDispatcher("/common/noticeAdd.jsp")
                .forward(request, response);
@@ -38,6 +35,7 @@ public class NoticeAdd extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
         try {
             Notice notice = new Notice();
             notice.setTitle(request.getParameter("title"));

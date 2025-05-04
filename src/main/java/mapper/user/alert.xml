@@ -42,4 +42,12 @@
     (#{content}, #{checked}, #{senderId}, #{senderName}, #{userId}, #{title}, #{type})
 </insert>
 
+<select id="selectUncheckedAlertsByUser" parameterType="string" resultType="alert">
+  SELECT alert_id, content, checked, sender_id, sender_name, user_id, title, type
+  FROM alert
+  WHERE user_id = #{userId}
+    AND checked = 0
+  ORDER BY alert_id DESC
+</select>
+
 </mapper>

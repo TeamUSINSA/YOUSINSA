@@ -183,7 +183,7 @@ public class OrderServlet extends HttpServlet {
 			}
 
 			orderService.insertOrderList(orderList);
-			resp.sendRedirect(req.getContextPath() + "/common/orderComplete.jsp");
+
 
 		} catch (Exception e) {
 			e.printStackTrace();

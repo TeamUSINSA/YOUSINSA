@@ -9,7 +9,7 @@
 	<select id="selectMainBannerList" resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
-		WHERE position = 'main'
+		WHERE position = 'top'
 		ORDER BY id ASC
 	</select>
 
@@ -17,7 +17,7 @@
 	<select id="selectSubBannerList" resultType="dto.product.BannerProduct">
 		SELECT id, name, product_id, img, position
 		FROM bannerproduct
-		WHERE position = 'sub'
+		WHERE position = 'middle'
 		ORDER BY id ASC
 	</select>
 

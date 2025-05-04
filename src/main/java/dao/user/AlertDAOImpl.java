@@ -49,4 +49,11 @@ public class AlertDAOImpl implements AlertDAO {
 	    }
 	}
 	
+	@Override
+	public List<Alert> selectUncheckedAlertsByUser(String userId) throws Exception {
+	    try (SqlSession session = sqlSessionFactory.openSession()) {
+	        return session.selectList("mapper.alert.selectUncheckedAlertsByUser", userId);
+	    }
+	}
+	
 }

@@ -127,7 +127,7 @@ button, .social-login button {
 
 <body>
 	<jsp:include page="/header" />
-
+<%@ include file="scrollTop.jsp" %>
 	<main>
   <h1>LOGIN</h1>
 
@@ -163,7 +163,7 @@ button, .social-login button {
 </main>
 
 
-	<jsp:include page="/footer" />
+	<jsp:include page="footer.jsp"/>
 </body>
 
 </html>

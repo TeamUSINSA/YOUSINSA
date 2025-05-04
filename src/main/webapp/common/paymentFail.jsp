@@ -82,9 +82,9 @@
     </div>
     <p class="message">죄송합니다. 다시 시도하거나 고객센터에 문의해주세요.</p>
     <div class="btn-group">
-      <a href="${pageContext.request.contextPath}/order?orderId=${rawOrderId}"
+      <a href="${pageContext.request.contextPath}/cart"
          class="btn btn-retry">다시 결제하기</a>
-      <a href="${pageContext.request.contextPath}/"
+      <a href="${pageContext.request.contextPath}/main"
          class="btn btn-home">메인으로</a>
     </div>
   </div>
