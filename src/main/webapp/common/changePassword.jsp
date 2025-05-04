@@ -91,6 +91,7 @@
 </head>
 <body>
   <jsp:include page="/header" />
+  <%@ include file="scrollTop.jsp" %>
 
   <div class="main-container">
     <div class="card">
@@ -116,6 +117,6 @@
     </div>
   </div>
 
-  <jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

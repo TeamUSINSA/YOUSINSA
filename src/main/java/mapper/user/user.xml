@@ -37,7 +37,7 @@
 
 	<select id="loginUser" parameterType="map"
 		resultType="dto.user.User">
-		SELECT user_id, name, is_seller, birth, deleted
+		SELECT user_id, password, name, birth, is_seller, deleted, fcm_token
 		FROM User
 		WHERE user_id = #{userId} AND
 		password = #{password}
@@ -331,5 +331,13 @@
      WHERE user_id = #{userId}
        AND password = #{currentPassword}
   </select>
+  
+<update id="updateFcmToken" parameterType="map">
+  UPDATE user
+  SET fcm_token = #{token}
+  WHERE user_id = #{userId}
+    AND (fcm_token IS NULL OR fcm_token != #{token})
+</update>
+  
 
 </mapper>

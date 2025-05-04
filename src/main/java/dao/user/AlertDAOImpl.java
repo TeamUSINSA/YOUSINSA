@@ -39,5 +39,21 @@ public class AlertDAOImpl implements AlertDAO {
             session.commit();
         }
 	}
-
+	
+	@Override
+	public int insertAlert(Alert alert) throws Exception {
+	    try (SqlSession session = sqlSessionFactory.openSession()) {
+	        int result = session.insert("mapper.alert.insertAlert", alert);
+	        session.commit();
+	        return result;
+	    }
+	}
+	
+	@Override
+	public List<Alert> selectUncheckedAlertsByUser(String userId) throws Exception {
+	    try (SqlSession session = sqlSessionFactory.openSession()) {
+	        return session.selectList("mapper.alert.selectUncheckedAlertsByUser", userId);
+	    }
+	}
+	
 }

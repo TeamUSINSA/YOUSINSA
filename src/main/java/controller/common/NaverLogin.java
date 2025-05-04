@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -27,9 +28,8 @@ public class NaverLogin extends HttpServlet {
         String code  = request.getParameter("code");
         String state = request.getParameter("state");
 
-        /* ───────── 1. 인가 코드가 없으면 네이버 로그인 페이지로 이동 ───────── */
+        // 1단계: 인가 코드가 없으면 로그인 페이지 이동
         if (code == null || code.isEmpty()) {
-            // CSRF 방어용 토큰 생성
             String csrfToken = UUID.randomUUID().toString();
             session.setAttribute("oauth_state", csrfToken);
 
@@ -38,21 +38,21 @@ public class NaverLogin extends HttpServlet {
                     + "&client_id="    + CLIENT_ID
                     + "&redirect_uri=" + URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8)
                     + "&state="        + csrfToken
-                    + "&auth_type=reauthenticate";   // 다른 계정 선택
+                    + "&auth_type=reauthenticate";
 
             response.sendRedirect(naverAuthUrl);
             return;
         }
 
-        /* ───────── 2. 콜백 단계 → state 값 검증 ───────── */
+        // 2단계: state 검증
         String savedState = (String) session.getAttribute("oauth_state");
         if (savedState == null || !savedState.equals(state)) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "잘못된 state 값입니다.");
             return;
         }
-        session.removeAttribute("oauth_state"); // 재사용 방지
+        session.removeAttribute("oauth_state");
 
-        /* ───────── 3. 토큰 교환 + 사용자 정보 조회 ───────── */
+        // 3단계: 토큰 교환 및 사용자 정보 조회
         try {
             NaverService service = new NaverServiceImpl();
             User user = service.naverLogin(code);

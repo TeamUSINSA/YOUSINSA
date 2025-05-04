@@ -51,6 +51,7 @@
 </head>
 <body>
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
   <div class="container">
     <h1>아이디 찾기</h1>
     <form action="findId" method="post">
@@ -66,6 +67,6 @@
       <button type="submit">아이디 찾기</button>
     </form>
   </div>
-   <jsp:include page="/footer" />
+   <jsp:include page="footer.jsp"/>
 </body>
 </html>

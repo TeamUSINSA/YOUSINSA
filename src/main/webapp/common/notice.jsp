@@ -52,6 +52,7 @@
 </head>
 <body>
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
   <div class="container">
     <h2>공지사항</h2>
     <table>
@@ -83,6 +84,6 @@
       </div>
     </c:if>
   </div>
-  <jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

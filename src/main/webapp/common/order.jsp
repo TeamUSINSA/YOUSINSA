@@ -145,6 +145,7 @@ input, textarea, button, select {
 
 
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
 
 	<div class="container">
 	
@@ -344,7 +345,7 @@ input, textarea, button, select {
     <script type="module" src="./index.js"></script>
 
 
-<jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 
 	<script>
 	$(function(){

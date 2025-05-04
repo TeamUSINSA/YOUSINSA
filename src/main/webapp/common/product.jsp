@@ -137,6 +137,7 @@ body {
 </head>
 <body>
 	<jsp:include page="/header" />
+	<%@ include file="scrollTop.jsp" %>
 
 
 <!-- 1) 선택된 상위 카테고리 한 개만 또는 특수 목록 -->
@@ -240,25 +241,28 @@ body {
 <!-- 페이지 네비게이션 -->
 <c:if test="${last > 1}">
   <div id="pagination" style="text-align:center; margin:40px 0;">
-    <!-- 이전 -->
-    <c:if test="${page > 1}">
-      <c:url var="prevUrl" value="/productList">
-        <c:param name="page" value="${page-1}" />
-        <c:if test="${not empty param.name}">
-          <c:param name="name" value="${param.name}" />
-        </c:if>
-        <c:if test="${not empty param.categoryId}">
-          <c:param name="categoryId" value="${param.categoryId}" />
-        </c:if>
-        <c:if test="${not empty param.subCategoryId}">
-          <c:param name="subCategoryId" value="${param.subCategoryId}" />
-        </c:if>
-      </c:url>
-      <a href="${prevUrl}">&laquo; 이전</a>
+
+    
+    <!-- 이전 블럭 (startPage > 1일 때) -->
+<c:if test="${startPage > 1}">
+  <c:url var="prevBlockUrl" value="/productList">
+    <c:param name="page" value="${startPage - 1}" />
+    <c:if test="${not empty param.name}">
+      <c:param name="name" value="${param.name}" />
     </c:if>
+    <c:if test="${not empty param.categoryId}">
+      <c:param name="categoryId" value="${param.categoryId}" />
+    </c:if>
+    <c:if test="${not empty param.subCategoryId}">
+      <c:param name="subCategoryId" value="${param.subCategoryId}" />
+    </c:if>
+  </c:url>
+  <a href="${prevBlockUrl}">&laquo; 이전</a>
+</c:if>
+    
 
     <!-- 번호 -->
-    <c:forEach begin="1" end="${last}" var="i">
+    <c:forEach begin="${startPage}" end="${endPage}" var="i">
       <c:url var="pageUrl" value="/productList">
         <c:param name="page" value="${i}" />
         <c:if test="${not empty param.name}">
@@ -277,22 +281,24 @@ body {
       </a>
     </c:forEach>
 
-    <!-- 다음 -->
-    <c:if test="${page < last}">
-      <c:url var="nextUrl" value="/productList">
-        <c:param name="page" value="${page+1}" />
-        <c:if test="${not empty param.name}">
-          <c:param name="name" value="${param.name}" />
-        </c:if>
-        <c:if test="${not empty param.categoryId}">
-          <c:param name="categoryId" value="${param.categoryId}" />
-        </c:if>
-        <c:if test="${not empty param.subCategoryId}">
-          <c:param name="subCategoryId" value="${param.subCategoryId}" />
-        </c:if>
-      </c:url>
-      <a href="${nextUrl}">다음 &raquo;</a>
+
+    <!-- 다음 블럭 (endPage < last일 때) -->
+<c:if test="${endPage < last}">
+  <c:url var="nextBlockUrl" value="/productList">
+    <c:param name="page" value="${endPage + 1}" />
+    <c:if test="${not empty param.name}">
+      <c:param name="name" value="${param.name}" />
     </c:if>
+    <c:if test="${not empty param.categoryId}">
+      <c:param name="categoryId" value="${param.categoryId}" />
+    </c:if>
+    <c:if test="${not empty param.subCategoryId}">
+      <c:param name="subCategoryId" value="${param.subCategoryId}" />
+    </c:if>
+  </c:url>
+  <a href="${nextBlockUrl}">다음 &raquo;</a>
+</c:if>
+    
   </div>
 
   <script>
@@ -300,12 +306,7 @@ body {
   </script>
 </c:if>
 
-	
-	
-	
-	
-
-   <%@ include file="../common/footer.jsp" %>
+  <jsp:include page="footer.jsp"/>
    
 <script>
   document.addEventListener('DOMContentLoaded', function() {

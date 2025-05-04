@@ -13,17 +13,14 @@ import service.user.NoticeServiceImpl;
 @WebServlet("/noticeDelete")
 public class NoticeDelete extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private NoticeService noticeService;
 
-    @Override
-    public void init() throws ServletException {
-        noticeService = new NoticeServiceImpl();
-    }
 
-    // 삭제 처리 (GET 또는 POST 모두 허용)
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
+        
         try {
             String idParam = request.getParameter("noticeId");
             int noticeId = Integer.parseInt(idParam);
@@ -37,9 +34,4 @@ public class NoticeDelete extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
 }

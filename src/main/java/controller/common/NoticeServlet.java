@@ -16,17 +16,15 @@ import service.user.NoticeServiceImpl;
 @WebServlet("/notice")
 public class NoticeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private NoticeService noticeService;
 
-    @Override
-    public void init() throws ServletException {
-        noticeService = new NoticeServiceImpl();
-    }
 
     // 오직 목록만 조회
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
+    	request.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
         try {
             List<Notice> notices = noticeService.getAllNotices();  // throws Exception
             request.setAttribute("notices", notices);
@@ -38,6 +36,5 @@ public class NoticeServlet extends HttpServlet {
         }
     }
 
-    // POST는 지원하지 않음
-    // HttpServlet 기본 doPost()가 405 에러를 반환하므로 오버라이드하지 않아도 됨.
+
 }

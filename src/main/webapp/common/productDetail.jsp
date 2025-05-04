@@ -675,7 +675,7 @@ body {
 
 
 	</div>
-	<%@ include file="../common/footer.jsp"%>
+	<jsp:include page="footer.jsp"/>
 
 
 	<!-- 1) 옵션 선택 & 총합 계산 스크립트 -->

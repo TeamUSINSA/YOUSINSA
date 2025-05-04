@@ -24,6 +24,7 @@ public class Header extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 1) 세션 가져오기 (로그인 전에도 헤더 렌더링)
+    	request.setCharacterEncoding("utf-8");
         HttpSession session = request.getSession(false);
 
         // 2) 알림 개수 조회 (로그인 되어 있으면 실제 개수, 아니면 0)

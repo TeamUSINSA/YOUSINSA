@@ -12,12 +12,13 @@ import service.user.LikeServiceImpl;
 @WebServlet("/likeProduct")
 public class LikeProduct extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final LikeService likeService = new LikeServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // 세션에서 로그인된 사용자 ID 조회
+    	request.setCharacterEncoding("UTF-8");
+    	LikeService likeService = new LikeServiceImpl();
         HttpSession session = request.getSession(false);
         String userId = (session != null) ? (String) session.getAttribute("userId") : null;
 

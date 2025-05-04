@@ -21,6 +21,8 @@ public interface CouponDAO {
 	int insertUserCoupon(Map<String,Object> params) throws Exception;
 	Coupon selectCouponById(int couponId) throws Exception;
 	int expireCouponsByUser(String userId) throws Exception;
+	List<Coupon> selectValidCouponsByType(String type) throws Exception;
+	int countUserCoupon(String userId, int couponId) throws Exception;
 
 }
 

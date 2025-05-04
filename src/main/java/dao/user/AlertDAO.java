@@ -10,4 +10,8 @@ public interface AlertDAO {
 	List<Alert> selectByUser(String userId) throws Exception;
 	
 	void markAsChecked(int alertId) throws Exception;
+
+	int insertAlert(Alert alert) throws Exception;
+
+	List<Alert> selectUncheckedAlertsByUser(String userId) throws Exception;
 }

@@ -14,16 +14,13 @@ import service.user.NoticeServiceImpl;
 @WebServlet("/noticeDetail")
 public class NoticeDetail extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private NoticeService noticeService;
-
-    @Override
-    public void init() throws ServletException {
-        noticeService = new NoticeServiceImpl();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	request.setCharacterEncoding("UTF-8");
+        NoticeService noticeService = new NoticeServiceImpl();
+        
         String idParam = request.getParameter("noticeId");
         try {
             int noticeId = Integer.parseInt(idParam);
@@ -41,9 +38,4 @@ public class NoticeDetail extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
-    }
 }

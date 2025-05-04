@@ -20,6 +20,7 @@
 </head>
 <body class="bg-white text-sm text-gray-700">
 <jsp:include page="/header" />
+<%@ include file="scrollTop.jsp" %>
 <!-- ✅ 비밀번호 찾기 메인 콘텐츠 -->
 <main class="flex flex-col items-center justify-center py-24">
   <div class="bg-gray-100 rounded-lg px-8 py-10 text-center w-full max-w-md shadow">
@@ -32,6 +33,6 @@
     </form>
   </div>
 </main>
- <jsp:include page="/footer" />
+<jsp:include page="footer.jsp"/>
 </body>
 </html>

@@ -24,6 +24,7 @@ public interface UserService {
 	 User findUserById(String userId) throws Exception;
 	 List<User> findUsersByName(String name) throws Exception;
 	boolean checkPassword(String userId, String currentPassword) throws Exception;
+	void updateFcmToken(String userId, String token) throws Exception;
 
 }
 

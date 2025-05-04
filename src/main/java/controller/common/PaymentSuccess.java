@@ -8,22 +8,26 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Base64;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import dto.order.Coupon;
 import dto.order.OrderItem;
 import dto.order.OrderList;
+import dto.product.Category;
+import dto.user.Alert;
 import dto.user.Point;
 import service.order.CartService;
 import service.order.CartServiceImpl;
@@ -33,12 +37,17 @@ import service.order.OrderItemService;
 import service.order.OrderItemServiceImpl;
 import service.order.OrderListService;
 import service.order.OrderListServiceImpl;
+import service.product.CategoryService;
+import service.product.CategoryServiceImpl;
 import service.product.ProductStockService;
 import service.product.ProductStockServiceImpl;
+import service.user.AlertService;
+import service.user.AlertServiceImpl;
 import service.user.PointService;
 import service.user.PointServiceImpl;
 import service.user.UserService;
 import service.user.UserServiceImpl;
+import utils.FCMService;
 
 @WebServlet("/paymentSuccess")
 public class PaymentSuccess extends HttpServlet {
@@ -199,6 +208,50 @@ public class PaymentSuccess extends HttpServlet {
 			    }
 			}
 			
+			// ── 자동 쿠폰 발급 (결제 금액 기준)
+			String typeToUse = null;
+
+			if (paidTotal >= 500000) {
+			    typeToUse = "autoOverFifty";
+			} else if (paidTotal >= 300000) {
+			    typeToUse = "autoOverThirty";
+			} else if (paidTotal >= 100000) {
+			    typeToUse = "autoOverTen";
+			}
+
+			if (typeToUse != null) {
+			    List<Coupon> coupons = couponService.selectValidCouponsByType(typeToUse);
+			    if (!coupons.isEmpty()) {
+			        Coupon c = coupons.get(0); // 하나만 발급
+
+			        LocalDate issue = LocalDate.now();
+			        LocalDate expire = issue.plusDays(c.getPeriod());
+
+			        couponService.downloadCoupon(c.getCouponId(), ol.getUserId(), issue, expire);
+
+			        Alert alert = new Alert();
+			        alert.setUserId(ol.getUserId());
+			        alert.setTitle("🎁 결제 감사 쿠폰 도착!");
+			        alert.setContent(c.getName() + " 쿠폰이 자동 발급되었습니다.");
+			        alert.setSenderId("system");
+			        alert.setSenderName("YOUSINSA");
+			        alert.setType("coupon");
+			        alert.setChecked(false);
+
+			        AlertService alertService = new AlertServiceImpl();
+			        alertService.insertAlert(alert);
+
+			        String token = userService.getUserById(ol.getUserId()).getFcmToken();
+			        if (token != null && !token.isEmpty()) {
+			            FCMService.sendNotification(alert.getTitle(), alert.getContent(), token);
+			        }
+			    }
+			}
+
+			CategoryService categoryService = new CategoryServiceImpl();
+			List<Category> categoryList = categoryService.selectCategoryWithSubList();
+			req.setAttribute("categoryList", categoryList);
+
 
 			// 8) 성공 페이지 포워드
 			req.setAttribute("paymentInfo", json);

@@ -34,17 +34,6 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 
 </style>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/firebase-messaging-sw.js')
-      .then(function(registration) {
-        console.log('✅ Service Worker 등록 성공:', registration);
-      })
-      .catch(function(error) {
-        console.error('❌ Service Worker 등록 실패:', error);
-      });
-  }
-</script>
 <script type="module" src="${pageContext.request.contextPath}/app.js"></script>
 
 
