@@ -20,3 +20,4 @@ Thumbs.db
 
 *.war
 *.ear
+src/main/java/resources/firebase-admin.json
