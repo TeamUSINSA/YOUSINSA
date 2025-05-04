@@ -27,9 +27,16 @@
       <input type="text" id="title" name="title" required />
     </div>
     <div class="form-group">
-      <label for="type">구분</label>
-      <input type="text" id="type" name="type" placeholder="예: 상품문의, 배송문의" required />
-    </div>
+    <label for="type">구분</label>
+    <select id="type" name="type" required>
+      <option value="">문의 유형 선택</option>
+      <option value="상품문의">상품문의</option>
+      <option value="배송문의">배송문의</option>
+      <option value="환불문의">환불문의</option>
+      <option value="교환문의">교환문의</option>
+      <option value="기타">기타</option>
+    </select>
+  </div>
     <div class="form-group">
       <label for="content">내용</label>
       <textarea id="content" name="content" required></textarea>

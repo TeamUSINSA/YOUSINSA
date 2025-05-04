@@ -141,7 +141,7 @@
     <tbody>
       <c:forEach var="q" items="${qnaList}" varStatus="st">
         <!-- 요약 행 -->
-        <tr class="qna-row">
+        <tr class="qna-row" onclick="location.href='${pageContext.request.contextPath}/myQnADetail?id=${q.qnaId}'" style="cursor:pointer;">
           <td>${(pageInfo.curPage - 1) * 10 + st.index + 1}</td>
           <td>${q.type}</td>
           <td>${q.title}</td>
@@ -191,15 +191,6 @@
   </div>
 </div>
 </div>
-<script>
-  // 상세내용 토글
-  document.querySelectorAll('.qna-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const detail = row.nextElementSibling;
-      if (!detail || !detail.classList.contains('qna-detail')) return;
-      detail.style.display = detail.style.display === 'none' ? '' : 'none';
-    });
-  });
-</script>
+
 
 <jsp:include page="/common/footer.jsp" />
