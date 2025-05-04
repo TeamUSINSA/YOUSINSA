@@ -17,4 +17,6 @@ public interface QNADAO {
 
 	List<QnA> findQnAByFilter(String filter) throws Exception;
 
+	String selectUserIdByQnaId(int qnaId) throws Exception;
+
 }

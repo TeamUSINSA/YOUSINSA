@@ -167,4 +167,11 @@
     WHERE qna_id = #{qnaId}
   </update>
 
+<!-- ✅ QnA 작성자 ID 조회 (알림용) -->
+<select id="selectUserIdByQnaId" parameterType="int" resultType="string">
+  SELECT user_id
+  FROM qna
+  WHERE qna_id = #{qnaId}
+</select>
+
 </mapper>

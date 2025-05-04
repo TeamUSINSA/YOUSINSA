@@ -67,4 +67,11 @@ public class QNADAOImpl implements QNADAO {
             return session.selectList("mapper.qna.selectAllQnA");
         }
     }
+    
+    @Override
+    public String selectUserIdByQnaId(int qnaId) throws Exception {     
+            return session.selectOne("mapper.qna.selectUserIdByQnaId", qnaId);
+    }
+
+    
 }

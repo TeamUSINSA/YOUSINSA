@@ -11,4 +11,5 @@ public interface QNAService {
     void answerQnA(QnA qna) throws Exception;    // QNA 답변 등록/수정
     void removeQnA(int qnaId) throws Exception;  // QNA 삭제
     List<QnA> getQnAByFilter(String filter) throws Exception;
+	String getUserIdByQnaId(int qnaId) throws Exception;
 }

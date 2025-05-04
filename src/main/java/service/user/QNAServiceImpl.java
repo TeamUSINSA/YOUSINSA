@@ -39,4 +39,9 @@ public class QNAServiceImpl implements QNAService {
 	public List<QnA> getQnAByFilter(String filter) throws Exception {
 		return qnaDAO.findQnAByFilter(filter);
 	}
+	
+	@Override
+	public String getUserIdByQnaId(int qnaId) throws Exception {
+	    return qnaDAO.selectUserIdByQnaId(qnaId);
+	}
 }

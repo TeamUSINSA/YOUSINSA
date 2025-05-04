@@ -18,4 +18,9 @@ public class InquiryServiceImpl implements InquiryService {
     public void addInquiry(Inquiry inquiry) throws Exception {
         inquiryDAO.insertInquiry(inquiry);
     }
+    
+    @Override
+    public String getUserIdByInquiryId(int inquiryId) throws Exception {
+        return inquiryDAO.getUserIdByInquiryId(inquiryId);
+    }
 }

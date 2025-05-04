@@ -113,4 +113,10 @@
     WHERE inquiry_id = #{inquiryId}
       AND user_id    = #{userId}
   </delete>
+  
+  <select id="getUserIdByInquiryId" parameterType="int" resultType="string">
+  SELECT user_id
+  FROM inquiry
+  WHERE inquiry_id = #{inquiryId}
+</select>
 </mapper>

@@ -10,4 +10,6 @@ public interface InquiryService {
 
 	void addInquiry(Inquiry inquiry) throws Exception;
 
+	String getUserIdByInquiryId(int inquiryId) throws Exception;
+
 }

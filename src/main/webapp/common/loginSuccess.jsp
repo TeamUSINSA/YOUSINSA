@@ -88,7 +88,9 @@
 
 <jsp:include page="/header" />
 <%@ include file="scrollTop.jsp" %>
-
+<script>
+  sessionStorage.removeItem('fcmSaved');
+</script>
 <main>
   <div class="welcome-box">
     <h2>환영합니다</h2>
@@ -117,6 +119,7 @@
 </main>
 
 <jsp:include page="footer.jsp"/>
+
 
 </body>
 </html>

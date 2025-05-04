@@ -119,14 +119,14 @@ public class SaveFcmToken extends HttpServlet {
             
             List<Alert> unChecked = alertService.selectUncheckedAlertsByUser(userId);
             for (Alert a : unChecked) {
-                if ("welcome".equals(a.getType())) {
-                    FCMService.sendNotification(a.getTitle(), a.getContent(), token);
-                    a.setChecked(true);
-                    alertService.markAsChecked(a.getAlertId());
-                    System.out.println("✅ 환영 푸시 전송 완료");
-                    break;
-                }
+                    if ("welcome".equals(a.getType()) || "qna".equals(a.getType()) || "inquiry".equals(a.getType())) {
+                        FCMService.sendNotification(a.getTitle(), a.getContent(), token);
+                        a.setChecked(true);
+                        alertService.markAsChecked(a.getAlertId());
+                        System.out.println("✅ " + a.getType() + " 푸시 전송 완료");
+                                    }
             }
+
 
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {

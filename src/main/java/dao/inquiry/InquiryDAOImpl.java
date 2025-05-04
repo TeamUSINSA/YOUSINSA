@@ -51,4 +51,10 @@ public class InquiryDAOImpl implements InquiryDAO {
             productId
         );
     }
+    
+    @Override
+    public String getUserIdByInquiryId(int inquiryId) throws Exception {
+            return sqlSession.selectOne("mapper.user.inquiry.getUserIdByInquiryId", inquiryId);       
+    }
+
 }

@@ -13,6 +13,8 @@ if (cookies != null) {
 	}
 }
 %>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-messaging-compat.js"></script>
 <c:if test="${not empty errMsg}">
 	<script>
 		alert('${errMsg}');
@@ -133,15 +135,16 @@ button, .social-login button {
 
   <!-- 일반 로그인 Form -->
   <form action="${pageContext.request.contextPath}/login" method="post">
-    <input type="text" name="userId" placeholder="아이디" required value="<%=savedId%>" />
-    <input type="password" name="password" placeholder="비밀번호" required />
+    <input type="text" name="userId" id="userId" placeholder="아이디" required value="<%=savedId%>" />
+    <input type="password" name="password" id="password" placeholder="비밀번호" required />
 
     <div class="checkbox">
       <input type="checkbox" id="saveId" name="saveId" <%=!savedId.isEmpty() ? "checked" : ""%> />
       <label for="saveId">아이디 저장</label>
     </div>
+     <input type="hidden" name="token" id="fcmToken" />
 
-    <button type="submit" class="login-btn">로그인</button>
+    <button type="submit" class="login-btn" id="login-btn">로그인</button>
   </form>
 
   <!-- 소셜 로그인은 Form 바깥 -->
@@ -164,6 +167,34 @@ button, .social-login button {
 
 
 	<jsp:include page="footer.jsp"/>
+	
+	<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyChh1pWhBBB1jFsI_YHR4id1PjM8htrFwU",
+    authDomain: "yousinsa-c83ae.firebaseapp.com",
+    projectId: "yousinsa-c83ae",
+    messagingSenderId: "372484059502",
+    appId: "1:372484059502:web:0d322309f20c8c7c79d17f"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+</script>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function (e) {
+	  e.preventDefault(); // 일단 막고
+
+	  try {
+	    const reg = await navigator.serviceWorker.register('/yousinsa/firebase-messaging-sw.js');
+	    const token = await messaging.getToken({ serviceWorkerRegistration: reg });
+	    document.getElementById("fcmToken").value = token; // ✅ hidden에 넣기
+	    this.submit(); // 👉 원래 폼 제출 실행
+	  } catch (err) {
+	    console.error("FCM 토큰 발급 실패", err);
+	    alert("FCM 초기화 실패");
+	  }
+	});
+</script>
 </body>
 
 </html>

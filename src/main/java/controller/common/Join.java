@@ -91,6 +91,8 @@ public class Join extends HttpServlet {
 
 	             AlertService alertService = new AlertServiceImpl();
 	             alertService.insertAlert(welcomeAlert);
+	             
+	             session.removeAttribute("userId");
 
 	             response.sendRedirect("afterJoin");
 	         } else {

@@ -15,5 +15,7 @@ public interface InquiryDAO {
     List<Inquiry> selectByStatus(String status) throws Exception; // 👈 이거 추가
 
 	List<Inquiry> selectByProductId(int productId) throws Exception;
+
+	String getUserIdByInquiryId(int inquiryId) throws Exception;
  
 }
