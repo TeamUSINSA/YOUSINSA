@@ -5,8 +5,6 @@
 /target/
 /*.class
 
-/src/main/java/resources/
-
 
 # === OS 별 무시할 파일 ===
 .DS_Store
