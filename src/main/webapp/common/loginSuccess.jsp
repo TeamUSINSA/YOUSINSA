@@ -13,41 +13,106 @@
 <head>
   <meta charset="UTF-8">
   <title>환영합니다</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: white;
+      font-size: 14px;
+      color: #4a5568;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 96px 16px;
+    }
+
+    .welcome-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 40px 24px;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .welcome-box h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .welcome-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #16a34a;
+    }
+
+    .welcome-text {
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .button-group {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-black {
+      background-color: #303030;
+      color: white;
+    }
+
+    .btn-gray {
+      background-color: #4b5563;
+      color: white;
+    }
+  </style>
 </head>
-<body class="bg-white text-sm text-gray-700">
+<body>
 
 <jsp:include page="/header" />
 <%@ include file="scrollTop.jsp" %>
 
-<main class="flex flex-col items-center justify-center py-24 px-4">
-  <div class="border rounded-lg px-6 py-10 w-full max-w-lg shadow-sm text-center">
-    <h2 class="text-2xl font-semibold mb-6">환영합니다</h2>
-    <p class="text-lg font-bold text-green-600">${sessionScope.name}님, 환영합니다!</p>
-    <p class="text-sm mt-4">유신사에 오신 것을 환영합니다.</p>
+<main>
+  <div class="welcome-box">
+    <h2>환영합니다</h2>
+    <p class="welcome-name">${sessionScope.name}님, 환영합니다!</p>
+    <p class="welcome-text">유신사에 오신 것을 환영합니다.</p>
 
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="${pageContext.request.contextPath}/main"
-         class="bg-black text-white px-4 py-2 rounded text-sm">
+    <div class="button-group">
+      <a href="${pageContext.request.contextPath}/main" class="btn btn-black">
         메인화면으로
       </a>
 
       <c:choose>
         <c:when test="${sessionScope.isSeller}">
-          <a href="${pageContext.request.contextPath}/adminOrderSearch"
-             class="bg-gray-700 text-white px-4 py-2 rounded text-sm">
+          <a href="${pageContext.request.contextPath}/adminOrderSearch" class="btn btn-gray">
             마이페이지로
           </a>
         </c:when>
         <c:otherwise>
-          <a href="${pageContext.request.contextPath}/myLikeList"
-             class="bg-gray-700 text-white px-4 py-2 rounded text-sm">
+          <a href="${pageContext.request.contextPath}/myLikeList" class="btn btn-gray">
             마이페이지로
           </a>
         </c:otherwise>
       </c:choose>
     </div>
-
   </div>
 </main>
 

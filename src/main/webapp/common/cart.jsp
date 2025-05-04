@@ -185,8 +185,8 @@ button:hover {
   <div class="cart-empty" style="text-align:center; margin:60px 0; font-size:18px; color:#000;">
     <p>장바구니에 담긴 상품이 없습니다.</p>
     <a href="${pageContext.request.contextPath}/productList?popular"
-       style="display:inline-block; margin-top:12px; padding:8px 16px; background:#000; color:#fff; text-decoration:none; border-radius:4px;">
-      상품 보러 가기
+       style="display:inline-block; margin-top:12px; padding:8px 16px; background:#303030; color:#fff; text-decoration:none; border-radius:4px;">
+      인기 상품 보러 가기
     </a>
   </div>
 </c:if>

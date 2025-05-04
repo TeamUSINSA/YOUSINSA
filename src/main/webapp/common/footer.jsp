@@ -141,3 +141,21 @@
 
   </div>
 </div>
+
+
+<script>
+  window.addEventListener("load", function () {
+    const footer = document.getElementById("footer-wrapper");
+    const bodyHeight = document.body.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    if (bodyHeight < windowHeight) {
+      footer.style.position = "absolute";
+      footer.style.bottom = "0";
+      footer.style.left = "0";
+      footer.style.right = "0";
+    } else {
+      footer.style.position = "static"; // 기본 위치로 복귀
+    }
+  });
+</script>

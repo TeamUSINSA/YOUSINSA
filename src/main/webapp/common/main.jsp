@@ -161,33 +161,33 @@ List<Product> recommendList = (List<Product>) request.getAttribute("recommendLis
 	<!-- 2 x 2 카드 구성 (축소 버전) -->
 <div
 	style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 800px; margin: 50px auto;">
-	<a href="#"
+	<a href="/yousinsa/productList?categoryId=3"
 		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
-		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		<img src="${pageContext.request.contextPath}/image/outer.jpg"
 		alt="2025 신상 컬렉션" style="width: 100%; height: 100%; object-fit: cover;">
 		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
-			<strong>2025 추천 컬렉션</strong><br> 개성에 대한 관심<br> <span>구매하기</span>
+			<strong>개성에 대한 관심</strong><br> 유신사 아우터<br> <span>구매하기</span>
 		</div>
 	</a>
-	<a href="#"
+	<a href="/yousinsa/productList?categoryId=5"
 		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
-		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		<img src="${pageContext.request.contextPath}/image/bag.jpg"
 		alt="현대적인 감성" style="width: 100%; height: 100%; object-fit: cover;">
 		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
 			<strong>현대적인 감성</strong><br> 가방의 새로운 아이콘<br> <span>구매하기</span>
 		</div>
 	</a>
-	<a href="#"
+	<a href="/yousinsa/productList?categoryId=4"
 		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
-		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		<img src="${pageContext.request.contextPath}/image/shoes.jpg"
 		alt="과감한 표현" style="width: 100%; height: 100%; object-fit: cover;">
 		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
 			<strong>과감한 표현</strong><br> 새로운 시각의 슈즈<br> <span>구매하기</span>
 		</div>
 	</a>
-	<a href="#"
+	<a href="/yousinsa/productList?categoryId=6"
 		style="text-decoration: none; color: black; position: relative; display: block; height: 200px; overflow: hidden;">
-		<img src="${pageContext.request.contextPath}/image/img1.jpg"
+		<img src="${pageContext.request.contextPath}/image/acc.jpg"
 		alt="예술성과 혁신" style="width: 100%; height: 100%; object-fit: cover;">
 		<div style="position: absolute; top: 10px; left: 10px; color: white; font-size: 14px;">
 			<strong>예술성과 혁신</strong><br> Signs of reality<br> <span>구매하기</span>
