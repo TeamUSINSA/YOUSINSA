@@ -78,41 +78,49 @@ public class MyCancelReturn extends HttpServlet {
 
             // 4) DTO 변환 + 합치기
             List<CancelReturn> mixed = new ArrayList<>();
+         // — 취소 레코드
             for (Cancel c : cancels) {
                 CancelReturn cr = new CancelReturn();
-                cr.setType("C");  // 옵션: JSP 분기용
+                cr.setType("C");
+                cr.setRecordId(c.getCancelId());            // ← cancelId
                 cr.setOrderId(c.getOrderId());
                 cr.setOrderDate(c.getOrder().getOrderDate());
                 cr.setActionDate(c.getCancelDate());
                 cr.setReason(c.getReason());
-                cr.setItems(c.getOrderItems());
                 cr.setStatus(c.getOrder().getDeliveryStatus());
+                // Cancel.orderItems 에 이미 “취소된 품목”만 담겨 있다고 가정
+                cr.setItems(c.getOrderItems());
                 mixed.add(cr);
             }
+
+            // — 반품 레코드
             for (Return r : returns) {
                 CancelReturn cr = new CancelReturn();
                 cr.setType("R");
+                cr.setRecordId(r.getReturnId());            // ← returnId
                 cr.setOrderId(r.getOrderId());
                 cr.setOrderDate(r.getOrder().getOrderDate());
                 cr.setActionDate(r.getReturnDate());
                 cr.setReason(r.getReason());
-                cr.setItems(r.getOrderItems());
                 cr.setStatus(r.getOrder().getDeliveryStatus());
+                // Return.orderItems 에 이미 “반품된 품목”만 담겨 있다고 가정
+                cr.setItems(r.getOrderItems());
                 mixed.add(cr);
             }
 
-            // 5) 날짜 내림차순 정렬
+            // 5) 날짜(반품/취소일) 내림차순 정렬
             Collections.sort(mixed, Comparator.comparing(CancelReturn::getActionDate).reversed());
 
-            // 6) JSP에 전달
+            // 6) JSP 에 넘기기
             request.setAttribute("cancelList", mixed);
             request.getRequestDispatcher("/user/myCancelList.jsp")
                    .forward(request, response);
 
         } catch (Exception e) {
-            throw new ServletException(e);
+            throw new ServletException("취소/반품 목록 조회 중 오류 발생", e);
         }
     }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

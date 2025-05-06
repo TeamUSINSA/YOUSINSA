@@ -103,9 +103,9 @@
 <div class="layout">
 
   <!-- 사이드바 -->
-  <div class="sidebar" style="width:200px;">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <!-- 본문 -->
   <div class="content" style="flex:1;">

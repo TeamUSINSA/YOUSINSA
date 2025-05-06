@@ -21,4 +21,6 @@ public interface MyCancelDAO {
     +    * @param params "userId", "startDate", "endDate"를 키로 갖는 Map
     +    */
     List<Cancel> selectCancelList(Map<String,Object> params) throws Exception;
+    // 단일 취소 상세 조회
+    Cancel selectCancelById(int cancelId) throws Exception;
 }

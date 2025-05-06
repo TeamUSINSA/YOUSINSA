@@ -44,6 +44,7 @@
 			<result property="size" column="size" />
 			<result property="name" column="product_name" />
 			<result property="price" column="price" />
+			<result property="discount" column="discount"/>
 			<result property="mainImage1" column="main_image1" />
 		</collection>
 	</resultMap>
@@ -73,6 +74,7 @@
 			<result property="size" column="size" />
 			<result property="name" column="product_name" />
 			<result property="price" column="price" />
+			<result property="discount" column="discount"/>
 			<result property="mainImage1" column="main_image1" />
 		</collection>
 	</resultMap>
@@ -85,8 +87,9 @@
 		i.order_item_id, i.product_id, i.quantity, i.status
 		AS item_status,
 		i.color, i.size,
-		p.name AS product_name, p.cost AS
-		price, p.main_image1
+		p.name AS product_name, p.price AS
+		price, p.main_image1,
+		p.discount   AS discount
 		FROM orderlist o
 		JOIN orderitem i ON o.order_id =
 		i.order_id
@@ -104,8 +107,9 @@
 		i.order_item_id, i.product_id, i.quantity, i.status
 		AS item_status,
 		i.color, i.size,
-		p.name AS product_name, p.cost AS
-		price, p.main_image1
+		p.name AS product_name, p.price AS
+		price, p.main_image1,
+		p.discount   AS discount
 		FROM orderlist o
 		JOIN orderitem i ON o.order_id =
 		i.order_id
@@ -125,8 +129,9 @@
 		i.order_item_id, i.product_id, i.quantity, i.status
 		AS item_status,
 		i.color, i.size,
-		p.name AS product_name, p.cost AS
-		price, p.main_image1
+		p.name AS product_name, p.price AS
+		price, p.main_image1,
+		p.discount   AS discount
 		FROM orderlist o
 		JOIN orderitem i ON o.order_id =
 		i.order_id
@@ -136,8 +141,7 @@
 		AND o.order_date BETWEEN #{startDate} AND #{endDate}
 		AND
 		delivery_status NOT IN ('취소완료', '반품완료')
-		ORDER BY o.order_date DESC,
-		i.order_item_id ASC
+		ORDER BY o.order_date DESC, o.order_id DESC, i.order_item_id ASC
 	</select>
 
 	<!-- 주문 상세 조회 (아이디 기준) -->
@@ -152,7 +156,8 @@
 		oi.order_item_id, oi.product_id, oi.quantity,
 		oi.status,
 		oi.color, oi.size,
-		p.name AS product_name, p.cost AS price,
+		p.name AS product_name, p.price AS price,
+		p.discount   AS discount,
 		p.main_image1
 		FROM orderlist o
 		LEFT JOIN orderitem oi ON o.order_id =

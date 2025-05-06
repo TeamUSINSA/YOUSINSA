@@ -22,5 +22,18 @@
       AND size       = #{size}
       AND quantity  >= #{quantity}
   </update>
+  
+  <select id="selectStockByProductId"
+          parameterType="int"
+          resultType="dto.product.ProductStock">
+    SELECT
+      stock_id   AS stockId,
+      product_id AS productId,
+      color,
+      size,
+      quantity
+    FROM productstock
+    WHERE product_id = #{productId}
+  </select>
 </mapper>
 

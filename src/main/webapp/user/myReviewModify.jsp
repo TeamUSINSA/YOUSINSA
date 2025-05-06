@@ -137,9 +137,9 @@
 <jsp:include page="/header" />
 <div class="layout">
   <!-- ⭐ 사이드바 -->
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <!-- ⭐ 본문 -->
   <div class="content">

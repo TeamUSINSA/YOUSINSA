@@ -25,5 +25,5 @@ public interface UserDAO {
 	void insertKakaoUser(User user) throws Exception;
 	int checkPassword(String userId, String currentPassword) throws Exception;
 	void updateFcmToken(String userId, String token) throws Exception;
-	
+
 }

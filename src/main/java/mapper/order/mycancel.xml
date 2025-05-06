@@ -14,8 +14,14 @@
     <result column="user_id"      property="userId"/>
 
     <association property="order" javaType="dto.order.OrderList">
+      <id     property="orderId"         column="order_id"/>           
       <result column="order_date"      property="orderDate"/>
       <result column="delivery_status" property="deliveryStatus"/>
+      <result property="totalPrice"      column="total_price"/>
+      <result property="deliveryRequest" column="delivery_request"/>
+      <result property="paymentMethod"   column="payment_method"/>
+      <result property="usedPoint"       column="used_point"/>
+      <result property="couponDiscount"  column="coupon_discount"/>
     </association>
 
     <collection property="orderItems" ofType="dto.order.OrderItem">
@@ -27,7 +33,8 @@
       <result column="size"           property="size"/>
       <result column="quantity"       property="quantity"/>
       <result column="item_status"    property="status"/>
-      <result column="total_price"    property="price"/>
+      <result column="price"    property="price"/>
+      <result column="discount" property="discount"/>
     </collection>
   </resultMap>
 
@@ -51,7 +58,8 @@
       i.size,
       i.quantity,
       i.status        AS item_status,
-      (p.cost * i.quantity) AS total_price
+      p.price  AS price,
+      p.discount       AS discount
     FROM cancel c
     JOIN orderlist  o ON o.order_id = c.order_id
     JOIN orderitem  i ON i.order_id = c.order_id
@@ -74,5 +82,40 @@
       SET delivery_status = '취소완료'
     WHERE order_id = #{orderId}
   </update>
-
+ <!-- 3. 취소 단일 조회 (cancelId) -->
+  <select id="selectCancelById"
+          parameterType="int"
+          resultMap="CancelMap">
+    SELECT
+      c.cancel_id,
+      c.order_id,
+      c.cancel_date,
+      c.reason,
+      c.user_id,
+      o.order_date,
+      o.total_price,
+      o.delivery_status,
+      o.delivery_request,
+      o.payment_method,
+      o.receiver_name,
+      o.receiver_phone,
+      o.receiver_address,
+      o.used_point,
+      o.coupon_discount,
+      i.order_item_id,
+      p.product_id,
+      p.name        AS name,
+      p.main_image1,
+      i.color,
+      i.size,
+      i.quantity,
+      i.status      AS item_status,
+      p.price AS price,
+      p.discount AS discount
+    FROM cancel c
+    JOIN orderlist o ON o.order_id = c.order_id
+    JOIN orderitem i ON i.order_id = c.order_id
+    JOIN product   p ON p.product_id   = i.product_id
+    WHERE c.cancel_id = #{cancelId}
+  </select>
 </mapper>

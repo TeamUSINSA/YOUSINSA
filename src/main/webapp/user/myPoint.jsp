@@ -26,6 +26,7 @@
             <c:choose>
                 <c:when test="${not empty pointList}">
                     <c:forEach var="p" items="${pointList}">
+                        <c:if test="${p.point != 0}">
                         <div class="point-card">
                             <div class="point-amount" style="color:${p.point > 0 ? 'green' : 'red'};">
                                 ${p.point > 0 ? '+' : ''}${p.point}P
@@ -34,6 +35,7 @@
                                 ${p.date} / ${p.point > 0 ? '주문 적립' : '주문 사용'}
                             </div>
                         </div>
+                        </c:if>
                     </c:forEach>
                 </c:when>
                 <c:otherwise>

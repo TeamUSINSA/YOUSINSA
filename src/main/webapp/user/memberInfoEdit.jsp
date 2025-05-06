@@ -3,9 +3,9 @@
 <jsp:include page="/header" />
 <div class="member-container">
   <!-- 사이드바 -->
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <!-- 본문 -->
   <div class="member-content">
@@ -83,14 +83,7 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-.sidebar {
-  width: 200px;
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
-}
+
 
 .member-content {
   flex: 1;

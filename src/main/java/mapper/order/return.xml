@@ -34,8 +34,100 @@
     SELECT * FROM `return` WHERE return_id = #{returnId}
 </select>
 
+
 <select id="getOrderItemIdByReturnId" parameterType="int" resultType="int">
     SELECT order_item_id FROM `return` WHERE return_id = #{returnId}
 </select>
+
+
+
+<!-- 마이페이지에서 쓰는것 -->
+
+<!-- 단일 반품 조회 -->
+  <select id="selectReturnByReturnId"
+          resultType="return"
+          parameterType="int">
+    SELECT 
+      r.return_id,
+      r.return_date,
+      r.reason,
+      r.user_id,
+      r.order_item_id,
+      oi.order_id       AS order_id,
+      r.approved,
+      r.reject_reason
+    FROM `return` r
+    JOIN orderitem oi
+      ON r.order_item_id = oi.order_item_id
+    WHERE r.return_id = #{returnId}
+  </select>
+
+  <!-- 사용자별 반품 목록 조회 -->
+  <select id="selectReturnsByUserId"
+          resultType="return"
+          parameterType="string">
+    SELECT 
+      r.return_id,
+      r.return_date,
+      r.reason,
+      r.user_id,
+      r.order_item_id,
+      oi.order_id       AS order_id,
+      r.approved,
+      r.reject_reason
+    FROM `return` r
+    JOIN orderitem oi
+      ON r.order_item_id = oi.order_item_id
+    WHERE r.user_id = #{userId}
+    ORDER BY r.return_date DESC
+  </select>
+
+  <!-- 반품 신청 등록 -->
+  <insert id="insertReturn"
+          parameterType="dto.order.Return"
+          useGeneratedKeys="true"
+          keyProperty="returnId">
+    INSERT INTO `return`
+      ( return_date
+      , reason
+      , user_id
+      , order_item_id
+      , approved
+      , reject_reason
+      )
+    VALUES
+      ( NOW()
+      , #{reason}
+      , #{userId}
+      , #{orderItemId}
+      , #{approved}
+      , #{rejectReason}
+      )
+  </insert>
+
+  <!-- 반품 승인/반려 업데이트 -->
+  <update id="updateApproval"
+          parameterType="dto.order.Return">
+    UPDATE `return`
+       SET approved      = #{approved}
+         , reject_reason = #{rejectReason}
+     WHERE return_id    = #{returnId}
+  </update>
+
+<!-- 1) orderitem.status를 '반품중'으로 변경 -->
+ <update id="updateOrderItemStatus"
+         parameterType="dto.order.Return">
+   UPDATE orderitem
+      SET status = '반품중'
+    WHERE order_item_id = #{orderItemId}
+ </update>
+
+  <!-- 2) orderlist.delivery_status를 '반품중'으로 변경 -->
+ <update id="updateOrderListStatus"
+         parameterType="dto.order.Return">
+   UPDATE orderlist
+     SET delivery_status = '반품대기'
+   WHERE order_id = #{orderId}
+ </update>
 
 </mapper>

@@ -35,7 +35,7 @@
               </div>
             </td>
             <td>${item.quantity}</td>
-            <td>${item.quantity * item.price}원</td>
+            <td>${item.quantity * (item.price - item.discount)}원</td>
             <td>
               ${item.status}<br>
               <c:choose>

@@ -144,9 +144,9 @@
 </head>
 <body>
 <div class="layout">
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
   <div class="content">
     <div class="title">후기 작성</div>
 

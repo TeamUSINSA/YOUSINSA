@@ -34,9 +34,9 @@
 </style>
 
 <div class="layout" style="display: flex; max-width:1200px; margin:0 auto; padding:40px 20px; gap:30px;">
-  <div class="sidebar" style="width:200px;">
+
     <%@ include file="/user/mysidebar.jsp" %>
-  </div>
+
   <div class="content" style="flex:1;">
     <h2 style="font-size:20px; font-weight:bold; margin-bottom:20px;">재입고 알림 목록</h2>
     <table class="restock-table" style="width:100%; border-collapse:collapse; font-size:14px;">

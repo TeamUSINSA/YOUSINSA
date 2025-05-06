@@ -6,6 +6,7 @@ import dto.order.OrderItem;
 
 public class CancelReturn {
     private int orderId;
+    private int recordId;
     private Date orderDate;
     private Date actionDate;      // 취소일자 혹은 반품일자
     private String reason;
@@ -15,7 +16,21 @@ public class CancelReturn {
 
     public CancelReturn() {}
 
-    public int getOrderId() {
+    
+    
+    public int getRecordId() {
+		return recordId;
+	}
+
+
+
+	public void setRecordId(int recordId) {
+		this.recordId = recordId;
+	}
+
+
+
+	public int getOrderId() {
         return orderId;
     }
     public void setOrderId(int orderId) {

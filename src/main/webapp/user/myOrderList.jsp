@@ -257,7 +257,7 @@ request.setAttribute("currentYear", currentYear);
               </option>
             </c:forEach>
           </select>
-          <button type="submit" style="margin-left:10px;background:#8cc63f;color:#fff;border:none;padding:8px 18px;">
+          <button type="submit" style="margin-left:10px;background:#030303;color:#fff;border:none;padding:8px 18px; border-radius:5px; cursor:pointer;">
             조회
           </button>
         </div>
@@ -286,6 +286,7 @@ request.setAttribute("currentYear", currentYear);
         <!-- 아이템 -->
         <div class="order-items">
           <c:forEach var="item" items="${order.items}">
+          
             <div class="order-item">
               <div class="product-info">
                 <a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}">
@@ -300,20 +301,20 @@ request.setAttribute("currentYear", currentYear);
                 </div>
               </div>
               <div class="quantity">${item.quantity}</div>
-              <div class="price">${item.quantity * item.price}원</div>
+              <div class="price">${item.quantity * (item.price - item.discount)}원</div>
 
               <!-- 상태 & 버튼 분기 -->
               <div class="status">
-                ${order.deliveryStatus}<br/>
-              <c:if test="${order.deliveryStatus ne '취소완료' && order.deliveryStatus ne '반품완료'}">
+                ${item.status}<br/>
+              <c:if test="${item.status ne '취소완료' && item.status ne '반품완료'}">
                 <c:choose>
-                  <c:when test="${order.deliveryStatus eq '배송준비중'}">
+                  <c:when test="${item.status eq '배송준비중'}">
                     <button class="action-btn"
                             onclick="location.href='${pageContext.request.contextPath}/myCancelApply?orderId=${order.orderId}'">
                       취소 신청
                     </button>
                   </c:when>
-                  <c:when test="${order.deliveryStatus eq '배송중'}">
+                  <c:when test="${item.status eq '배송중'}">
                     <button class="action-btn"
                             onclick="location.href='${pageContext.request.contextPath}/tracking?itemId=${item.orderItemId}'">
                       배송 조회
@@ -323,31 +324,39 @@ request.setAttribute("currentYear", currentYear);
                       취소 신청
                     </button>
                   </c:when>
-                  <c:when test="${order.deliveryStatus eq '배송완료'}">
+                  <c:when test="${item.status eq '배송완료'}">
                     <button class="action-btn"
-                            onclick="location.href='${pageContext.request.contextPath}/myReturnApply?itemId=${item.orderItemId}'">
+                            onclick="location.href='${pageContext.request.contextPath}/myReturnApply?'+ 'orderItemId=${item.orderItemId}&orderId=${order.orderId}'"
+                  >
                       반품 신청
+                    </button>
+                    <button class="action-btn"
+                            onclick="location.href='${pageContext.request.contextPath}/myExchangeApply?'+ 'orderItemId=${item.orderItemId}&orderId=${order.orderId}'"
+                  >
+                      교환 신청
                     </button>
                   </c:when>
                   
                 </c:choose>
 </c:if>
                 <!-- 후기 분기 -->
-                <c:choose>
-                  <c:when test="${!item.hasReview}">
-                    <button class="action-btn"
-                            onclick="location.href='${pageContext.request.contextPath}/myReviewWrite?orderId=${order.orderId}&orderItemId=${item.orderItemId}&productId=${item.productId}'">
-                      후기 작성
-                    </button>
-                  </c:when>
-                  <c:otherwise>
-                    <button class="action-btn"
-                            onclick="location.href='${pageContext.request.contextPath}/myReviewList'">
-                      후기 확인
-                    </button>
-                  </c:otherwise>
-                </c:choose>
-              </div>
+                <c:if test="${item.status eq '배송완료'}">
+    <c:choose>
+      <c:when test="${!item.hasReview}">
+        <button class="action-btn"
+                onclick="location.href='${pageContext.request.contextPath}/myReviewWrite?orderId=${order.orderId}&orderItemId=${item.orderItemId}&productId=${item.productId}'">
+          후기 작성
+        </button>
+      </c:when>
+      <c:otherwise>
+        <button class="action-btn"
+                onclick="location.href='${pageContext.request.contextPath}/myReviewList'">
+          후기 확인
+        </button>
+      </c:otherwise>
+    </c:choose>
+  </c:if>
+</div>
             </div>
           </c:forEach>
         </div>

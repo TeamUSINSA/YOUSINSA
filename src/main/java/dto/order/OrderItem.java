@@ -10,10 +10,8 @@ public class OrderItem {
     private String color;
     private String size;
     private int price;
-
- 
     
-
+    private int discount; 
     private String name;
     private String mainImage1;
    
@@ -22,7 +20,8 @@ public class OrderItem {
     public int getCost() { return cost; }
     public void setCost(int cost) { this.cost = cost; }
 
-
+    public int getDiscount() { return discount; }
+    public void setDiscount(int discount) { this.discount = discount; }
 
     public OrderItem() {}
 

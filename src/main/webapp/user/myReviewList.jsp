@@ -101,9 +101,9 @@
 
 <div class="layout">
   <!-- ⭐ 사이드바 -->
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <!-- ⭐ 본문 -->
   <div class="content">
@@ -121,7 +121,10 @@
           <tr>
             <td>
               <div class="product-info">
-                <img src="/yousinsa/upload/${review.image}" alt="리뷰 이미지">
+                <c:if test="${not empty review.image}">
+      <img src="${pageContext.request.contextPath}/upload/${review.image}"
+           alt="리뷰 이미지">
+    </c:if>
                 <div class="product-details">
                   <div><strong>${review.productName}</strong></div>
                   <div>색상 : ${review.color}</div>

@@ -5,15 +5,17 @@
 
 <mapper namespace="mapper.order">
 
-    <select id="selectAllExchanges" resultType="dto.order.Exchange">
-        SELECT *
-        FROM exchange
-        ORDER BY exchange_date DESC
-    </select>
+	<select id="selectAllExchanges" resultType="dto.order.Exchange">
+		SELECT *
+		FROM exchange
+		ORDER BY exchange_date DESC
+	</select>
 
-    <select id="getExchangeTotalPages" resultType="int">
-        SELECT CEIL(COUNT(*) / 10.0) FROM exchange
-    </select>
+	<select id="getExchangeTotalPages" resultType="int">
+		SELECT
+		CEIL(COUNT(*) / 10.0) FROM exchange
+	</select>
+
 
     <!-- ✨ 여기를 추가 -->
     <select id="selectExchangeById" parameterType="int" resultType="dto.order.Exchange">
@@ -24,4 +26,78 @@
   SELECT order_item_id FROM exchange WHERE exchange_id = #{exchangeId}
 </select>
 
+	<!-- 마이페이지용 -->
+	<!-- 1. 특정 주문(orderId)의 배송완료된 상품만 조회 -->
+	<select id="selectDeliveredItemsByOrder" parameterType="map"
+		resultType="dto.order.OrderItem">
+		  SELECT
+    i.order_item_id    AS orderItemId,
+    i.product_id       AS productId,
+    p.name             AS name,
+    p.price            AS price,
+    p.discount         AS discount,     <!-- product.discount 컬럼 사용 -->
+    i.color,
+    i.size,
+    i.quantity,
+    p.main_image1      AS mainImage1,
+    i.status           AS status
+  FROM orderitem i
+  JOIN orderlist o ON i.order_id = o.order_id
+  JOIN product p   ON i.product_id = p.product_id
+  WHERE o.user_id   = #{userId}
+    AND o.order_id  = #{orderId}
+    AND i.status    = '배송완료'
+  ORDER BY i.order_item_id
+	</select>
+
+	<!-- 교환신청 등록 -->
+	<insert id="insertExchange" parameterType="dto.order.Exchange"
+		useGeneratedKeys="true" keyProperty="exchangeId">
+		INSERT INTO `exchange`
+		( exchange_date
+		, reason
+		, user_id
+		, order_item_id
+		, approved
+		, shipping_fee
+		, reject_reason
+		, shipping_fee_paid
+		, size
+		,
+		color
+		)
+		VALUES
+		( NOW()
+		, #{reason}
+		, #{userId}
+		, #{orderItemId}
+		, 0                  <!-- 0=대기 -->
+		, 0                  <!-- 신청단계에선 0원 -->
+		, NULL
+		, NULL
+		, #{size}
+		, #{color}
+		)
+	</insert>
+
+	<!-- 주문아이템 상태를 '교환대기'로 변경 -->
+	<update id="updateOrderItemToCancelPending" parameterType="int">
+		UPDATE orderitem
+		SET status = '교환대기'
+		WHERE order_item_id =
+		#{orderItemId}
+	</update>
+	
+	<select id="selectExchangeDetail" parameterType="int" resultType="dto.order.OrderItem">
+    SELECT
+      e.exchange_id,
+      e.exchange_date,
+      e.reason,
+      e.approved,
+      e.reject_reason,
+      e.size,
+      e.color
+    FROM `exchange` e
+    WHERE e.exchange_id = #{exchangeId}
+  </select>
 </mapper>

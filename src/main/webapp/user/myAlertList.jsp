@@ -74,9 +74,9 @@
 <div class="layout">
 
   <!-- ✅ 사이드바 -->
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <!-- ✅ 본문: 나의 알림 목록 -->
   <div class="content">

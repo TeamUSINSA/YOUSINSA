@@ -3,12 +3,13 @@
 <jsp:include page="/header" />
 
 <style>
+  /* 레이아웃 중앙정렬 및 여백 */
   .page-wrapper {
     display: flex;
-    gap: 30px;
     max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    gap: 30px;
   }
 
   /* sidebar column */
@@ -95,18 +96,21 @@
     background: #f0f0f0;
   }
 
+  /* pagination: coupon page와 동일한 디자인 */
   .pagination {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px;
   }
-  .pagination a,
-  .pagination strong {
-    margin: 0 6px;
-    color: #333;
+  .pagination a {
+    margin: 0 5px;
     text-decoration: none;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 4px;
   }
-  .pagination strong {
-    font-weight: bold;
+  .pagination a.current {
+    background: #333;
+    color: #fff;
   }
 
   /* answer status colors */
@@ -118,79 +122,70 @@
     .sidebar { width: 100%; }
   }
 </style>
+
 <div class="page-wrapper">
-<div class="sidebar">
-    <%@ include file="mysidebar.jsp" %>
-  </div>
-<div class="qna-container">
-  <div class="qna-header">
-    <h2>나의 Q&amp;A 목록</h2>
-    <button class="btn-new" onclick="location.href='${pageContext.request.contextPath}/myQnAWrite'">문의 작성</button>
-  </div>
 
-  <table class="qna-table">
-    <thead>
-      <tr>
-        <th>번호</th>
-        <th>구분</th>
-        <th>제목</th>
-        <th>작성일</th>
-        <th>상태</th>
-      </tr>
-    </thead>
-    <tbody>
-      <c:forEach var="q" items="${qnaList}" varStatus="st">
-        <!-- 요약 행 -->
-        <tr class="qna-row" onclick="location.href='${pageContext.request.contextPath}/myQnADetail?id=${q.qnaId}'" style="cursor:pointer;">
-          <td>${(pageInfo.curPage - 1) * 10 + st.index + 1}</td>
-          <td>${q.type}</td>
-          <td>${q.title}</td>
-          <td>${q.questionDate}</td>
-          <td>
-            <c:choose>
-              <c:when test="${not empty q.answer}">
-                <span style="color:#28a745;">답변 완료</span>
-              </c:when>
-              <c:otherwise>
-                <span style="color:#d9534f;">미답변</span>
-              </c:otherwise>
-            </c:choose>
-          </td>
+  <%@ include file="mysidebar.jsp" %>
+
+  <div class="qna-container">
+    <div class="qna-header">
+      <h2>나의 Q&amp;A 목록</h2>
+      <button class="btn-new" onclick="location.href='${pageContext.request.contextPath}/myQnAWrite'">문의 작성</button>
+    </div>
+
+    <table class="qna-table">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>구분</th>
+          <th>제목</th>
+          <th>작성일</th>
+          <th>상태</th>
         </tr>
-        <!-- 상세 행 -->
-        <tr class="qna-detail">
-          <td colspan="5">
-            <div class="qna-detail-content">
-              <h4>문의 내용</h4>
-              <p>${q.content}</p>
-              <h4 style="margin-top:20px;">답변 내용</h4>
-              <p>${empty q.answer ? '아직 답변이 등록되지 않았습니다.' : q.answer}</p>
-            </div>
-            <div class="qna-actions">
-              <button onclick="location.href='${pageContext.request.contextPath}/qnaEdit?id=${q.qnaId}'">수정</button>
-              <button onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/qnaDelete?id=${q.qnaId}'">삭제</button>
-            </div>
-          </td>
-        </tr>
+      </thead>
+      <tbody>
+        <c:forEach var="q" items="${qnaList}" varStatus="st">
+          <tr class="qna-row" onclick="location.href='${pageContext.request.contextPath}/myQnADetail?id=${q.qnaId}'">
+            <td>${(pageInfo.curPage - 1) * 10 + st.index + 1}</td>
+            <td>${q.type}</td>
+            <td>${q.title}</td>
+            <td>${q.questionDate}</td>
+            <td>
+              <c:choose>
+                <c:when test="${not empty q.answer}">
+                  <span class="answered">답변 완료</span>
+                </c:when>
+                <c:otherwise>
+                  <span class="not-answered">미답변</span>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </tr>
+          <tr class="qna-detail">
+            <td colspan="5">
+              <div class="qna-detail-content">
+                <h4>문의 내용</h4>
+                <p>${q.content}</p>
+                <h4 style="margin-top:20px;">답변 내용</h4>
+                <p>${empty q.answer ? '아직 답변이 등록되지 않았습니다.' : q.answer}</p>
+              </div>
+              <div class="qna-actions">
+                <button onclick="location.href='${pageContext.request.contextPath}/qnaEdit?id=${q.qnaId}'">수정</button>
+                <button onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/qnaDelete?id=${q.qnaId}'">삭제</button>
+              </div>
+            </td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
+        <a href="?page=${i}" class="${i == pageInfo.curPage ? 'current' : ''}">${i}</a>
       </c:forEach>
-    </tbody>
-  </table>
+    </div>
 
-  <!-- 페이지네이션 -->
-  <div class="pagination">
-    <c:forEach var="i" begin="${pageInfo.startPage}" end="${pageInfo.endPage}">
-      <c:choose>
-        <c:when test="${i == pageInfo.curPage}">
-          <strong>${i}</strong>
-        </c:when>
-        <c:otherwise>
-          <a href="?page=${i}">${i}</a>
-        </c:otherwise>
-      </c:choose>
-    </c:forEach>
   </div>
 </div>
-</div>
-
 
 <jsp:include page="/common/footer.jsp" />

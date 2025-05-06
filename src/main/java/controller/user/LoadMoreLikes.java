@@ -21,7 +21,7 @@ import service.user.LikeServiceImpl;
 @WebServlet("/loadMoreLikes")
 public class LoadMoreLikes extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private LikeService likeService = new LikeServiceImpl();
+	
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -35,37 +35,44 @@ public class LoadMoreLikes extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		LikeService likeService = new LikeServiceImpl();
 		try {
-			String userId = request.getParameter("userId");
-			String offsetParam = request.getParameter("offset");
-			int offset = 0; // 기본값
+		      String userId      = request.getParameter("userId");
+		      String offsetParam = request.getParameter("offset");
+		      String limitParam  = request.getParameter("limit");
 
-			try {
-			    if (offsetParam != null && !offsetParam.trim().isEmpty()) {
-			        offset = Integer.parseInt(offsetParam);
-			        if (offset < 0) offset = 0; //offset 음수일경우 처리
-			    }
-			} catch (NumberFormatException e) {
-			    e.printStackTrace(); // 또는 로그 처리
-			    // 잘못된 요청에 대한 기본 처리 (예: offset = 0 또는 에러 리턴)
-			    offset = 0;
-			}
-			//limit도 똑같이 처리
-			String limitParam = request.getParameter("limit");
-			int limit = 1;
-			if (limitParam != null && !limitParam.trim().isEmpty()) {
-				limit = Integer.parseInt(limitParam);
-			}
+		      int offset = 0;
+		      if (offsetParam != null && !offsetParam.trim().isEmpty()) {
+		        try { offset = Math.max(0, Integer.parseInt(offsetParam)); }
+		        catch(NumberFormatException ignored){}
+		      }
 
-			List<LikeList> moreLikes = likeService.getLikedProductsByUserId(userId, offset, limit);
+		      int limit = 1;
+		      if (limitParam != null && !limitParam.trim().isEmpty()) {
+		        try { limit = Integer.parseInt(limitParam); }
+		        catch(NumberFormatException ignored){}
+		      }
 
-			response.setContentType("application/json;charset=UTF-8");
-			new Gson().toJson(moreLikes, response.getWriter());
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
-	}
+		      List<LikeList> moreLikes = likeService.getLikedProductsByUserId(userId, offset, limit);
+
+		      // ↓ 필터링 추가: productId, mainImage1, name이 모두 유효할 때만 남긴다
+		      moreLikes.removeIf(item ->
+		      // productId가 1 이상이 아니면 제거 (optional)
+		      item.getProductId() <= 0
+		   || item.getMainImage1() == null
+		   || item.getMainImage1().trim().isEmpty()
+		   || item.getName() == null
+		   || item.getName().trim().isEmpty()
+		 );
+
+		      response.setContentType("application/json;charset=UTF-8");
+		      new Gson().toJson(moreLikes, response.getWriter());
+
+		    } catch (Exception e) {
+		      e.printStackTrace();
+		      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		    }
+		  }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

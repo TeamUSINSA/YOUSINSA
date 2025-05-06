@@ -13,4 +13,6 @@ public interface MyCancelService {
     
     /** 신규 ①—주문 취소 요청: cancel 테이블에 insert + orderlist 상태 변경 */
     void requestCancel(int orderId, String userId, String reason) throws Exception;
+ // 단일 취소 상세 조회
+    Cancel getCancelById(int cancelId) throws Exception;
 }

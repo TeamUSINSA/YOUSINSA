@@ -12,9 +12,9 @@
 <div class="layout" style="display: flex; max-width: 1000px; margin: 0 auto; padding: 40px 20px; gap: 30px;">
 
    <!-- 사이드바 영역 (필요 시 포함) --> 
-  <div class="sidebar" style="width: 200px;">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
   
 
   <!-- 본문 -->

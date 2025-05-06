@@ -45,4 +45,9 @@ public class MyCancelServiceImpl implements MyCancelService {
 		// 3) DAO 호출: orderlist 상태 변경
 		cancelDAO.updateOrderToCancelled(orderId);
 	}
+
+	@Override
+	public Cancel getCancelById(int cancelId) throws Exception {
+		 return cancelDAO.selectCancelById(cancelId);
+	}
 }
