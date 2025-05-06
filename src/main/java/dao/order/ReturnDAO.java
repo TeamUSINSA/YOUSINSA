@@ -15,4 +15,5 @@ public interface ReturnDAO {
     void updateRejectedStatus(int returnId, int approved, String rejectReason) throws Exception;
     
     Return selectReturnById(int returnId) throws Exception;
+	int getOrderItemIdByReturnId(int returnId) throws Exception;
 }

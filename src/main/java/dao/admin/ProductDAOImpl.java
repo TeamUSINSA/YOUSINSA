@@ -28,7 +28,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void deleteProductById(int productId) throws Exception {
-        sqlSession.delete("mapper.product.deleteProductById", productId);
+        sqlSession.delete("mapper.admin.product.deleteProductById", productId);
         sqlSession.commit();
     }
 

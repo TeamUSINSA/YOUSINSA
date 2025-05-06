@@ -19,5 +19,9 @@
     <select id="selectExchangeById" parameterType="int" resultType="dto.order.Exchange">
         SELECT * FROM exchange WHERE exchange_id = #{exchangeId}
     </select>
+    
+    <select id="getOrderItemIdByExchangeId" parameterType="int" resultType="int">
+  SELECT order_item_id FROM exchange WHERE exchange_id = #{exchangeId}
+</select>
 
 </mapper>

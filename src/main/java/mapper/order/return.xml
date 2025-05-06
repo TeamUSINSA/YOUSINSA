@@ -34,4 +34,8 @@
     SELECT * FROM `return` WHERE return_id = #{returnId}
 </select>
 
+<select id="getOrderItemIdByReturnId" parameterType="int" resultType="int">
+    SELECT order_item_id FROM `return` WHERE return_id = #{returnId}
+</select>
+
 </mapper>

@@ -13,4 +13,6 @@ public interface OrderItemDAO {
 
 	List<Product> selectTopSellingProducts(int count) throws Exception;
 
+	void updateOrderItemStatus(int orderItemId, String status);
+
 }

@@ -17,4 +17,6 @@ public interface ExchangeDAO {
 	// 대신 아래처럼 구체적인 메서드 2개로 나누는 걸 추천:
 	void approveExchange(int exchangeId) throws Exception;
 	void rejectExchange(int exchangeId, String reason) throws Exception;
+
+	int getOrderItemIdByExchangeId(int exchangeId) throws Exception;
 }

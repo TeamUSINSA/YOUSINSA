@@ -115,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
 
 	        List<ProductStock> stockList = new ArrayList<>();
 	        String[] colors = multi.getParameterValues("color");
-	        String[] sizeTypes = sizeType.equals("F") ? new String[]{"F"} : new String[]{"XS", "S", "M", "L", "XL"};
+	        String[] sizeTypes = sizeType.equals("F") ? new String[]{"FREE"} : new String[]{"XS", "S", "M", "L", "XL"};
 	        for(int i=0; i<colors.length;i++) {
 	        	System.out.println(colors[i]);
 	        }
@@ -133,7 +133,12 @@ public class ProductServiceImpl implements ProductService {
 	                        try {
 	                            int quantity = Integer.parseInt(quantityStr.trim());
 	                            if (quantity >= 0) {
-	                                stockList.add(new ProductStock(productId, color, s, quantity));
+	                            	stockList.add(new ProductStock(
+	                                        productId,
+	                                        color.trim().toUpperCase(),
+	                                        s.trim().toUpperCase(),
+	                                        quantity
+	                                    ));
 	                            }
 	                        } catch (NumberFormatException e) {
 	                            System.out.println("재고 숫자 파싱 실패: " + paramName + "=" + quantityStr);

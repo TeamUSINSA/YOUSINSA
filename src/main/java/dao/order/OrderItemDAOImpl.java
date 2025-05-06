@@ -1,6 +1,7 @@
 package dao.order;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -28,4 +29,11 @@ public class OrderItemDAOImpl implements OrderItemDAO{
         return sqlSession.selectList(
             "mapper.orderitem.selectTopSellingProducts", count);
     }
+    
+    @Override
+    public void updateOrderItemStatus(int orderItemId, String status) {
+    	sqlSession.update("mapper.orderitem.updateStatus", Map.of("orderItemId", orderItemId, "status", status));
+
+    }
+
 }

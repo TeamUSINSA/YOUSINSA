@@ -53,4 +53,9 @@ public class ReturnDAOImpl implements ReturnDAO {
     public Return selectReturnById(int returnId) throws Exception {
         return sqlSession.selectOne("mapper.return.selectReturnById", returnId);
     }
+    
+    @Override
+    public int getOrderItemIdByReturnId(int returnId) throws Exception {
+        return sqlSession.selectOne("mapper.return.getOrderItemIdByReturnId", returnId);
+    }
 }

@@ -89,7 +89,11 @@
 </select>
 
   
-  
+  <update id="updateStatus">
+    UPDATE orderitem
+    SET status = #{status}
+    WHERE order_item_id = #{orderItemId}
+</update>
 
 
 </mapper>

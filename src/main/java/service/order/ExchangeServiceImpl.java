@@ -5,11 +5,14 @@ import java.util.Map;
 
 import dao.order.ExchangeDAO;
 import dao.order.ExchangeDAOImpl;
+import dao.order.OrderItemDAO;
+import dao.order.OrderItemDAOImpl;
 import dto.order.Exchange;
 
 public class ExchangeServiceImpl implements ExchangeService {
 
 	private ExchangeDAO exchangeDAO;
+	private OrderItemDAO orderItemDAO = new OrderItemDAOImpl();
 
 	public ExchangeServiceImpl() {
 		this.exchangeDAO = new ExchangeDAOImpl();
@@ -38,10 +41,16 @@ public class ExchangeServiceImpl implements ExchangeService {
 	@Override
 	public void approveExchange(int exchangeId) throws Exception {
 	    exchangeDAO.approveExchange(exchangeId);
+	    
+	    int orderItemId = exchangeDAO.getOrderItemIdByExchangeId(exchangeId);
+	    orderItemDAO.updateOrderItemStatus(orderItemId, "교환승인");
 	}
 
 	@Override
 	public void rejectExchange(int exchangeId, String reason) throws Exception {
 	    exchangeDAO.rejectExchange(exchangeId, reason);
+	    
+	    int orderItemId = exchangeDAO.getOrderItemIdByExchangeId(exchangeId);
+	    orderItemDAO.updateOrderItemStatus(orderItemId, "교환반려");
 	}
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import dao.order.OrderDAO;
 import dao.order.OrderDAOImpl;
+import dao.order.OrderItemDAO;
+import dao.order.OrderItemDAOImpl;
 import dao.order.ReturnDAO;
 import dao.order.ReturnDAOImpl;
 import dao.product.ProductStockDAO;
@@ -16,6 +18,7 @@ public class ReturnServiceImpl implements ReturnService {
     private ReturnDAO returnDAO;
     private ProductStockDAO productStockDAO = new ProductStockDAOImpl();
     private OrderDAO orderDAO = new OrderDAOImpl(); // ⬅ 추가해줘야 해
+    private OrderItemDAO orderItemDAO = new OrderItemDAOImpl();
 
     public ReturnServiceImpl() {
         this.returnDAO = new ReturnDAOImpl();
@@ -50,10 +53,14 @@ public class ReturnServiceImpl implements ReturnService {
             item.getSize(),
             item.getQuantity()
         );
+        orderItemDAO.updateOrderItemStatus(refund.getOrderItemId(), "반품승인");
     }
 
     @Override
     public void rejectReturn(int returnId, String rejectReason) throws Exception {
         returnDAO.updateRejectedStatus(returnId, 2, rejectReason); // 2 = 반려
+        
+        int orderItemId = returnDAO.getOrderItemIdByReturnId(returnId);
+        orderItemDAO.updateOrderItemStatus(orderItemId, "반품반려");
     }
 }

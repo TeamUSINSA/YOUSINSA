@@ -56,4 +56,9 @@ public class ExchangeDAOImpl implements ExchangeDAO {
             pstmt.executeUpdate();
         }
     }
+    
+    @Override
+    public int getOrderItemIdByExchangeId(int exchangeId) throws Exception {
+        return sqlSession.selectOne("mapper.exchange.getOrderItemIdByExchangeId", exchangeId);
+    }
 }
