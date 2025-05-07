@@ -94,6 +94,35 @@
     .sidebar { width: 100%; }
     .inq-detail-content { padding: 16px; }
   }
+  .board {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* 게시판 헤더 */
+.board-header {
+  background: #f3f3f3;
+  padding: 12px 16px;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 게시판 본문 */
+.board-body {
+  padding: 16px;
+  line-height: 1.6;
+  color: #555;
+  white-space: pre-wrap; /* 줄바꿈 보존 */
+}
+
+/* 기존 inq-detail-content 패딩만 유지 */
+.inq-detail-content {
+  padding: 24px 0;
+}
 </style>
 
 <div class="page-wrapper">
@@ -120,23 +149,41 @@
             </td>
           </tr>
           <tr class="inq-detail">
-            <td colspan="5">
-              <div class="inq-detail-content">
-                <div class="inq-box question">
-                  <h4>문의 내용</h4>
-                  <p>${inq.content}</p>
-                </div>
-                <div class="inq-box answer">
-                  <h4>답변 내용</h4>
-                  <p>${empty inq.answer ? '아직 답변이 등록되지 않았습니다.' : inq.answer}</p>
-                </div>
-              </div>
-              <div class="inq-detail-buttons">
-                <c:if test="${empty inq.answer}"><button onclick="location.href='${pageContext.request.contextPath}/myInquiryEdit?id=${inq.inquiryId}'">수정</button></c:if>
-                <button class="delete" onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/inquiryDelete?id=${inq.inquiryId}'">삭제</button>
-              </div>
-            </td>
-          </tr>
+  <td colspan="5">
+    <div class="inq-detail-content">
+
+      <!-- 문의 내용 게시판 스타일 -->
+      <div class="board">
+        <div class="board-header">문의 내용</div>
+        <div class="board-body">
+${inq.content}
+        </div>
+      </div>
+
+      <!-- 답변 내용 게시판 스타일 -->
+      <div class="board">
+        <div class="board-header">답변 내용</div>
+        <div class="board-body">
+          ${empty inq.answer 
+             ? '아직 답변이 등록되지 않았습니다.' 
+             : inq.answer}
+        </div>
+      </div>
+
+    </div>
+    <div class="inq-detail-buttons">
+      <c:if test="${empty inq.answer}">
+        <button onclick="location.href='${pageContext.request.contextPath}/myInquiryEdit?id=${inq.inquiryId}'">
+          수정
+        </button>
+      </c:if>
+      <button class="delete"
+              onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/inquiryDelete?id=${inq.inquiryId}'">
+        삭제
+      </button>
+    </div>
+  </td>
+</tr>
         </c:forEach>
       </tbody>
     </table>

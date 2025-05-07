@@ -96,9 +96,9 @@ body {
 </style>
 
 <div class="page-wrapper">
-  <div class="sidebar">
+
     <%@ include file="mysidebar.jsp" %>
-  </div>
+
 
   <div class="qna-detail-container">
     <!-- 1) 연회색 헤더 -->

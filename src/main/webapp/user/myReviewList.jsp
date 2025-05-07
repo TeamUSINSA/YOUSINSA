@@ -117,47 +117,59 @@
         </tr>
       </thead>
       <tbody>
-        <c:forEach var="review" items="${reviewList}">
-          <tr>
-            <td>
-              <div class="product-info">
-                <c:if test="${not empty review.image}">
-      <img src="${pageContext.request.contextPath}/upload/${review.image}"
-           alt="리뷰 이미지">
-    </c:if>
-                <div class="product-details">
-                  <div><strong>${review.productName}</strong></div>
-                  <div>색상 : ${review.color}</div>
-                  <div>사이즈 : ${review.size}</div>
-                  <div>주문일자 : ${review.orderDate}</div>
-                </div>
+  <c:choose>
+    <c:when test="${not empty reviewList}">
+      <c:forEach var="review" items="${reviewList}">
+        <tr>
+          <td>
+            <div class="product-info">
+              <c:if test="${not empty review.image}">
+                <img src="${pageContext.request.contextPath}/upload/${review.image}" alt="리뷰 이미지">
+              </c:if>
+              <div class="product-details">
+                <div><strong>${review.productName}</strong></div>
+                <div>색상 : ${review.color}</div>
+                <div>사이즈 : ${review.size}</div>
+                <div>주문일자 : ${review.orderDate}</div>
               </div>
-            </td>
-            <td>
-              <div class="star-rating">
-                <c:forEach begin="1" end="5" var="i">
-                  <c:choose>
-                    <c:when test="${i <= review.rating}">★</c:when>
-                    <c:otherwise>☆</c:otherwise>
-                  </c:choose>
-                </c:forEach>
-              </div>
-              <div>${review.content}</div>
-              <div style="margin-top: 10px;">작성일자 : ${review.regDate}</div>
-              <div class="review-buttons">
-                <form action="myReviewModify" method="get" style="display:inline;">
-  					<input type="hidden" name="reviewId" value="${review.reviewId}">
-  					<button type="submit">후기 수정</button>
-				</form>
-                <form action="deleteReview" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                  <input type="hidden" name="reviewId" value="${review.reviewId}">
-                  <button type="submit">후기 삭제</button>
-                </form>
-              </div>
-            </td>
-          </tr>
-        </c:forEach>
-      </tbody>
+            </div>
+          </td>
+          <td>
+            <div class="star-rating">
+              <c:forEach begin="1" end="5" var="i">
+                <c:choose>
+                  <c:when test="${i <= review.rating}">★</c:when>
+                  <c:otherwise>☆</c:otherwise>
+                </c:choose>
+              </c:forEach>
+            </div>
+            <div>${review.content}</div>
+            <div style="margin-top: 10px;">작성일자 : ${review.regDate}</div>
+            <div class="review-buttons">
+              <form action="myReviewModify" method="get" style="display:inline;">
+                <input type="hidden" name="reviewId" value="${review.reviewId}">
+                <button type="submit">후기 수정</button>
+              </form>
+              <form action="deleteReview" method="post" style="display:inline;" 
+                    onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <input type="hidden" name="reviewId" value="${review.reviewId}">
+                <button type="submit">후기 삭제</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </c:forEach>
+    </c:when>
+    <c:otherwise>
+      <tr>
+        <td colspan="2" style="padding: 20px; text-align:center;">
+          후기가 없습니다.
+        </td>
+      </tr>
+    </c:otherwise>
+  </c:choose>
+</tbody>
+
     </table>
   </div>
 </div>

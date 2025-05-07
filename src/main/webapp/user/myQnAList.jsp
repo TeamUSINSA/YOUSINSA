@@ -144,39 +144,51 @@
         </tr>
       </thead>
       <tbody>
-        <c:forEach var="q" items="${qnaList}" varStatus="st">
-          <tr class="qna-row" onclick="location.href='${pageContext.request.contextPath}/myQnADetail?id=${q.qnaId}'">
-            <td>${(pageInfo.curPage - 1) * 10 + st.index + 1}</td>
-            <td>${q.type}</td>
-            <td>${q.title}</td>
-            <td>${q.questionDate}</td>
-            <td>
-              <c:choose>
-                <c:when test="${not empty q.answer}">
-                  <span class="answered">답변 완료</span>
-                </c:when>
-                <c:otherwise>
-                  <span class="not-answered">미답변</span>
-                </c:otherwise>
-              </c:choose>
-            </td>
-          </tr>
-          <tr class="qna-detail">
-            <td colspan="5">
-              <div class="qna-detail-content">
-                <h4>문의 내용</h4>
-                <p>${q.content}</p>
-                <h4 style="margin-top:20px;">답변 내용</h4>
-                <p>${empty q.answer ? '아직 답변이 등록되지 않았습니다.' : q.answer}</p>
-              </div>
-              <div class="qna-actions">
-                <button onclick="location.href='${pageContext.request.contextPath}/qnaEdit?id=${q.qnaId}'">수정</button>
-                <button onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/qnaDelete?id=${q.qnaId}'">삭제</button>
-              </div>
-            </td>
-          </tr>
-        </c:forEach>
-      </tbody>
+  <c:choose>
+    <c:when test="${not empty qnaList}">
+      <c:forEach var="q" items="${qnaList}" varStatus="st">
+        <tr class="qna-row" onclick="location.href='${pageContext.request.contextPath}/myQnADetail?id=${q.qnaId}'">
+          <td>${(pageInfo.curPage - 1) * 10 + st.index + 1}</td>
+          <td>${q.type}</td>
+          <td>${q.title}</td>
+          <td>${q.questionDate}</td>
+          <td>
+            <c:choose>
+              <c:when test="${not empty q.answer}">
+                <span class="answered">답변 완료</span>
+              </c:when>
+              <c:otherwise>
+                <span class="not-answered">미답변</span>
+              </c:otherwise>
+            </c:choose>
+          </td>
+        </tr>
+        <tr class="qna-detail">
+          <td colspan="5">
+            <div class="qna-detail-content">
+              <h4>문의 내용</h4>
+              <p>${q.content}</p>
+              <h4 style="margin-top:20px;">답변 내용</h4>
+              <p>${empty q.answer ? '아직 답변이 등록되지 않았습니다.' : q.answer}</p>
+            </div>
+            <div class="qna-actions">
+              <button onclick="location.href='${pageContext.request.contextPath}/qnaEdit?id=${q.qnaId}'">수정</button>
+              <button onclick="if(confirm('삭제하시겠습니까?')) location.href='${pageContext.request.contextPath}/qnaDelete?id=${q.qnaId}'">삭제</button>
+            </div>
+          </td>
+        </tr>
+      </c:forEach>
+    </c:when>
+    <c:otherwise>
+      <tr>
+        <td colspan="5" style="padding: 20px; text-align:center;">
+          QnA가 없습니다.
+        </td>
+      </tr>
+    </c:otherwise>
+  </c:choose>
+</tbody>
+
     </table>
 
     <div class="pagination">

@@ -111,22 +111,22 @@
 
     <c:forEach var="rec" items="${cancelList}">
       <c:if test="${rec.status != '반품중'}">
-        <c:set var="orderDate" value="${rec.orderDate}"/>
-        <c:set var="actionDate" value="${rec.actionDate}"/>
-        <c:set var="items" value="${rec.items}"/>
-        <c:set var="status" value="${rec.status}"/>
+        <!-- 링크 경로 셋업 -->
+        <c:choose>
+          <c:when test="${rec.type=='C'}">
+            <c:set var="detailPath" value="/myCancelDetail?cancelId=${rec.recordId}"/>
+          </c:when>
+          <c:otherwise>
+            <c:set var="detailPath" value="/myReturnDetail?returnId=${rec.recordId}"/>
+          </c:otherwise>
+        </c:choose>
 
         <div class="order-group">
           <div class="order-meta">
-            <div><fmt:formatDate value="${orderDate}" pattern="yyyy-MM-dd"/></div>
-            <div><fmt:formatDate value="${actionDate}" pattern="yyyy-MM-dd"/></div>
+            <div><fmt:formatDate value="${rec.orderDate}" pattern="yyyy-MM-dd"/></div>
+            <div><fmt:formatDate value="${rec.actionDate}" pattern="yyyy-MM-dd"/></div>
             <div><strong>${rec.orderId}</strong></div>
-            <a href="${pageContext.request.contextPath}/
-              <c:choose>
-                <c:when test="${rec.type=='C'}">myCancelDetail?cancelId=${rec.recordId}</c:when>
-                <c:otherwise>myReturnDetail?returnId=${rec.recordId}</c:otherwise>
-              </c:choose>"
-               class="detail-btn">
+            <a href="${pageContext.request.contextPath}${detailPath}" class="detail-btn">
               <c:choose>
                 <c:when test="${rec.type=='C'}">취소 상세</c:when>
                 <c:otherwise>반품 상세</c:otherwise>
@@ -135,7 +135,7 @@
           </div>
 
           <div class="order-items">
-            <c:forEach var="item" items="${items}">
+            <c:forEach var="item" items="${rec.items}">
               <div class="order-item">
                 <div class="product-info">
                   <a href="${pageContext.request.contextPath}/productDetail?productId=${item.productId}">
@@ -147,8 +147,8 @@
                   </div>
                 </div>
                 <div class="quantity">${item.quantity}</div>
-                <div class="price"><fmt:formatNumber value="${item.price}" pattern="#,###"/>원</div>
-                <div class="status">${status}</div>
+                <div class="price"><fmt:formatNumber value="${item.price - item.discount}" pattern="#,###"/>원</div>
+                <div class="status">${rec.status}</div>
               </div>
             </c:forEach>
           </div>

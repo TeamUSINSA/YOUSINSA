@@ -62,7 +62,7 @@
       , #{couponId}
       , #{color}
       , #{size}
-      , '베송준비중'
+      , '배송준비중'
       )
   </insert>
   
