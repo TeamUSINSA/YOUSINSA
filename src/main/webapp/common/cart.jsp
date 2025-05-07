@@ -100,14 +100,37 @@ button:hover {
 	margin: 20px auto;
 	gap: 10px;
 }
+
+.cart-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1220px; /* 사이드바 200 + 컨텐츠 1000 + 간격 여유 */
+  margin: 40px auto;
+}
+
+/* 사이드바 고정 너비 */
+.user-sidebar {
+  flex: 0 0 200px;
+}
+
+/* cart-container는 남은 공간 채우기 */
+.cart-container {
+  flex: 1;
+  margin: 0;    /* 기존 margin 제거 */
+  padding: 0 20px;
+}
 </style>
 </head>
 <body>
 <jsp:include page="/header" />
 <%@ include file="scrollTop.jsp" %>
+
+<div class="cart-wrapper">
+<%@ include file="/user/mysidebar.jsp" %>
+
 	<c:if test="${not empty cartList}">
   <div class="cart-container">
-
     <form id="cartForm" method="post">
       <table class="cart-table">
         <thead>
@@ -190,6 +213,7 @@ button:hover {
     </a>
   </div>
 </c:if>
+</div>
 	<jsp:include page="footer.jsp"/>
 
 
